@@ -1,15 +1,6 @@
-#ifdef CS_COMPILE
-
 #include "pch.h"
 
-int extern "C" __delclspec(dllexport) sayHello(int i)
-{
-    return gg(i);
-}
-
-#endif
-
-inline int gg(int i)
+extern "C" int __declspec(dllexport) SampleMethod(int i)
 {
     return i * 10;
 }
