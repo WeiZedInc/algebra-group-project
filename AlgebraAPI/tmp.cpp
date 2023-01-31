@@ -1,11 +1,19 @@
-#include "pch.h"
+#include <iostream>
+#include "vector"
+#include "tmp.h"
 
-extern "C" int __declspec(dllexport) SampleMethod(int i)
+int SampleMethod(int i)
 {
-    return gg(i);
+    std::vector<int> s = {1};
+    return gg(s[0]);
 }
 
 int gg(int i)
 {
-    return i * 20;
+    return i * 10;
+}
+
+int main()
+{
+    std::cout << SampleMethod(100) << std::endl;
 }
