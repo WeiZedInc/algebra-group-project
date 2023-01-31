@@ -1,5 +1,5 @@
 extern "C"
 {
-    int SampleMethod(int i);
+    int __declspec(dllexport) SampleMethod(int i);
     int gg(int i);
 }
