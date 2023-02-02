@@ -61,7 +61,8 @@
                      VerticalAlignment="Center"
                      HorizontalAlignment="Left"
                      Margin="5"
-                     Grid.Column="1"/>
+                     Grid.Column="1"
+                     Style="{StaticResource TextBoxTheme}"/>
 
         </Grid>
 
