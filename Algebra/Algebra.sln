@@ -5,7 +5,10 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgebraAPI", "..\AlgebraAPI\AlgebraAPI.vcxproj", "{BE3061EB-BC96-435A-953E-64989F1F2E56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgebraWASM", "..\AlgebraWASM\AlgebraWASM.csproj", "{71AE3A90-748C-4661-8CC0-91916218A330}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgebraWASM", "..\AlgebraWASM\AlgebraWASM.csproj", "{71AE3A90-748C-4661-8CC0-91916218A330}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BE3061EB-BC96-435A-953E-64989F1F2E56} = {BE3061EB-BC96-435A-953E-64989F1F2E56}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
