@@ -1,0 +1,23 @@
+﻿@page "/first-group"
+@using System.Runtime.InteropServices;
+
+<PageTitle>First Group</PageTitle>
+
+<h1>First Group</h1>
+
+<p role="status">Result: @result</p>
+
+<button class="btn btn-primary" @onclick="DoMath">Click me</button>
+
+@code {
+    int result = 0;
+
+    [DllImport("AlgebraAPI")]
+    static extern int SampleMethod(int i);
+
+    void DoMath()
+    {
+        result = SampleMethod(10);
+    }
+
+}
