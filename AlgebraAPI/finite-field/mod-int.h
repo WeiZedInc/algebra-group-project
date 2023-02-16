@@ -1,3 +1,4 @@
+#include "globals.h"
 
 namespace modular
 {
@@ -10,5 +11,4 @@ namespace modular
     public:
         modInt() = default;
     };
-
 }
