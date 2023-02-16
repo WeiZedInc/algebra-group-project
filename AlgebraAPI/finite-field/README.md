@@ -1,5 +1,4 @@
-## This document is written to help students organise their work throgh group project for universal algebra class
-
+## This document is written to help students organise their work throgh group project 
 ### Code commiting, review and pushing
 1) Code commits via git should follow [this](https://waitng-for-zhereb-respond.com/) rules
 2) Each new feature must be followed by set of tests. How to design test you can find bellow
