@@ -17,4 +17,7 @@ Do not forget to sync your project before doing this
         - From file 
         - Randomly generated
     * Edge (border) cases must be tested especially thoroughly
-
+4. File name convention: 
+    * simple, meaningful, short: basic-operations.cpp, sqrt.cpp, primality-test.cpp
+5. If you need more than one file to implement all functions, create a folder
+ 
