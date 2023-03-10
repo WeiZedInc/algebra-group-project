@@ -5,46 +5,54 @@
 
 namespace modular
 {
-    __int128_t add(__int128_t value1, __int128_t value2, __int128_t MOD); // addition
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 add(T2 value1, T3 value2, T4 MOD); // addition
 
-    __int128_t subs(__int128_t value1, __int128_t value2, __int128_t MOD); // substruction
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 subs(T2 value1, T3 value2, T4 MOD); // substruction
 
-    __int128_t mult(__int128_t value1, __int128_t value2, __int128_t MOD); // multyplication
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 mult(T2 value1, T3 value2, T4 MOD); // multyplication
 
     ////////////////////////////////////////////////////////////////////////////////////////////
-
-    __int128_t div(__int128_t value1, __int128_t value2, __int128_t MOD); // division
-
-    __int128_t inv(__int128_t value1, __int128_t MOD); // inverse element
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 div(T2 value1, T3 value2, T4 MOD); // division
+    template <typename T1, typename T2, typename T3>
+    T1 inv(T2 value1, T3 MOD); // inverse element
 
     /////////////////////////////////////////////////////////////////////////////////////////////
-
-    __int128_t pow(__int128_t value, __int128_t base, __int128_t MOD); // regular pow
-
-    __int128_t fpow(__int128_t value, __int128_t base, __int128_t MOD); // fast pow
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    std::vector<__int128_t> factorize(__int128_t value, __int128_t MOD); // number factorization using Polard algorithm
-
-    std::vector<__int128_t> naiveFactorize(__int128_t value, __int128_t MOD); // naive number factorization
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 pow(T2 value, T3 base, T4 MOD); // regular pow
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 fpow(T2 value, T3 base, T4 MOD); // fast pow
 
     //////////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T1, typename T2, typename T3>
+    std::vector<T1> factorize(T2 value, T3 MOD); // number factorization using Polard algorithm
+    template <typename T1, typename T2, typename T3>
+    std::vector<T1> naiveFactorize(T2 value, T3 MOD); // naive number factorization
 
-    __int128_t log(__int128_t value, __int128_t base, __int128_t MOD); // discrete logarithm
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 log(T2 value, T3 base, T4 MOD); // discrete logarithm
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     // needs clarifications
-    bool isGenrator(__int128_t value, std::string operation, __int128_t MOD); // is element a gromGenerator
+    template <typename T1, typename T2>
+    bool isGenrator(T1 value, std::string operation, T2 MOD); // is element a gromGenerator
 
-    __int128_t orderOfElement(__int128_t value, __int128_t base, __int128_t MOD);
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    __int128_t eulerFunction(__int128_t value, __int128_t MOD);      // Euler function
-    __int128_t carmichaelFunction(__int128_t value, __int128_t MOD); // Carmichael function
+    template <typename T1, typename T2, typename T3, typename T4>
+    T1 orderOfElement(T2 value, T3 base, T4 MOD);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool isPrime(__int128_t value, __int128_t MOD); // Miller–Rabin primality test
+    template <typename T1, typename T2, typename T3>
+    T1 eulerFunction(T2 value, T3 MOD); // Euler function
+
+    template <typename T1, typename T2, typename T3>
+    T1 carmichaelFunction(T2 value, T3 MOD); // Carmichael function
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    template <typename T1, typename T2>
+    bool isPrime(T1 value, T2 MOD); // Miller–Rabin primality test
 }
