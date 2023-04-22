@@ -32,10 +32,12 @@ T1 inv(T1 value1, T1 MOD)
 
     num g = gcdExtended(value1, MOD, x, y);
     if (g != 1) {
-        cout << "No solution!";
+        cout << "Euclid Algorithm: No solution!";
+        return null;
     } else {
         x = (x % m + m) % m;
-        cout << x << endl;
+        cout << "Euclid Algorithm: " << x << endl;
+        return x;
     }
 }
 
