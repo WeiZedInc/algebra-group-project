@@ -1,5 +1,6 @@
 // Function for extended Euclidean Algorithm
-template<typename num> num gcdExtended(num a, num b, num *x, num *y)
+template <typename num>
+num gcdExtended(num a, num b, num *x, num *y)
 {
     // Base Case
     if (a == 0)
@@ -25,18 +26,19 @@ template<typename num> num gcdExtended(num a, num b, num *x, num *y)
  *  @return returns inversed element
  */
 
-template<typename num, typename T1, typename T2, typename T3>
+template <typename num, typename T1, typename T2, typename T3>
 T1 inv(T1 value1, T1 MOD)
 {
-    num x,y;
+    num x, y;
 
     num g = gcdExtended(value1, MOD, x, y);
-    if (g != 1) {
-        cout << "Euclid Algorithm: No solution!";
+    if (g != 1)
+    {
         return null;
-    } else {
+    }
+    else
+    {
         x = (x % m + m) % m;
-        cout << "Euclid Algorithm: " << x << endl;
         return x;
     }
 }
@@ -52,7 +54,7 @@ T1 inv(T1 value1, T1 MOD)
  *  @return returns result of division
  */
 
-template<typename num, typename T1, typename T2, typename T3, typename T4>
+template <typename num, typename T1, typename T2, typename T3, typename T4>
 T1 div(T2 value1, T3 value2, T4 MOD)
 {
     return value1 * inv(value2, MOD);
