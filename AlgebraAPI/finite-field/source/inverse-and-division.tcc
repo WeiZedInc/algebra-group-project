@@ -1,10 +1,13 @@
 // Function for extended Euclidean Algorithm
 #include <stdexcept>
 
+//include guard:
+#ifndef ALGEBRA_INVERSION_AND_DIVISION
+#define ALGEBRA_INVERSION_AND_DIVISION
 namespace modular
 {
     template <typename num>
-    num gcdExtended(num a, num b, num *x, num *y)
+    num gcdExtended(num a, num b, num* x, num* y)
     {
         // Base Case
         if (a == 0)
@@ -64,3 +67,4 @@ namespace modular
         return value1 * inv(value2, MOD);
     }
 }
+#endif
