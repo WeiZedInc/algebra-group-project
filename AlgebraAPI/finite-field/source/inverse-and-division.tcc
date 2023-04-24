@@ -33,6 +33,22 @@ namespace modular
      *  @return returns inversed element
      */
 
+//failed alt attempt
+/*
+     // Computes the modular inverse of a modulo m using the extended Euclidean algorithm
+    template <typename num>
+    num inv_alt_new(num a, num m) {
+        int r = a % m, t, q, x0 = 0, x1 = 1;
+        while (r != 0) {
+            q = a / r;
+            t = r; r = a % r; a = t;
+            t = x0; x0 = x1 - q * x0; x1 = t;
+        }
+        if (x1 < 0) x1 += m;
+        return x1;
+    }
+*/
+
     template <typename num>
     num inv(num value1, num MOD)
     {
@@ -41,7 +57,8 @@ namespace modular
         num g = gcdExtended(value1, MOD, &x, &y);
         if (g != 1)
         {
-            throw std::invalid_argument("Write something here");
+            std::string errormsg = "Inverse does not exist here. g: " + std::to_string(g) + " value1: " + std::to_string(value1) + " mod: " + std::to_string(MOD);
+            throw std::invalid_argument(errormsg);
         }
         else
         {
