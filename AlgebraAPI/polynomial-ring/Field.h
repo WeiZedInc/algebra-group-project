@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <list>
 #include <iostream>
 
 template <typename T>
@@ -81,14 +81,34 @@ public:
 template <typename T>
 class Field {
 private:
-	std::vector<Node<T>> poly;
+	std::list<Node<T>> poly;
 
 public:
-	Field();
-	~Field();
+	Field() {}
+	~Field() {}
 
-	Node<T> operator [] (int i);
-	void addNode();
+	void addNode(Node<T>);
+
+	Node<T> operator [] (const int i) {
+		try {
+
+			if (i < 0 || i >= poly.size())
+				throw "Index out of bounds";
+
+			int j = 0;
+			for (auto it = poly.begin(); it != poly.end(); ++it)
+			{
+				if (i == j)
+					return *it;
+				j++;
+			}
+		}
+		catch (const char* e)
+		{
+			std::cerr << e;
+			exit(69);
+		}
+	}
 };
 
 template <typename T>
@@ -102,8 +122,6 @@ T Node<T>::koeficient() {
 }
 
 template <typename T>
-Node<T> Field<T>::operator [] (int i) {
-	return poly[i];
+void Field<T>::addNode(Node<T> p) {
+	poly.push_back(p);
 }
-
-
