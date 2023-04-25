@@ -1,8 +1,10 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "../../../doctest.h"
-#include "../mod-num.tcc"
+#include "../../mod-math.h"
 #include "utils.h"
 #include <random>
+
+using namespace modular;
 
 TEST_CASE("Testing modNum class with random values")
 {
