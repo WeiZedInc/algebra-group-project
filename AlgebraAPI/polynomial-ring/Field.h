@@ -46,35 +46,26 @@ public:
 	}
 
 	Node operator + (const Node p2) {
-		try {
 			if (pow != p2.pow)
-				throw "Can't add monominals with different powers";
+				throw std::logic_error("Can't add monominals with different powers");
 			else {
 				Node res(pow, koef + p2.koef);
 				return res;
 			}
-		}
-		catch (const char* e)
-		{
-			std::cerr << e;
-			exit(69);
-		}
 	}
 
 	Node operator - (const Node p2) {
-		try {
 			if (pow != p2.pow)
-				throw "Can't substract monominals with different powers";
+				throw std::logic_error("Can't substract monominals with different powers");
 			else {
 				Node res(pow, koef - p2.koef);
 				return res;
 			}
 		}
-		catch (const char* e)
-		{
-			std::cerr << e;
-			exit(69);
-		}
+
+	void operator = (const Node &p2) {
+		pow = p2.pow;
+		koef = p2.koef;
 	}
 };
 
@@ -90,10 +81,9 @@ public:
 	void addNode(Node<T>);
 
 	Node<T> operator [] (const int i) {
-		try {
 
 			if (i < 0 || i >= poly.size())
-				throw "Index out of bounds";
+				throw std::out_of_range("Index out of range");
 
 			int j = 0;
 			for (auto it = poly.begin(); it != poly.end(); ++it)
@@ -101,13 +91,7 @@ public:
 				if (i == j)
 					return *it;
 				j++;
-			}
-		}
-		catch (const char* e)
-		{
-			std::cerr << e;
-			exit(69);
-		}
+			}	
 	}
 };
 
