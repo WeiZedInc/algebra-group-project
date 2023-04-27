@@ -125,3 +125,8 @@ template <typename T>
 void Field<T>::addNode(Node<T> p) {
 	poly.push_back(p);
 }
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, Node<T>& p) {
+	return os << '{' << p.power() << ", " << p.koeficient() << '}';
+}
