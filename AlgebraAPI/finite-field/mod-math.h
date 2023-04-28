@@ -70,8 +70,8 @@ modNum<T1> sqrt(modNum<T1> value);   // discrete square root
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename T1>
-modNum<T1> log(modNum<T1> value, modNum<T1> base);   // discrete logarithm
+<typename T1> size_t log(modNum<T1> value,
+                         modNum<T1> base);   // discrete logarithm
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
