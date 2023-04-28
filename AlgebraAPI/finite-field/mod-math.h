@@ -17,14 +17,27 @@ class modNum {
     T div(T value1, T value2, T mod) const;
 
    public:
-    T getValue() const;
-    T getMod() const { return MOD; };
-    void setMod(T MOD);
     modNum(T value = 0, T MOD = 1) : value(value), MOD(MOD) {
         if (MOD <= 0) {
             throw std::invalid_argument("modulus should be positive");
         }
     }
+
+    T getValue() const;
+    T getMod() const { return MOD; };
+    void setMod(T MOD);
+
+    bool operator==(const modNum &other) const {
+        return value == other.value && MOD == other.MOD;
+    }
+
+    bool operator<(const modNum &other) const { return value < other.value; }
+
+    bool operator<=(const modNum &other) const { return value <= other.value; }
+
+    bool operator>(const modNum &other) const { return value > other.value; }
+
+    bool operator>=(const modNum &other) const { return value >= other.value; }
 
     modNum inv();
 
