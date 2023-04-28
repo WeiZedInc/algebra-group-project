@@ -14,7 +14,7 @@ class modNum {
     T add(T value1, T value2, T MOD) const;
     T subs(T value1, T value2, T MOD) const;
     T mult(T value1, T value2, T MOD) const;
-    T gcdExtended(T a, T b, T *x, T *y) const;
+
     T inverseValue(T value1, T mod) const;
     T div(T value1, T value2, T mod) const;
 
@@ -25,9 +25,12 @@ class modNum {
         }
     }
 
+    T gcdExtended(T a, T b, T *x, T *y) const;
+
     T getValue() const;
     T getMod() const { return MOD; };
     void setMod(T MOD);
+    void setValue(T _value) { value = _value; }
 
     bool operator==(const modNum &other) const {
         return value == other.value && MOD == other.MOD;
