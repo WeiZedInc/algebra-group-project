@@ -1,14 +1,14 @@
 #ifndef TASK2_TCC
 #define TASK2_TCC
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 #ifndef MOD_NUM
 #define MOD_NUM
+
 template <typename T>
-class modNum
-{
-private:
+class modNum {
+   private:
     mutable T value, MOD;
 
     T add(T value1, T value2, T MOD) const;
@@ -18,17 +18,28 @@ private:
     T inverseValue(T value1, T mod) const;
     T div(T value1, T value2, T mod) const;
 
-public:
-    T getValue() const;
-    void setMod(T MOD);
-    modNum(T value = 0, T MOD = 1) : value(value), MOD(MOD)
-    {
-
-        if (MOD <= 0)
-        {
+   public:
+    modNum(T value = 0, T MOD = 1) : value(value), MOD(MOD) {
+        if (MOD <= 0) {
             throw std::invalid_argument("modulus should be positive");
         }
     }
+
+    T getValue() const;
+    T getMod() const { return MOD; };
+    void setMod(T MOD);
+
+    bool operator==(const modNum &other) const {
+        return value == other.value && MOD == other.MOD;
+    }
+
+    bool operator<(const modNum &other) const { return value < other.value; }
+
+    bool operator<=(const modNum &other) const { return value <= other.value; }
+
+    bool operator>(const modNum &other) const { return value > other.value; }
+
+    bool operator>=(const modNum &other) const { return value >= other.value; }
 
     modNum inv();
 
@@ -39,8 +50,6 @@ public:
 };
 #endif
 
-using namespace modular;
-
 /**
  * @brief Adds two values modulo MOD.
  * @param  value1 the first value to add
@@ -50,16 +59,14 @@ using namespace modular;
  * @throws std::invalid_argument if MOD is non - positive
  */
 template <typename T>
-T modNum<T>::add(T value1, T value2, T MOD) const
-{
-    if (MOD <= 0)
-    {
+T
+modNum<T>::add(T value1, T value2, T MOD) const {
+    if (MOD <= 0) {
         throw std::invalid_argument("modulus should be positive");
     }
     T result = value1 + value2;
     result %= MOD;
-    if (result < 0)
-    {
+    if (result < 0) {
         result += MOD;
     }
     return result;
@@ -73,16 +80,14 @@ T modNum<T>::add(T value1, T value2, T MOD) const
  *  @throws std::invalid_argument if MOD is non-positive
  */
 template <typename T>
-T modNum<T>::subs(T value1, T value2, T MOD) const
-{
-    if (MOD <= 0)
-    {
+T
+modNum<T>::subs(T value1, T value2, T MOD) const {
+    if (MOD <= 0) {
         throw std::invalid_argument("modulus should be positive");
     }
     T result = value1 - value2;
     result %= MOD;
-    if (result < 0)
-    {
+    if (result < 0) {
         result += MOD;
     }
     return result;
@@ -96,19 +101,16 @@ T modNum<T>::subs(T value1, T value2, T MOD) const
  *  @throws std::invalid_argument if MOD is non-positive
  */
 template <typename T>
-T modNum<T>::mult(T value1, T value2, T MOD) const
-{
-    if (MOD <= 0)
-    {
+T
+modNum<T>::mult(T value1, T value2, T MOD) const {
+    if (MOD <= 0) {
         throw std::invalid_argument("modulus should be positive");
     }
     value1 = (value1 % MOD + MOD) % MOD;
     value2 = (value2 % MOD + MOD) % MOD;
     T result = 0;
-    while (value2)
-    {
-        if (value2 & 1)
-        {
+    while (value2) {
+        if (value2 & 1) {
             result = (result + value1) % MOD;
         }
         value1 = (value1 * 2) % MOD;
@@ -117,16 +119,15 @@ T modNum<T>::mult(T value1, T value2, T MOD) const
     return result;
 }
 template <typename T>
-T modNum<T>::gcdExtended(T a, T b, T *x, T *y) const
-{
+T
+modNum<T>::gcdExtended(T a, T b, T *x, T *y) const {
     // Base Case
-    if (a == 0)
-    {
+    if (a == 0) {
         *x = 0;
         *y = 1;
         return b;
     }
-    T x1, y1; // To store results of recursive call
+    T x1, y1;   // To store results of recursive call
     T gcd = gcdExtended(b % a, a, &x1, &y1);
     // Update x and y using results of
     // recursive call
@@ -144,18 +145,18 @@ T modNum<T>::gcdExtended(T a, T b, T *x, T *y) const
  *  @return returns inversed element
  */
 template <typename T>
-T modNum<T>::inverseValue(T value1, T mod) const
-{
+T
+modNum<T>::inverseValue(T value1, T mod) const {
     T x, y;
 
     T gcdResult = gcdExtended(value1, mod, &x, &y);
-    if (gcdResult != 1)
-    {
-        std::string errormsg = "Inverse does not exist here. g: " + std::to_string(gcdResult) + " value1: " + std::to_string(value1) + " mod: " + std::to_string(mod);
+    if (gcdResult != 1) {
+        std::string errormsg =
+            "Inverse does not exist here. g: " + std::to_string(gcdResult) +
+            " value1: " + std::to_string(value1) +
+            " mod: " + std::to_string(mod);
         throw std::invalid_argument(errormsg);
-    }
-    else
-    {
+    } else {
         x = (x % mod + mod) % mod;
         return x;
     }
@@ -172,51 +173,50 @@ T modNum<T>::inverseValue(T value1, T mod) const
  *  @return returns result of division
  */
 template <typename T>
-T modNum<T>::div(T value1, T value2, T mod) const
-{
+T
+modNum<T>::div(T value1, T value2, T mod) const {
     return value1 * inverseValue(value2, mod);
 }
 
 template <typename T>
-T modNum<T>::getValue() const
-{ // method to access private member value
+T
+modNum<T>::getValue() const {   // method to access private member value
     return value;
 }
 template <typename T>
-void modNum<T>::setMod(T MOD)
-{
-    if (MOD <= 0)
-    {
+void
+modNum<T>::setMod(T MOD) {
+    if (MOD <= 0) {
         throw std::invalid_argument("modulus should be positive");
     }
     this->MOD = MOD;
 }
 
 template <typename T>
-modNum<T> modNum<T>::inv()
-{
+modNum<T>
+modNum<T>::inv() {
     return modNum(inverseValue(value, MOD), MOD);
 }
 template <typename T>
-modNum<T> modNum<T>::operator+(const modNum &other) const
-{
+modNum<T>
+modNum<T>::operator+(const modNum &other) const {
     return modNum<T>(add(value, other.value, MOD), MOD);
 }
 template <typename T>
-modNum<T> modNum<T>::operator-(const modNum &other) const
-{
+modNum<T>
+modNum<T>::operator-(const modNum &other) const {
     return modNum<T>(subs(value, other.value, MOD), MOD);
 }
 template <typename T>
-modNum<T> modNum<T>::operator*(const modNum &other) const
-{
+modNum<T>
+modNum<T>::operator*(const modNum &other) const {
     return modNum<T>(mult(value, other.value, MOD), MOD);
 }
 
 template <typename T>
-modNum<T> modNum<T>::operator/(const modNum &other) const
-{
+modNum<T>
+modNum<T>::operator/(const modNum &other) const {
     return modNum<T>(div(value, other.value, MOD), MOD);
 }
 
-#endif // TASK2_TCC
+#endif   // TASK2_TCC

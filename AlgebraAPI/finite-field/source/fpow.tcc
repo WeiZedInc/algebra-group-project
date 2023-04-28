@@ -1,3 +1,5 @@
+#include "mod-num.tcc"
+
 // include guard:
 #ifndef ALGEBRA_INVERSION_AND_DIVISION
 #define ALGEBRA_INVERSION_AND_DIVISION
@@ -12,8 +14,8 @@
  *  @return returns a number in Montgomery form
  */
 template <typename T1>
-T1 toMontgomery(T1 x, T1 n, T1 r)
-{
+T1
+toMontgomery(T1 x, T1 n, T1 r) {
     return (x * r) % n;
 }
 
@@ -26,17 +28,17 @@ T1 toMontgomery(T1 x, T1 n, T1 r)
  *
  *  @return returns a real number
  */
+
 template <typename T1>
-T1 fromMontgomery(T1 x, T1 n, T1 r)
-{
+T1
+fromMontgomery(T1 x, T1 n, T1 r) {
     T1 inv_r = 0;
     T1 q = 0;
     T1 r1 = 1;
     T1 r2 = 0;
     T1 a = n;
 
-    while (r != 0)
-    {
+    while (r != 0) {
         q = a / r;
         r2 = r1 - q * r2;
         r1 = r;
@@ -64,8 +66,8 @@ T1 fromMontgomery(T1 x, T1 n, T1 r)
  *  @return returns a result
  */
 template <typename T1>
-T1 fpow(T1 base, T1 power, T1 MOD)
-{
+modNum<T1>
+fpow(modNum<T1> base, int32_t power) {
     /*
       T1 r = 1 << 16;
 
@@ -86,17 +88,17 @@ T1 fpow(T1 base, T1 power, T1 MOD)
       return fromMontgomery(result, MOD, r);
     */
     T1 result = 1;
-    while (power > 0)
-    {
-
-        if (power % 2 == 1)
-        { // Can also use (power & 1) to make code even faster
-            result = (result * base) % MOD;
+    T1 baseVal = base.getValue();
+    while (power > 0) {
+        if (power % 2 ==
+            1) {   // Can also use (power & 1) to make code even faster
+            result = (result * baseVal) % base.getMod();
         }
-        base = (base * base) % MOD;
-        power = power / 2; // Can also use power >>= 1; to make code even faster
+        baseVal = (baseVal * baseVal) % base.getMod();
+        power =
+            power / 2;   // Can also use power >>= 1; to make code even faster
     }
-    return result;
+    return modNum(result, base.getMod());
 }
 
 #endif
