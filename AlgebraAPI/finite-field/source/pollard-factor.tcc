@@ -99,14 +99,15 @@ factorize(modNum<T1> value) {
 
     T1 divisor = pollardRhO(value.getValue());
     if (isPrime(divisor))
-        factors.push_back(modNum<T1>(divisor));
+        factors.push_back(modNum<T1>(divisor, value.getMod()));
     else {
-        std::vector<modNum<T1>> tmp = factorize(modNum<T1>(divisor));
+        std::vector<modNum<T1>> tmp =
+            factorize(modNum<T1>(divisor, value.getMod()));
         factors.insert(factors.end(), tmp.begin(), tmp.end());
     }
 
     std::vector<modNum<T1>> tmp =
-        factorize(modNum<T1>(value.getValue() / divisor));
+        factorize(modNum<T1>(value.getValue() / divisor, value.getMod()));
     factors.insert(factors.end(), tmp.begin(), tmp.end());
 
     return factors;
