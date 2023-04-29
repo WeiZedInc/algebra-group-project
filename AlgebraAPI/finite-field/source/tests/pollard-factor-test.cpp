@@ -5,6 +5,7 @@
 
 #include "../../../doctest.h"
 #include "utils.h"
+using namespace modular;
 
 TEST_CASE("Testing Pollard factorization") {
     using T = long long;
@@ -25,9 +26,8 @@ TEST_CASE("Testing Pollard factorization") {
 
         std::vector<modNum<T>> f4 = factorize(modNum<T>(1232));
         sort(f4.begin(), f4.end());
-        std::vector<modNum<T>> factors4{modNum<T>(2), modNum<T>(2),
-                                        modNum<T>(2), modNum<T>(2),
-                                        modNum<T>(7), modNum<T>(11)};
+        std::vector<modNum<T>> factors4{modNum<T>(2), modNum<T>(2), modNum<T>(2),
+                                        modNum<T>(2), modNum<T>(7), modNum<T>(11)};
         REQUIRE(f4 == factors4);
     }
 

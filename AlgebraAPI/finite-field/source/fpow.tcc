@@ -1,4 +1,5 @@
 #include "mod-num.tcc"
+namespace modular {
 
 // include guard:
 #ifndef ALGEBRA_INVERSION_AND_DIVISION
@@ -90,15 +91,14 @@ fpow(modNum<T1> base, int32_t power) {
     T1 result = 1;
     T1 baseVal = base.getValue();
     while (power > 0) {
-        if (power % 2 ==
-            1) {   // Can also use (power & 1) to make code even faster
+        if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
             result = (result * baseVal) % base.getMod();
         }
         baseVal = (baseVal * baseVal) % base.getMod();
-        power =
-            power / 2;   // Can also use power >>= 1; to make code even faster
+        power = power / 2;   // Can also use power >>= 1; to make code even faster
     }
     return modNum(result, base.getMod());
 }
 
 #endif
+}

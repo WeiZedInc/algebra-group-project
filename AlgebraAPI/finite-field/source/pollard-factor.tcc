@@ -6,6 +6,7 @@
 
 #ifndef POLLARD_FACTORIZATION
 #define POLLARD_FACTORIZATION
+using namespace modular;
 
 /**
  *  @brief Calculating GCD
@@ -88,8 +89,7 @@ template <typename T1>
 std::vector<modNum<T1>>
 factorize(modNum<T1> value) {
     if (value < 1)
-        throw std::invalid_argument(std::to_string(value.getValue()) +
-                                    " is less than 1");
+        throw std::invalid_argument(std::to_string(value.getValue()) + " is less than 1");
     else if (value == 1)
         return std::vector<modNum<T1>>{};
     else if (isPrime(value.getValue()))
@@ -101,13 +101,11 @@ factorize(modNum<T1> value) {
     if (isPrime(divisor))
         factors.push_back(modNum<T1>(divisor, value.getMod()));
     else {
-        std::vector<modNum<T1>> tmp =
-            factorize(modNum<T1>(divisor, value.getMod()));
+        std::vector<modNum<T1>> tmp = factorize(modNum<T1>(divisor, value.getMod()));
         factors.insert(factors.end(), tmp.begin(), tmp.end());
     }
 
-    std::vector<modNum<T1>> tmp =
-        factorize(modNum<T1>(value.getValue() / divisor, value.getMod()));
+    std::vector<modNum<T1>> tmp = factorize(modNum<T1>(value.getValue() / divisor, value.getMod()));
     factors.insert(factors.end(), tmp.begin(), tmp.end());
 
     return factors;

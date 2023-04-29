@@ -1,3 +1,4 @@
+namespace modular {
 #ifndef TASK2_TCC
 #define TASK2_TCC
 #include <cassert>
@@ -29,24 +30,24 @@ class modNum {
     T getMod() const { return MOD; };
     void setMod(T MOD);
 
-    bool operator==(const modNum &other) const {
+    bool operator==(const modNum<T> &other) const {
         return value == other.value && MOD == other.MOD;
     }
 
-    bool operator<(const modNum &other) const { return value < other.value; }
+    bool operator<(const modNum<T> &other) const { return value < other.value; }
 
-    bool operator<=(const modNum &other) const { return value <= other.value; }
+    bool operator<=(const modNum<T> &other) const { return value <= other.value; }
 
-    bool operator>(const modNum &other) const { return value > other.value; }
+    bool operator>(const modNum<T> &other) const { return value > other.value; }
 
-    bool operator>=(const modNum &other) const { return value >= other.value; }
+    bool operator>=(const modNum<T> &other) const { return value >= other.value; }
 
-    modNum inv();
+    modNum<T> inv();
 
-    modNum<T> operator+(const modNum &other) const;
-    modNum<T> operator-(const modNum &other) const;
-    modNum<T> operator*(const modNum &other) const;
-    modNum<T> operator/(const modNum &other) const;
+    modNum<T> operator+(const modNum<T> &other) const;
+    modNum<T> operator-(const modNum<T> &other) const;
+    modNum<T> operator*(const modNum<T> &other) const;
+    modNum<T> operator/(const modNum<T> &other) const;
 };
 #endif
 
@@ -151,10 +152,9 @@ modNum<T>::inverseValue(T value1, T mod) const {
 
     T gcdResult = gcdExtended(value1, mod, &x, &y);
     if (gcdResult != 1) {
-        std::string errormsg =
-            "Inverse does not exist here. g: " + std::to_string(gcdResult) +
-            " value1: " + std::to_string(value1) +
-            " mod: " + std::to_string(mod);
+        std::string errormsg = "Inverse does not exist here. g: " + std::to_string(gcdResult) +
+                               " value1: " + std::to_string(value1) +
+                               " mod: " + std::to_string(mod);
         throw std::invalid_argument(errormsg);
     } else {
         x = (x % mod + mod) % mod;
@@ -195,28 +195,29 @@ modNum<T>::setMod(T MOD) {
 template <typename T>
 modNum<T>
 modNum<T>::inv() {
-    return modNum(inverseValue(value, MOD), MOD);
+    return modNum<T>(inverseValue(value, MOD), MOD);
 }
 template <typename T>
 modNum<T>
-modNum<T>::operator+(const modNum &other) const {
+modNum<T>::operator+(const modNum<T> &other) const {
     return modNum<T>(add(value, other.value, MOD), MOD);
 }
 template <typename T>
 modNum<T>
-modNum<T>::operator-(const modNum &other) const {
+modNum<T>::operator-(const modNum<T> &other) const {
     return modNum<T>(subs(value, other.value, MOD), MOD);
 }
 template <typename T>
 modNum<T>
-modNum<T>::operator*(const modNum &other) const {
+modNum<T>::operator*(const modNum<T> &other) const {
     return modNum<T>(mult(value, other.value, MOD), MOD);
 }
 
 template <typename T>
 modNum<T>
-modNum<T>::operator/(const modNum &other) const {
+modNum<T>::operator/(const modNum<T> &other) const {
     return modNum<T>(div(value, other.value, MOD), MOD);
 }
 
 #endif   // TASK2_TCC
+}   // namespace modular
