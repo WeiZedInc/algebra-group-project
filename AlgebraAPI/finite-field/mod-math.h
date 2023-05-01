@@ -56,8 +56,7 @@ template <typename T1>
 modNum<T1> pow(modNum<T1> value, modNum<T1> base,
                modNum<T1> MOD);   // regular pow
 template <typename T1>
-modNum<T1> fpow(modNum<T1> value, modNum<T1> base,
-                modNum<T1> MOD);   // fast pow
+modNum<T1> fpow(modNum<T1> value, size_t degree);   // fast pow
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
