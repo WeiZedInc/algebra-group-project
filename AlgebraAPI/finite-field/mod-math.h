@@ -78,8 +78,7 @@ size_t log(modNum<T1> value,
 
 // needs clarifications
 template <typename T1>
-bool isGenrator(modNum<T1> value,
-                std::string operation);   // is element a group generator
+bool isGenrator(modNum<T1> value);   // is element a multyplicative group generator
 
 template <typename T1>
 size_t orderOfElement(modNum<T1> value, modNum<T1> base);
