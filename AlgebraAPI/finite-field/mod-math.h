@@ -97,4 +97,7 @@ bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 
 }   // namespace modular
 
+#include "source/fpow.tcc"
+#include "source/log.tcc"
 #include "source/mod-num.tcc"
+#include "source/pollard-factor.tcc"
