@@ -4,6 +4,7 @@
 #include <vector>
 
 namespace modular {
+using namespace std;
 #ifndef MOD_NUM
 #define MOD_NUM
 template <typename T>
@@ -32,9 +33,7 @@ class modNum {
     void setMod(T MOD);
     void setValue(T _value) { value = _value; }
 
-    bool operator==(const modNum &other) const {
-        return value == other.value && MOD == other.MOD;
-    }
+    bool operator==(const modNum &other) const { return value == other.value && MOD == other.MOD; }
 
     bool operator<(const modNum &other) const { return value < other.value; }
 
@@ -63,8 +62,7 @@ modNum<T1> fpow(modNum<T1> value, modNum<T1> base,
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
-std::vector<modNum<T1>> factorize(
-    modNum<T1> value);   // number factorization using Polard algorithm
+vector<modNum<T1>> factorize(modNum<T1> value);   // number factorization using Polard algorithm
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -81,7 +79,7 @@ modNum<T1> sqrt(modNum<T1> value);   // discrete square root
 // needs clarifications
 template <typename T1>
 bool isGenrator(modNum<T1> value,
-                std::string operation);   // is element a group generator
+                string operation);   // is element a group generator
 
 template <typename T1>
 size_t orderOfElement(modNum<T1> value, modNum<T1> base);
