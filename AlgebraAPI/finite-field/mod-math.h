@@ -1,10 +1,9 @@
-
 #include <stdexcept>
 #include <string>
 #include <vector>
 
 namespace modular {
-using namespace std;
+
 #ifndef MOD_NUM
 #define MOD_NUM
 template <typename T>
@@ -62,7 +61,8 @@ modNum<T1> fpow(modNum<T1> value, modNum<T1> base,
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
-vector<modNum<T1>> factorize(modNum<T1> value);   // number factorization using Polard algorithm
+std::vector<modNum<T1>> factorize(
+    modNum<T1> value);   // number factorization using Polard algorithm
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +79,7 @@ size_t log(modNum<T1> value,
 // needs clarifications
 template <typename T1>
 bool isGenrator(modNum<T1> value,
-                string operation);   // is element a group generator
+                std::string operation);   // is element a group generator
 
 template <typename T1>
 size_t orderOfElement(modNum<T1> value, modNum<T1> base);
