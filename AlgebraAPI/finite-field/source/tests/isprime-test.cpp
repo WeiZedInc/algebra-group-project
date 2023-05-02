@@ -10,7 +10,6 @@ template <class T>
 
 bool SimpleIsPrime(T n)
 {
- 
     if (n == 2 || n == 3)
         return true;
 
@@ -21,21 +20,19 @@ bool SimpleIsPrime(T n)
         if (n % i == 0 || n % (i + 2) == 0)
             return false;
     }
-
     return true;
 }
 
 TEST_CASE("Testing the Miller-Rabin method to check a number for prime ") {
-    using T = int;
+    using T = long long;
     SUBCASE("Edge case") {
 
-      int value =1;
-       int k = 100;
+        CHECK_EQ(isPrime(modNum<T>(-1), 100), SimpleIsPrime(1));
+        CHECK_EQ(isPrime(modNum<T>(1), 100), SimpleIsPrime(1));
+        CHECK_EQ(isPrime(modNum<T>(2), 100), SimpleIsPrime(2));
+    }
 
-    CHECK_EQ(isPrime(modNum<T>(value), k), SimpleIsPrime(value));
-      
-}
-SUBCASE("Input from the console") {
+    SUBCASE("Input from the console") {
         std::cout << "Enter the numbers you want to check for prime " << std::endl;
         T value;
         std::cin >> value;
@@ -46,23 +43,17 @@ SUBCASE("Input from the console") {
        if (isPrime(modNum<T>(value), k))
            std::cout << "Your number is prime" << std::endl;
        else 
-           std::cout << "Your number is compound" << std::endl;
+           std::cout << "Your number is NOT prime" << std::endl;
     }
 
     SUBCASE("Random values") {
         int num_errors = 0;
-
-        for (int i = 0; i < 20; ++i)
+        for (int i = 0; i < 100000; ++i)
         {
-        
-           int value=getRandomNumber(1, 1000);
-            int k = getRandomNumber(1, 1000);
-            
-            if (isPrime(modNum<T>(value), k) != SimpleIsPrime(value)) {
-                num_errors++;
-            }
+            int value=getRandomNumber(1, 100000);
+            int k = getRandomNumber(100, 1000);
+            CHECK_EQ( isPrime(modNum<T>(value), k), SimpleIsPrime(value));
         }
-        CHECK(num_errors <= 5);
     }
 
     SUBCASE("Input from the file") {
@@ -86,11 +77,10 @@ SUBCASE("Input from the console") {
             if (isPrime(modNum<T>(value), k))
                 outfile << "Your number is prime" << std::endl;
             else
-                outfile << "Your number is compound" << std::endl;
+                outfile << "Your number is NOT prime" << std::endl;
 
             outfile.close();
         }
-
         input.close();
     }
 }

@@ -20,18 +20,17 @@ using namespace modular;
     {
          T1 value = base.getValue();
          
-        // The value is 2, less than 2, or even numbers are not prime
-
+        // Edge case
+        if (value == 3 || value == 2 ) return true;
         if (value <= 1 || value == 4 || value % 2 == 0)  return false;
-        if (value <= 3) return true;
-
+        
         // Set k to a default value of 1 if it is less than 1
         if (k < 1)
             k = 1;
 
-         T1 up= value - 1;
-        
+        T1 up= value - 1;
         T1 s = 0;
+
         while (up % 2 == 0)
         {
             up /= 2;
@@ -45,14 +44,13 @@ using namespace modular;
             T1 rand_number=rand() % (value - 4) + 2;
 
             // Compute y = rand_number^up mod value
-
-            T1 y= fpow(modNum(rand_number,up), value).getValue();
+            T1 y= fpow(modNum(rand_number,value),up).getValue();
 
             if (y != 1 && y != value - 1)
             {
                 for (T1 j = 0; j < s && y != value - 1; j++)
                 {
-                    y = (fpow(modNum(y,2), value)).getValue();
+                    y = (fpow(modNum(y,value), 2).getValue());
 
                     // If y == 1, value is composite
                     if (y == 1)
