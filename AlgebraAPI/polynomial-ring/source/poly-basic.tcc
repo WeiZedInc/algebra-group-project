@@ -1,29 +1,61 @@
-#pragma once
 #include <list>
 #include <iostream>
 #include "node.tcc"
 
 #ifndef POLYNOMIAL
 #define POLYNOMIAL
+
 template <typename T>
 class Polynomial
 {
 private:
     std::list<Node<T>> poly;
+    size_t degree;
 
 public:
     Polynomial() = default;
+
     ~Polynomial() = default;
 
-    void addNode(Node<T>);
+    Node<T> operator[](const size_t i); // use only when really necessary
 
-    Node<T> operator[](const int i);
+    bool empty();
+    typename std::list<Node<T>>::const_iterator begin() const;
+    typename std::list<Node<T>>::const_iterator end() const;
+
+    void addNode(const Node<T>);
+
+    void removeNode(const Node<T>); // by value
+    void removeNode(const size_t);  // by degree
+
+    size_t deg() const;
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    Polynomial<T> operator+(const Polynomial<T> &) const;
+    Polynomial<T> operator-(const Polynomial<T> &) const;
+    Polynomial<T> operator*(const Polynomial<T> &) const;
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    Polynomial<T> der() const; // deriveative
+    T evaluate() const;
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
+
+    Polynomial<T> gcd(const Polynomial<T> &) const;
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    static Polynomial<T> getPolynomialByOrder(size_t);
 };
 
 #endif
 
 template <typename T>
-Node<T> Polynomial<T>::operator[](const int i)
+Node<T> Polynomial<T>::operator[](const size_t i)
 {
 
     if (i < 0 || i >= poly.size())
@@ -36,12 +68,6 @@ Node<T> Polynomial<T>::operator[](const int i)
             return *it;
         j++;
     }
-}
-
-template <typename T>
-void Polynomial<T>::addNode(Node<T> p)
-{
-    poly.push_back(p);
 }
 
 template <typename T>

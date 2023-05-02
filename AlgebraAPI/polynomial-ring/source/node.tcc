@@ -1,105 +1,110 @@
 #include <list>
 #include <iostream>
 
-#ifndef POLY_NODE
-#define POLY_NODE
+#ifndef POLY_NODE_H
+#define POLY_NODE_H
+
+#include <stdexcept>
+
 template <typename T>
 class Node
 {
 private:
-    size_t pow;
+    size_t degree;
     T koef;
 
 public:
     Node();
-    Node(T p1, T k1);
+    Node(T koef, size_t degree);
     ~Node() = default;
 
-    size_t pow();
-    T koef();
+    size_t deg() const;
+    T k() const;
 
-    bool operator>(const Node &p2);
-    bool operator>=(const Node p2);
-    bool operator<(const Node p2);
-    bool operator<=(const Node p2);
-    bool operator==(const Node p2);
+    bool operator>(const Node<T> &p2) const;
+    bool operator>=(const Node<T> &p2) const;
+    bool operator<(const Node<T> &p2) const;
+    bool operator<=(const Node<T> &p2) const;
 
-    bool operator!=(const Node p2);
-    Node operator+(const Node p2);
-    Node operator-(const Node p2);
-    void operator=(const Node &p2);
+    bool operator!=(const Node<T> &p2) const;
+    Node<T> operator+(const Node<T> &p2) const;
+    Node<T> operator-(const Node<T> &p2) const;
+    void operator=(const Node<T> &p2);
+    bool operator==(const Node<T> &p2) const;
+
+    T evaluate() const;
 };
-#endif
+#endif // POLY_NODE_H
 
-template <class T>
-Node<T>::Node()
-{
-    pow = 0;
-    koef = 0;
-}
+#ifndef POLY_NODE_IMPLEMENTATION
+#define POLY_NODE_IMPLEMENTATION
+
 template <typename T>
-Node<T>::Node(T p1, T k1)
+Node<T>::Node() : degree(0), koef(0)
 {
-    pow = p1;
-    koef = k1;
 }
 
 template <typename T>
-bool Node<T>::operator>(const Node &p2)
+Node<T>::Node(T koef, size_t degree) : degree(degree), koef(koef)
 {
-    return pow > p2.pow;
 }
 
 template <typename T>
-bool Node<T>::operator>=(const Node p2)
+bool Node<T>::operator>(const Node<T> &p2) const
 {
-    return pow >= p2.pow;
+    return degree > p2.degree;
 }
 
 template <typename T>
-bool Node<T>::operator<(const Node p2)
+bool Node<T>::operator>=(const Node<T> &p2) const
 {
-    return pow < p2.pow;
+    return degree >= p2.degree;
 }
 
 template <typename T>
-bool Node<T>::operator<=(const Node p2)
+bool Node<T>::operator<(const Node<T> &p2) const
 {
-    return pow <= p2.pow;
+    return degree < p2.degree;
 }
 
 template <typename T>
-bool Node<T>::operator==(const Node<T> p2)
+bool Node<T>::operator<=(const Node<T> &p2) const
 {
-    return pow == p2.pow;
+    return degree <= p2.degree;
 }
 
 template <typename T>
-bool Node<T>::operator!=(const Node<T> p2)
+bool Node<T>::operator==(const Node<T> &p2) const
 {
-    return pow != p2.pow;
+    return degree == p2.degree;
 }
 
 template <typename T>
-Node<T> Node<T>::operator+(const Node<T> p2)
+bool Node<T>::operator!=(const Node<T> &p2) const
 {
-    if (pow != p2.pow)
-        throw std::logic_error("Can't add monominals with different powers");
+    return degree != p2.degree;
+}
+
+template <typename T>
+Node<T> Node<T>::operator+(const Node<T> &p2) const
+{
+    if (degree != p2.degree)
+        throw std::logic_error("Can't add monomials with different powers");
     else
     {
-        Node res(pow, koef + p2.koef);
+        Node<T> res(koef + p2.koef, degree);
         return res;
     }
 }
 
 template <typename T>
-Node<T> Node<T>::operator-(const Node<T> p2)
+Node<T> Node<T>::operator-(const Node<T> &p2) const
 {
-    if (pow != p2.pow)
-        throw std::logic_error("Can't substract monominals with different powers");
+    if (degree != p2.degree)
+        throw std::logic_error("Can't subtract monomials with different powers");
     else
     {
-        Node res(pow, koef - p2.koef);
+        Node<T> res(koef - p2.koef, degree);
         return res;
     }
 }
@@ -107,18 +112,19 @@ Node<T> Node<T>::operator-(const Node<T> p2)
 template <typename T>
 void Node<T>::operator=(const Node<T> &p2)
 {
-    pow = p2.pow;
+    degree = p2.degree;
     koef = p2.koef;
 }
 
 template <typename T>
-size_t Node<T>::pow()
+size_t Node<T>::deg() const
 {
-    return pow;
+    return degree;
 }
 
 template <typename T>
-T Node<T>::koef()
+T Node<T>::k() const
 {
     return koef;
 }
+#endif
