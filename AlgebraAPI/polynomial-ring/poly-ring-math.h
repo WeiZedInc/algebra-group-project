@@ -2,37 +2,36 @@
 #include <list>
 #include <iostream>
 #include <vector>
-#include <../finite-field/mod-math.h>
 
-#ifndef POLY_NODE
-#define POLY_NODE
-
+#ifndef POLY_NODE_H
+#define POLY_NODE_H
 template <typename T>
 class Node
 {
 private:
-    size_t pow;
+    size_t degree;
     T koef;
 
 public:
     Node();
-    Node(T koef, size_t pow);
+    Node(T koef, size_t degree);
     ~Node() = default;
 
-    size_t pow();
-    modNum<T> koef();
+    size_t deg() const;
+    T k() const;
 
-    bool operator>(const Node &p2);
-    bool operator>=(const Node p2);
-    bool operator<(const Node p2);
-    bool operator<=(const Node p2);
+    bool operator>(const Node<T> &p2) const;
+    bool operator>=(const Node<T> &p2) const;
+    bool operator<(const Node<T> &p2) const;
+    bool operator<=(const Node<T> &p2) const;
 
-    bool operator!=(const Node p2);
-    Node operator+(const Node p2);
-    Node operator-(const Node p2);
-    void operator=(const Node &p2);
+    bool operator!=(const Node<T> &p2) const;
+    Node<T> operator+(const Node<T> &p2) const;
+    Node<T> operator-(const Node<T> &p2) const;
+    void operator=(const Node<T> &p2);
+    bool operator==(const Node<T> &p2) const;
 
-    modular::modNum<T> evaluate();
+    T evaluate() const;
 };
 #endif
 
@@ -44,38 +43,47 @@ class Polynomial
 private:
     std::list<Node<T>> poly;
     size_t degree;
-    T mod; // also a field
 
 public:
     Polynomial() = default;
+
     ~Polynomial() = default;
-    Node<T> operator[](const size_t i);
+
+    Node<T> operator[](const size_t i); // use only when really necessary
 
     bool empty();
+    typename std::list<Node<T>>::const_iterator begin() const;
+    typename std::list<Node<T>>::const_iterator end() const;
 
-    void addNode(Node<T>);
-    void removeNode(Node<T>); // by value
-    void removeNode(size_t);  // by degree
+    void addNode(const Node<T>);
 
-    // getters
-    size_t deg();
-    //////////////////////////////////////////////////////////////////////////////
-    Polynomial<T> operator+(const &Polynomial<T>);
-    Polynomial<T> operator-(const &Polynomial<T>);
-    Polynomial<T> operator*(const &Polynomial<T>);
+    void removeNode(const Node<T>); // by value
+    void removeNode(const size_t);  // by degree
+
+    size_t deg() const;
 
     //////////////////////////////////////////////////////////////////////////////
 
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const &Polynomial<T>);
-    std::pair<Polynomial<T>> operator/(const &Polynomial<T>);
-    Polynomial<T> gcd(const &Polynomial<T>);
+    Polynomial<T> operator+(const Polynomial<T> &) const;
+    Polynomial<T> operator-(const Polynomial<T> &) const;
+    Polynomial<T> operator*(const Polynomial<T> &) const;
 
     //////////////////////////////////////////////////////////////////////////////
 
-    Polynomial<T> der();
-    modular::modNum<T> evaluate();
+    Polynomial<T> der() const; // deriveative
+    T evaluate() const;
+
     //////////////////////////////////////////////////////////////////////////////
 
-    static Polynomial getPolynomialByOrder(size_t);
+    std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
+
+    Polynomial<T> gcd(const Polynomial<T> &) const;
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    static Polynomial<T> getPolynomialByOrder(size_t);
 };
 #endif
+
+#include "source/node.tcc"
+#include "source/poly-basic.tcc"
