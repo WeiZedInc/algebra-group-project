@@ -68,7 +68,7 @@ fromMontgomery(T1 x, T1 n, T1 r) {
  */
 template <typename T1>
 modNum<T1>
-fpow(modNum<T1> base, int32_t power) {
+fpow(modNum<T1> base, size_t power) {
     /*
       T1 r = 1 << 16;
 
@@ -101,4 +101,4 @@ fpow(modNum<T1> base, int32_t power) {
 }
 
 #endif
-}
+}   // namespace modular

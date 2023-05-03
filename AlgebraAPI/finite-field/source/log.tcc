@@ -6,10 +6,12 @@
 #include "fpow.tcc"
 #include "mod-num.tcc"
 namespace modular {
+#ifndef LOG_H
+#define LOG_H
 
 template <class numT>
 bool
-isGenrator(modNum<numT>, std::string) {
+isGenrator2(modNum<numT>, std::string) {
     return true;
 }
 template <class numT>
@@ -18,16 +20,13 @@ struct customHash {
     std::hash<numT> hasher;
 
    public:
-    size_t operator()(const modNum<numT> &number) const {
-        return hasher(number.getValue());
-    }
+    size_t operator()(const modNum<numT> &number) const { return hasher(number.getValue()); }
 };
 template <class numT>
 size_t
 log(modNum<numT> value, modNum<numT> base) {
-    if (!isGenrator(base, "+"))
-        throw std::invalid_argument(
-            "Base of a logarithm must be a group Generator");
+    if (!isGenrator2(base, "+"))
+        throw std::invalid_argument("Base of a logarithm must be a group Generator");
 
     size_t m = static_cast<size_t>(std::sqrt(base.getMod())) + 1;
 
@@ -51,5 +50,6 @@ log(modNum<numT> value, modNum<numT> base) {
 
     throw std::invalid_argument("Unexpected behaviour");
 }
+#endif
 
 }   // namespace modular

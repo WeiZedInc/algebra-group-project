@@ -51,7 +51,7 @@ TEST_CASE("Testing Pollard factorization") {
         T mult = 1;
         bool isExceptionThrown = false;
         for (auto numb : f1) {
-            if (!isPrime(numb.getValue()))
+            if (!isPrimeSimple(numb.getValue()))
                 break;
             mult *= numb.getValue();
         }

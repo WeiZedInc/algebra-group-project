@@ -31,7 +31,7 @@ gcd(T1 a, T2 b) {
  */
 template <typename T1>
 bool
-isPrime(T1 a) {
+isPrimeSimple(T1 a) {
     for (int i = 2; i <= std::sqrt(a); ++i)
         if (a % i == 0)
             return false;
@@ -92,13 +92,13 @@ factorize(modNum<T1> value) {
         throw std::invalid_argument(std::to_string(value.getValue()) + " is less than 1");
     else if (value == 1)
         return std::vector<modNum<T1>>{};
-    else if (isPrime(value.getValue()))
+    else if (isPrimeSimple(value.getValue()))
         return std::vector<modNum<T1>>{value};
 
     std::vector<modNum<T1>> factors;
 
     T1 divisor = pollardRhO(value.getValue());
-    if (isPrime(divisor))
+    if (isPrimeSimple(divisor))
         factors.push_back(modNum<T1>(divisor, value.getMod()));
     else {
         std::vector<modNum<T1>> tmp = factorize(modNum<T1>(divisor, value.getMod()));
