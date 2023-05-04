@@ -13,8 +13,8 @@ template <typename T>
 class PolynomialField : public Polynomial<modNum<T>>
 {
 private:
-    T mod;
-    size_t order = 0;
+    size_t polyMod;
+    size_t order = 0; // degree of polynom
 
 public:
     static std::vector<PolynomialField<T>> findKIrreducible(size_t k);
