@@ -1,6 +1,9 @@
 #include <list>
+#include <vector>
 #include <iostream>
 #include "node.tcc"
+
+using namespace modular;
 
 #ifndef POLYNOMIAL
 #define POLYNOMIAL
@@ -10,31 +13,31 @@ class Polynomial
 {
 private:
     std::list<Node<T>> poly;
-    size_t degree;
+    size_t degree = 0;
+    T numMod = 0;
 
 public:
-    Polynomial() = default;
-    Polynomial(std::vector<modNum<T>>);
+    Polynomial(T mod) : numMod(mod){};
+    Polynomial(std::vector<std::pair<T, size_t>>, T);
+    Polynomial(std::pair<T, size_t> *arr, size_t n, T);
 
     ~Polynomial() = default;
 
     Node<T> operator[](const size_t i); // use only when really necessary
 
     bool empty();
-    typename std::list<Node<T>>::const_iterator begin() const;
+    typename std::list<T>::const_iterator begin() const;
     typename std::list<Node<T>>::const_iterator end() const;
 
     void addNode(const Node<T>);
+    void addNode(const T, size_t);
 
     void removeNode(const Node<T>); // by value
     void removeNode(const size_t);  // by degree
 
     size_t deg() const;
-    Polynomial<T> derivative();
-    int evaluate(const T);
 
-    void print();
-
+    void print() const;
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +48,8 @@ public:
     //////////////////////////////////////////////////////////////////////////////
 
     Polynomial<T> der() const; // deriveative
-    T evaluate() const;
+    modNum<T> evaluate(const T) const;
+    modNum<T> evaluate(const modNum<T>) const;
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -74,20 +78,19 @@ Node<T> Polynomial<T>::operator[](const size_t i)
             return *it;
         j++;
     }
-}
-template <typename T>
-Polynomial<T>::Polynomial(std::vector<modNum<T>>)
-{
+
+    throw std::out_of_range("Index out of range");
 }
 
 template <typename T>
 std::ostream &operator<<(std::ostream &os, Node<T> &p)
 {
-    return os << '{' << p.power() << ", " << p.koeficient() << '}';
+    return os << '{' << p.deg() << ", " << p.k().getValue() << '}';
 }
 
 template <typename T>
-Polynomial<T> Polynomial<T>::derivative() {
+Polynomial<T> Polynomial<T>::der() const
+{
     Polynomial<T> returned_field;
     Node<T> current_newnode;
     T new_koef;
@@ -97,11 +100,12 @@ Polynomial<T> Polynomial<T>::derivative() {
     {
         new_koef = it->k() * it->deg();
         new_pow = it->deg() - 1;
-        if (new_pow < 1) {
+        if (new_pow < 1)
+        {
             new_koef = 0;
             new_pow = 0;
         }
-        current_newnode = { new_pow, new_koef };
+        current_newnode = {new_pow, new_koef};
         returned_field.addNode(current_newnode);
     }
 
@@ -109,23 +113,22 @@ Polynomial<T> Polynomial<T>::derivative() {
 }
 
 template <typename T>
+modNum<T> Polynomial<T>::evaluate(const T x_value) const
+{
 
-//TODO: replace int with modular::modNum<T>
-//modular::modNum<T> Field<T>::evaluate() {
-int Polynomial<T>::evaluate(T x_value) {
-
-    T sum = 0;
-    T current_num = 0;
+    modNum<T> sum(0, numMod);
+    modNum<T> current_num(0, numMod);
 
     for (auto it = poly.begin(); it != poly.end(); ++it)
     {
-        if (it->deg() > 0) {
-            current_num = std::pow(it->k() * x_value, it->deg());
+        if (it->deg() > 0)
+        {
+            current_num = fpow(modNum<T>(x_value, numMod), it->deg()) * it->k();
         }
-        else {
+        else
+        {
             current_num = it->k();
         }
-        std::cout << current_num << std::endl;
         sum = sum + current_num;
     }
 
@@ -133,22 +136,70 @@ int Polynomial<T>::evaluate(T x_value) {
 }
 
 template <typename T>
-void Polynomial<T>::print() {
-    //boolean used for adding the plus sign
+void Polynomial<T>::print() const
+{
+    // boolean used for adding the plus sign
     bool first_number_checked = false;
     for (auto it = poly.begin(); it != poly.end(); ++it)
     {
-        if (first_number_checked) {
+        if (first_number_checked)
+        {
             std::cout << " + ";
         }
-        else {
+
+        else
+        {
             first_number_checked = true;
         }
-        if (it->deg() > 0) {
-            std::cout << it->k() << "x^" << it->deg();
+        if (it->deg() > 0)
+        {
+            if (it->k().getValue() > 1)
+                std::cout << (it->k().getValue()) << "x^" << (it->deg());
+            else
+                std::cout << "x^" << (it->deg());
         }
-        else {
-            std::cout << it->k();
+        else
+        {
+            std::cout << (it->k().getValue());
         }
     }
+    std::cout << std::endl;
+}
+
+template <typename T>
+void Polynomial<T>::addNode(const Node<T> node)
+{
+    if (node.deg() > degree)
+    {
+        degree = node.deg();
+        poly.push_front(node);
+        return;
+    }
+
+    for (auto it = poly.begin(); it != poly.end(); it++)
+    {
+        if (it->deg() == node.deg())
+        {
+            *it = *it + node;
+            return;
+        }
+        if (it->deg() < node.deg())
+        {
+            poly.insert(it, node);
+            return;
+        }
+    }
+    poly.push_back(node);
+}
+
+template <typename T>
+void Polynomial<T>::addNode(const T num, size_t deg)
+{
+    Node<T> a(modNum(num, numMod), deg);
+    this->addNode(a);
+}
+
+template <typename T>
+Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial(mod)
+{
 }
