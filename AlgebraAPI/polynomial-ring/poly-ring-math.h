@@ -13,7 +13,7 @@ class Node
 {
 private:
     size_t degree;
-    T koef;
+    modNum<T> koef;
 
 public:
     Node();
@@ -21,20 +21,20 @@ public:
     ~Node() = default;
 
     size_t deg() const;
-    T k() const;
+    modNum<T> k() const;
 
-    bool operator>(const Node<T> &p2) const;
-    bool operator>=(const Node<T> &p2) const;
-    bool operator<(const Node<T> &p2) const;
-    bool operator<=(const Node<T> &p2) const;
+    bool operator>(const Node<modNum<T>> &p2) const;
+    bool operator>=(const Node<modNum<T>> &p2) const;
+    bool operator<(const Node<modNum<T>> &p2) const;
+    bool operator<=(const Node<modNum<T>> &p2) const;
 
-    bool operator!=(const Node<T> &p2) const;
-    Node<T> operator+(const Node<T> &p2) const;
-    Node<T> operator-(const Node<T> &p2) const;
-    void operator=(const Node<T> &p2);
-    bool operator==(const Node<T> &p2) const;
+    bool operator!=(const Node<modNum<T>> &p2) const;
+    Node<modNum<T>> operator+(const Node<modNum<T>> &p2) const;
+    Node<modNum<T>> operator-(const Node<modNum<T>> &p2) const;
+    void operator=(const Node<modNum<T>> &p2);
+    bool operator==(const Node<modNum<T>> &p2) const;
 
-    T evaluate() const { return fpow(koef, degree); };
+    modNum<T> evaluate() const { return fpow(koef, degree); };
 };
 #endif
 
@@ -46,6 +46,7 @@ class Polynomial
 private:
     std::list<Node<modNum<T>>> poly;
     size_t degree; // polynomial degree
+    T numMod;
 
 public:
     Polynomial() = default;

@@ -14,6 +14,7 @@ private:
 
 public:
     Polynomial() = default;
+    Polynomial(std::vector<modNum<T>>);
 
     ~Polynomial() = default;
 
@@ -68,6 +69,10 @@ Node<T> Polynomial<T>::operator[](const size_t i)
             return *it;
         j++;
     }
+}
+template <typename T>
+Polynomial<T>::Polynomial(std::vector<modNum<T>>)
+{
 }
 
 template <typename T>
