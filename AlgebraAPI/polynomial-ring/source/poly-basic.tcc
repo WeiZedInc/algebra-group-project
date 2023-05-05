@@ -26,8 +26,8 @@ public:
     Node<T> operator[](const size_t i); // use only when really necessary
 
     bool empty();
-    typename std::list<T>::const_iterator begin() const;
-    typename std::list<Node<T>>::const_iterator end() const;
+    typename std::list<Node<T>>::const_iterator begin() const { return poly.begin(); };
+    typename std::list<Node<T>>::const_iterator end() const { return poly.end(); };
 
     void addNode(const Node<T>);
     void addNode(const T, size_t);
@@ -35,7 +35,8 @@ public:
     void removeNode(const Node<T>); // by value
     void removeNode(const size_t);  // by degree
 
-    size_t deg() const;
+    size_t getDegree() const { return degree; };
+    T getNumMod() const { return numMod; }
 
     void print() const;
 
@@ -133,6 +134,12 @@ modNum<T> Polynomial<T>::evaluate(const T x_value) const
     }
 
     return sum;
+}
+
+template <typename T>
+modNum<T> Polynomial<T>::evaluate(const modNum<T> x_value) const
+{
+    return evaluate(x_value->getValue());
 }
 
 template <typename T>
