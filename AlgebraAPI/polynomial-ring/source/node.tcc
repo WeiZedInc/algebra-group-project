@@ -1,6 +1,7 @@
 #include <list>
 #include <iostream>
-
+#include "../../finite-field/mod-math.h"
+using namespace modular;
 #ifndef POLY_NODE_H
 #define POLY_NODE_H
 
@@ -11,15 +12,15 @@ class Node
 {
 private:
     size_t degree;
-    T koef;
+    modNum<T> koef;
 
 public:
     Node();
-    Node(T koef, size_t degree);
+    Node(modNum<T> koef, size_t degree);
     ~Node() = default;
 
     size_t deg() const;
-    T k() const;
+    modNum<T> k() const;
 
     bool operator>(const Node<T> &p2) const;
     bool operator>=(const Node<T> &p2) const;
@@ -32,7 +33,7 @@ public:
     void operator=(const Node<T> &p2);
     bool operator==(const Node<T> &p2) const;
 
-    T evaluate() const;
+    modNum<T> evaluate() const;
 };
 #endif // POLY_NODE_H
 
@@ -45,7 +46,7 @@ Node<T>::Node() : degree(0), koef(0)
 }
 
 template <typename T>
-Node<T>::Node(T koef, size_t degree) : degree(degree), koef(koef)
+Node<T>::Node(modNum<T> koef, size_t degree) : degree(degree), koef(koef)
 {
 }
 
@@ -123,7 +124,7 @@ size_t Node<T>::deg() const
 }
 
 template <typename T>
-T Node<T>::k() const
+modNum<T> Node<T>::k() const
 {
     return koef;
 }
