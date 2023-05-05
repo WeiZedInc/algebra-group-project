@@ -214,7 +214,7 @@ factorize(size_t &size, char *num, char *mod, char *errorStr) {
             strcpy(resStr[i], res[i].getValue().get_str().c_str());
         }
     } catch (const std::exception &e) {
-        strcpy(errorStr, ex.what());
+        strcpy(errorStr, e.what());
     }
 
     return resStr;
