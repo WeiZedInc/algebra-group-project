@@ -13,61 +13,56 @@ using namespace modular;
 
 const size_t MESSAGE_LEN = 200;
 
-template <typename numT>
 void
-additionNumerical(numT &ans, numT a, numT b, numT mod) {
+additionNumerical(mpz_class &ans, mpz_class a, mpz_class b, mpz_class mod) {
     if (mod < 1) {
         std::invalid_argument("mod must be greater or equal 1");
     }
 
-    modNum<numT> a1(a, mod), b1(b, mod);
-    modNum<numT> c = a1 + b1;
+    modNum<mpz_class> a1(a, mod), b1(b, mod);
+    modNum<mpz_class> c = a1 + b1;
 
     ans = c.getValue();
 }
 
-template <typename numT>
-numT
-subtractionNumerical(numT a, numT b, numT mod) {
+mpz_class
+subtractionNumerical(mpz_class a, mpz_class b, mpz_class mod) {
     if (mod < 1) {
         std::invalid_argument("mod must be greater or equal 1");
     }
 
-    modNum<numT> a1(a, mod), b1(b, mod);
-    modNum<numT> c = a1 - b1;
+    modNum<mpz_class> a1(a, mod), b1(b, mod);
+    modNum<mpz_class> c = a1 - b1;
 
     return c.getValue();
 }
 
-template <typename numT>
-numT
-multiplicationNumerical(numT a, numT b, numT mod) {
+mpz_class
+multiplicationNumerical(mpz_class a, mpz_class b, mpz_class mod) {
     if (mod < 1) {
         std::invalid_argument("mod must be greater or equal 1");
     }
 
-    modNum<numT> a1(a, mod), b1(b, mod);
-    modNum<numT> c = a1 * b1;
+    modNum<mpz_class> a1(a, mod), b1(b, mod);
+    modNum<mpz_class> c = a1 * b1;
 
     return c.getValue();
 }
 
-template <typename numT>
-numT
-divisionNumerical(numT a, numT b, numT mod) {
+mpz_class
+divisionNumerical(mpz_class a, mpz_class b, mpz_class mod) {
     if (mod < 1) {
         std::invalid_argument("mod must be greater or equal 1");
     }
 
-    modNum<numT> a1(a, mod), b1(b, mod);
-    modNum<numT> c = a1 / b1;
+    modNum<mpz_class> a1(a, mod), b1(b, mod);
+    modNum<mpz_class> c = a1 / b1;
 
     return c.getValue();
 }
 
-template <typename T>
 void
-stringToNum(T &number, char *s) {
+stringToNum(mpz_class &number, char *s) {
     size_t len = strlen(s);
 
     number = 0;
@@ -92,13 +87,30 @@ addition(char *a, char *b, char *mod) {
 
     return ansStr;
 }
+template <typename Func>
+char *
+apply(char *a, char *b, char *mod, Func func) {
+    mpz_class numA, numB, numC, ans;
+
+    stringToNum(numA, a);
+    stringToNum(numB, b);
+    stringToNum(numC, mod);
+
+    func(ans, numA, numB, numC);
+
+    char *ansStr = new char[MESSAGE_LEN];
+    strcpy(ansStr, ans.get_str().c_str());
+
+    return ansStr;
+}
+
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
 //
 int
 main() {
-    char a[] = "1";
+    char a[] = "2";
     char b[] = "22";
     char c[] = "7";
 
-    std::cout << addition(a, b, c) << std::endl;
+    std::cout << apply(a, b, c, additionNumerical) << std::endl;
 }

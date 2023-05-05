@@ -111,7 +111,7 @@ modNum<T>::mult(T value1, T value2, T MOD) const {
     value2 = (value2 % MOD + MOD) % MOD;
     T result = 0;
     while (value2) {
-        if (value2 & 1) {
+        if (value2 % 2 == 1) {
             result = (result + value1) % MOD;
         }
         value1 = (value1 * 2) % MOD;
@@ -152,9 +152,7 @@ modNum<T>::inverseValue(T value1, T mod) const {
 
     T gcdResult = gcdExtended(value1, mod, &x, &y);
     if (gcdResult != 1) {
-        std::string errormsg = "Inverse does not exist here. g: " + std::to_string(gcdResult) +
-                               " value1: " + std::to_string(value1) +
-                               " mod: " + std::to_string(mod);
+        std::string errormsg = "Inverse does not exist here.";
         throw std::invalid_argument(errormsg);
     } else {
         x = (x % mod + mod) % mod;
