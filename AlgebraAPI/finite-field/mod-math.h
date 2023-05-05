@@ -80,7 +80,7 @@ template <typename T1>
 bool isGenrator(modNum<T1> value);   // is element a multyplicative group generator
 
 template <typename T1>
-size_t orderOfElement(modNum<T1> value, modNum<T1> base);
+T1 orderOfElement(modNum<T1> value, modNum<T1> base);
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
