@@ -13,104 +13,439 @@ using namespace modular;
 
 const size_t MESSAGE_LEN = 200;
 
-void
-additionNumerical(mpz_class &ans, mpz_class a, mpz_class b, mpz_class mod) {
-    if (mod < 1) {
-        std::invalid_argument("mod must be greater or equal 1");
+/**
+ *
+ *    @brief Adds two numbers and returns their sum modulo a given number.
+ *    @param a The first number to be added.
+ *    @param b The second number to be added.
+ *    @param mod The number to take the result modulo with.
+ *    @return A char pointer to the result of the subtraction in string form
+ *    @note memory should be manualy freed by delete[]
+ *    */
+
+char *
+addition(char *a, char *b, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numB, numMod;
+
+        numA.set_str(a, 10);
+        numB.set_str(b, 10);
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
+        res = a1 + b1;
+
+        char *resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
     }
 
-    modNum<mpz_class> a1(a, mod), b1(b, mod);
-    modNum<mpz_class> c = a1 + b1;
-
-    ans = c.getValue();
+    return resStr;
 }
 
-mpz_class
-subtractionNumerical(mpz_class a, mpz_class b, mpz_class mod) {
-    if (mod < 1) {
-        std::invalid_argument("mod must be greater or equal 1");
+/**
+ *
+ *    @brief Subtracts two numbers a and b modulo mod
+ *    @param a The minuend (
+ *    @param b The subtrahend
+ *    @param mod The modulus of the operation
+ *    @return A char pointer to the result of the subtraction in string form
+ *    @note memory should be manualy freed by delete[]
+ *    */
+
+char *
+subtraction(char *a, char *b, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numB, numMod;
+
+        numA.set_str(a, 10);
+        numB.set_str(b, 10);
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
+        res = a1 - b1;
+
+        char *resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
     }
 
-    modNum<mpz_class> a1(a, mod), b1(b, mod);
-    modNum<mpz_class> c = a1 - b1;
-
-    return c.getValue();
+    return resStr;
 }
+/**
+ *
+ *    @brief Multiply two numbers modulo mod
+ *    @param a The first number in string form
+ *    @param b The second number in string form
+ *    @param mod The number to take the modulus by in string form
+ *    @return A char pointer to the result of the multiplication in string form
+ *    @note memory should be manualy freed by delete[]
+ */
 
-mpz_class
-multiplicationNumerical(mpz_class a, mpz_class b, mpz_class mod) {
-    if (mod < 1) {
-        std::invalid_argument("mod must be greater or equal 1");
+char *
+multiplication(char *a, char *b, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numB, numMod;
+
+        numA.set_str(a, 10);
+        numB.set_str(b, 10);
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
+        res = a1 * b1;
+
+        char *resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
     }
 
-    modNum<mpz_class> a1(a, mod), b1(b, mod);
-    modNum<mpz_class> c = a1 * b1;
-
-    return c.getValue();
+    return resStr;
 }
+/**
+ *
+ *    @brief Performs modular division of two large integers.
+ *    @param a string representing the numerator.
+ *    @param b  string representing the denominator.
+ *    @param mod  string representing the modulus.
+ *    @return A char pointer to the result of modular division.
+ *    @note memory should be manualy freed by delete[]
+ */
+char *
+division(char *a, char *b, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numB, numMod;
 
-mpz_class
-divisionNumerical(mpz_class a, mpz_class b, mpz_class mod) {
-    if (mod < 1) {
-        std::invalid_argument("mod must be greater or equal 1");
+        numA.set_str(a, 10);
+        numB.set_str(b, 10);
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
+        res = a1 / b1;
+
+        char *resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
     }
-
-    modNum<mpz_class> a1(a, mod), b1(b, mod);
-    modNum<mpz_class> c = a1 / b1;
-
-    return c.getValue();
-}
-
-void
-stringToNum(mpz_class &number, char *s) {
-    size_t len = strlen(s);
-
-    number = 0;
-    for (size_t i = 0; i < len; ++i) {
-        number *= 10;
-        number += s[i] - '0';
-    }
+    return resStr;
 }
 
 char *
-addition(char *a, char *b, char *mod) {
-    mpz_class numA, numB, numC, ans;
+fastPow(char *num, char *degree, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numMod;
+        size_t numDegree = static_cast<size_t>(atoll(degree));
 
-    stringToNum(numA, a);
-    stringToNum(numB, b);
-    stringToNum(numC, mod);
+        numA.set_str(num, 10);
 
-    additionNumerical(ans, numA, numB, numC);
+        numMod.set_str(mod, 10);
 
-    char *ansStr = new char[MESSAGE_LEN];
-    strcpy(ansStr, ans.get_str().c_str());
+        modNum<mpz_class> a1(numA, numMod), res;
+        res = fpow(a1, numDegree);
+        char *resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
+    }
 
-    return ansStr;
+    return resStr;
 }
-template <typename Func>
+
 char *
-apply(char *a, char *b, char *mod, Func func) {
-    mpz_class numA, numB, numC, ans;
+inverse(char *num, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numMod;
 
-    stringToNum(numA, a);
-    stringToNum(numB, b);
-    stringToNum(numC, mod);
+        numA.set_str(num, 10);
 
-    func(ans, numA, numB, numC);
+        numMod.set_str(mod, 10);
 
-    char *ansStr = new char[MESSAGE_LEN];
-    strcpy(ansStr, ans.get_str().c_str());
+        modNum<mpz_class> a1(numA, numMod), res;
 
-    return ansStr;
+        res = a1.inv();
+        char *resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
+    }
+
+    return resStr;
+}
+
+/**
+ *
+ *    @brief Factorize a number modulo a given modulus.
+ *    This function computes the prime factorization of a number modulo a given modulus.
+ *    @param size Reference to a variable that will hold the number of prime factors found.
+ *    @param num The number to factorize.
+ *    @param mod The modulus.
+ *    @return An array of strings representing the prime factors. The first element of the array is
+ * the number of factors.
+ *    @throw std::length_error if the number of prime factors is greater than 127.
+ *    */
+char **
+factorize(size_t &size, char *num, char *mod, char *errorStr) {
+    char **resStr = nullptr;
+    try {
+        mpz_class numA, numMod;
+
+        numA.set_str(num, 10);
+
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod);
+
+        std::vector<modNum<mpz_class>> res = modular::factorize(a1);
+
+        resStr = new char *[res.size()];
+        size = res.size();
+
+        for (int i = 0; i < res.size(); ++i) {
+            resStr[i] = new char[MESSAGE_LEN];
+            strcpy(resStr[i], res[i].getValue().get_str().c_str());
+        }
+    } catch (const std::exception &e) {
+        strcpy(errorStr, ex.what());
+    }
+
+    return resStr;
+}
+
+/**
+ *
+ *    @brief Calculate the discrete square root of a given number modulo a given modulus
+ *    @param num the number to take the square root of
+ *    @param mod the modulus to calculate the square root modulo
+ *    @return A string representation of the discrete square root of the given number modulo the
+ * given modulus
+ *    */
+
+char *
+discreteSqrt(char *num, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numMod;
+
+        numA.set_str(num, 10);
+
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), res;
+
+        res = modular::sqrt(a1);
+        char *resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
+    }
+
+    return resStr;
+}
+
+/**
+ *
+ *    @brief Computes the discrete logarithm of a number to a given base modulo a given modulus
+ *    Computes the smallest integer 'x' such that (base ^ x) % mod == num.
+ *    @param num the number whose logarithm is to be found
+ *    @param base the base of the logarithm
+ *    @param mod the modulus used in the computation
+ *    @return a string representation of the computed logarithm
+ *    */
+
+char *
+discreteLog(char *num, char *base, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numB, numMod;
+
+        numA.set_str(num, 10);
+        numB.set_str(base, 10);
+
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod);
+
+        size_t res;
+
+        res = modular::log(a1, b1);
+        resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, std::to_string(res).c_str());
+
+    } catch (const std::exception &ex) {
+        strcpy(errorStr, ex.what());
+    }
+
+    return resStr;
+}
+
+/**
+ *
+ *   @brief Calculates the order of an element in a finite field.
+ *   Given an integer number 'num' and a modulus 'mod', calculates the smallest positive
+ *   integer 'k' such that num^k = 1 (mod mod). The function returns the order 'k' as a string.
+ *  @param num base number
+ *  @param mod modulus
+ *  @return string representation of the order of the element
+ */
+
+char *
+orderOfElement(char *num, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numMod, res;
+
+        numA.set_str(num, 10);
+
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod);
+
+        res = modular::orderOfElement(a1);
+
+        resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.get_str().c_str());
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+    }
+
+    return resStr;
+}
+
+/**
+ *
+ *    @brief Checks if a given number is a group generator
+ *    @param num the number to check if it is a generator
+ *    @param mod the modulus
+ *    @return true if num is a generator, false otherwise
+ *    */
+
+bool
+isGenerator(char *num, char *mod, char *errorStr) {
+    try {
+        char *resStr = nullptr;
+        mpz_class numA, numMod, res;
+
+        numA.set_str(num, 10);
+
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod);
+
+        return modular::isGenrator(a1);
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+    }
+    return false;
+}
+
+/**
+ *
+ *    @brief Calculates Euler's totient function of a given number modulo m.
+ *    @param num A string representation of the number for which Euler's totient function is to be
+ * calculated.
+ *    @param mod A string representation of the modulo for the calculation of Euler's totient
+ * function.
+ *    @return A string representation of the value of Euler's totient function of the given number
+ * modulo m.
+ *    */
+
+char *
+eulerFunction(char *num, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numMod;
+
+        numA.set_str(num, 10);
+
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), res;
+
+        res = modular::eulerFunction(a1);
+
+        resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+    }
+
+    return resStr;
+}
+
+/**
+ *
+ *    @brief Calculates the Carmichael Function λ(n) for a given number n and modulus mod
+ *    @param num the number for which to calculate the Carmichael Function
+ *    @param mod the modulus used to calculate the Carmichael Function
+ *   @return The value of the Carmichael Function as a string
+ *   */
+
+char *
+carmichaelFunction(char *num, char *mod, char *errorStr) {
+    char *resStr = nullptr;
+    try {
+        mpz_class numA, numMod;
+
+        numA.set_str(num, 10);
+
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), res;
+
+        res = modular::carmichaelFunction(a1);
+
+        resStr = new char[MESSAGE_LEN];
+        strcpy(resStr, res.getValue().get_str().c_str());
+
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+    }
+
+    return resStr;
+}
+
+/**
+ *
+ *    @brief Determines if a given number is prime using the Miller-Rabin primality test
+ *    @param num A char pointer to the number being checked for primality
+ *    @param mod A char pointer to the modulus used to perform the modular arithmetic
+ *    @param iterations A char pointer to the number of iterations used to perform the Miller-Rabin
+ * test
+ *    @return A boolean value indicating whether the given number is prime (true) or not (false)
+ *   */
+bool
+isPrime(char *num, char *mod, char *iterations, char *errorStr) {
+    try {
+        mpz_class numA, numMod, res;
+
+        numA.set_str(num, 10);
+
+        numMod.set_str(mod, 10);
+        size_t iters = atoll(iterations);
+
+        modNum<mpz_class> a1(numA, numMod);
+
+        return modular::isPrime(a1, iters);
+
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+    }
 }
 
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
-//
 int
 main() {
     char a[] = "2";
-    char b[] = "22";
+    char b[] = "0";
     char c[] = "7";
-
-    std::cout << apply(a, b, c, additionNumerical) << std::endl;
 }
