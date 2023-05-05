@@ -217,8 +217,9 @@ Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial
  * @return Polynomial<T> The result of adding two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const {
-    Polynomial<T> result;
+Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
+{
+    Polynomial<T> result(this->degree);
 
     result.degree = std::max(this->degree, other.degree);
     auto it = this->poly.begin();
@@ -226,24 +227,28 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const {
 
     while (it != this->poly.end() && io != other.poly.end())
     {
-        if (it.deg() == io.deg()) {
-            modNum<T> t1 = it.k();
-            modNum<T> t2 = io.k();
-            modNum<T> temp = t1.operator+(t2);
-            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+        if (it->deg() == io->deg())
+        {
+            modNum<T> t1 = it->k();
+            modNum<T> t2 = io->k();
+            modNum<T> temp = t1 + t2;
+
+            result.poly.push_back(Node<T>(temp.getValue(), it->deg()));
             it++;
             io++;
         }
-        else if (it.deg() < io.deg()) {
-            modNum<T> t = it.k();
-            modNum<T> temp = t.operator+(modNum<T>(0));
-            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+        else if (it->deg() < io->deg())
+        {
+            modNum<T> t = it->k();
+            modNum<T> temp = t + (modNum<T>(0));
+            result.poly.push_back(Node<T>(temp.getValue(), it->deg()));
             it++;
         }
-        else {
-            modNum<T> t = io.k();
-            modNum<T> temp = t.operator+(modNum<T>(0));
-            result.poly.push_back(Node<T>(temp.getValue(), io.deg()));
+        else
+        {
+            modNum<T> t = io->k();
+            modNum<T> temp = t + (modNum<T>(0));
+            result.poly.push_back(Node<T>(temp.getValue(), io->deg()));
             io++;
         }
     }
@@ -256,8 +261,9 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const {
  * @return Polynomial<T> The result of subtracting two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const {
-    Polynomial<T> result;
+Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
+{
+    Polynomial<T> result(this->degree);
 
     result.degree = std::max(this->degree, other.degree);
     auto it = this->poly.begin();
@@ -265,31 +271,31 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const {
 
     while (it != this->poly.end() && io != other.poly.end())
     {
-        if (it.deg() == io.deg()) {
-            modNum<T> t1 = it.k();
-            modNum<T> t2 = io.k();
-            modNum<T> temp = t1.operator-(t2);
-            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+        if (it->deg() == io->deg())
+        {
+            modNum<T> t1 = it->k();
+            modNum<T> t2 = io->k();
+            modNum<T> temp = t1 - (t2);
+            result.poly.push_back(Node<T>(temp.getValue(), it->deg()));
             it++;
             io++;
         }
-        else if (it.deg() < io.deg()) {
-            modNum<T> t = it.k();
-            modNum<T> temp = t.operator+(modNum<T>(0));
-            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+        else if (it->deg() < io->deg())
+        {
+            modNum<T> t = it->k();
+            modNum<T> temp = t + (modNum<T>(0));
+            result.poly.push_back(Node<T>(temp.getValue(), it->deg()));
             it++;
         }
-        else {
-            modNum<T> t = io.k();
-            modNum<T> temp = t.operator+(modNum<T>(0));
-            result.poly.push_back(Node<T>(-temp.getValue(), io.deg()));
+        else
+        {
+            modNum<T> t = io->k();
+            modNum<T> temp = t + (modNum<T>(0));
+            result.poly.push_back(Node<T>(-temp.getValue(), io->deg()));
             io++;
         }
     }
-    auto ir = result.poly.end();
-    while (result.degree != ir.deg()) {
-        result.degree--;
-    }
+
     return result;
 }
 
@@ -299,26 +305,30 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const {
  * @return Polynomial<T> The result of multiplying two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const {
+Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
+{
+    if (this->degree != other.degree)
+    {
+        throw std::invalid_argument("Can't add Polynomials with diferent modulas");
+    }
+
     std::size_t s = this->poly.size() + other.poly.size() - 1;
-    Polynomial<T> result;
+    Polynomial<T> result(this->degree);
     result.degree = s - 1;
     auto it = this->poly.begin();
     auto io = other.poly.begin();
 
-    while (it != this->poly.end()) {
-        while (io != other.poly.end()) {
-            modNum<T> t1 = it.k();
-            modNum<T> t2 = io.k();
-            modNum<T> temp = t1.operator*(t2);
-            result.poly.push_back(Node<T>(temp.getValue(), it.deg() * io.deg()));
+    while (it != this->poly.end())
+    {
+        while (io != other.poly.end())
+        {
+            modNum<T> t1 = it->k();
+            modNum<T> t2 = io->k();
+            modNum<T> temp = t1 * t2;
+            result.addNode(Node<T>(temp, it->deg() * io->deg()));
             io++;
         }
         it++;
-    }
-    auto ir = result.poly.end();
-    while (result.degree != ir.deg()) {
-        result.degree--;
     }
     return result;
 }
