@@ -203,3 +203,115 @@ template <typename T>
 Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial(mod)
 {
 }
+
+/**
+ * @brief Adds two polynomials.
+ * @param other The polynomial to add to the current polynomial.
+ * @return Polynomial<T> The result of adding two polynomials.
+ */
+template <typename T>
+Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const {
+    Polynomial<T> result;
+
+    result.degree = std::max(this->degree, other.degree);
+    auto it = this->poly.begin();
+    auto io = other.poly.begin();
+
+    while (it != this->poly.end() && io != other.poly.end())
+    {
+        if (it.deg() == io.deg()) {
+            modNum<T> t1 = it.k();
+            modNum<T> t2 = io.k();
+            modNum<T> temp = t1.operator+(t2);
+            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+            it++;
+            io++;
+        }
+        else if (it.deg() < io.deg()) {
+            modNum<T> t = it.k();
+            modNum<T> temp = t.operator+(modNum<T>(0));
+            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+            it++;
+        }
+        else {
+            modNum<T> t = io.k();
+            modNum<T> temp = t.operator+(modNum<T>(0));
+            result.poly.push_back(Node<T>(temp.getValue(), io.deg()));
+            io++;
+        }
+    }
+    return result;
+}
+
+/**
+ * @brief Subtracts one polynomial from another.
+ * @param other The polynomial to subtract from the current polynomial.
+ * @return Polynomial<T> The result of subtracting two polynomials.
+ */
+template <typename T>
+Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const {
+    Polynomial<T> result;
+
+    result.degree = std::max(this->degree, other.degree);
+    auto it = this->poly.begin();
+    auto io = other.poly.begin();
+
+    while (it != this->poly.end() && io != other.poly.end())
+    {
+        if (it.deg() == io.deg()) {
+            modNum<T> t1 = it.k();
+            modNum<T> t2 = io.k();
+            modNum<T> temp = t1.operator-(t2);
+            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+            it++;
+            io++;
+        }
+        else if (it.deg() < io.deg()) {
+            modNum<T> t = it.k();
+            modNum<T> temp = t.operator+(modNum<T>(0));
+            result.poly.push_back(Node<T>(temp.getValue(), it.deg()));
+            it++;
+        }
+        else {
+            modNum<T> t = io.k();
+            modNum<T> temp = t.operator+(modNum<T>(0));
+            result.poly.push_back(Node<T>(-temp.getValue(), io.deg()));
+            io++;
+        }
+    }
+    auto ir = result.poly.end();
+    while (result.degree != ir.deg()) {
+        result.degree--;
+    }
+    return result;
+}
+
+/**
+ * @brief Multiplies two polynomials.
+ * @param other A polynomial to multiply by the current polynomial.
+ * @return Polynomial<T> The result of multiplying two polynomials.
+ */
+template <typename T>
+Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const {
+    std::size_t s = this->poly.size() + other.poly.size() - 1;
+    Polynomial<T> result;
+    result.degree = s - 1;
+    auto it = this->poly.begin();
+    auto io = other.poly.begin();
+
+    while (it != this->poly.end()) {
+        while (io != other.poly.end()) {
+            modNum<T> t1 = it.k();
+            modNum<T> t2 = io.k();
+            modNum<T> temp = t1.operator*(t2);
+            result.poly.push_back(Node<T>(temp.getValue(), it.deg() * io.deg()));
+            io++;
+        }
+        it++;
+    }
+    auto ir = result.poly.end();
+    while (result.degree != ir.deg()) {
+        result.degree--;
+    }
+    return result;
+}
