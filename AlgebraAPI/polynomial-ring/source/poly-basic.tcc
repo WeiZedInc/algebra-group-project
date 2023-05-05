@@ -29,6 +29,11 @@ public:
     void removeNode(const size_t);  // by degree
 
     size_t deg() const;
+    Polynomial<T> derivative();
+    int evaluate(const T);
+
+    void print();
+
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -74,4 +79,71 @@ template <typename T>
 std::ostream &operator<<(std::ostream &os, Node<T> &p)
 {
     return os << '{' << p.power() << ", " << p.koeficient() << '}';
+}
+
+template <typename T>
+Polynomial<T> Polynomial<T>::derivative() {
+    Polynomial<T> returned_field;
+    Node<T> current_newnode;
+    T new_koef;
+    T new_pow;
+
+    for (auto it = poly.begin(); it != poly.end(); ++it)
+    {
+        new_koef = it->k() * it->deg();
+        new_pow = it->deg() - 1;
+        if (new_pow < 1) {
+            new_koef = 0;
+            new_pow = 0;
+        }
+        current_newnode = { new_pow, new_koef };
+        returned_field.addNode(current_newnode);
+    }
+
+    return returned_field;
+}
+
+template <typename T>
+
+//TODO: replace int with modular::modNum<T>
+//modular::modNum<T> Field<T>::evaluate() {
+int Polynomial<T>::evaluate(T x_value) {
+
+    T sum = 0;
+    T current_num = 0;
+
+    for (auto it = poly.begin(); it != poly.end(); ++it)
+    {
+        if (it->deg() > 0) {
+            current_num = std::pow(it->k() * x_value, it->deg());
+        }
+        else {
+            current_num = it->k();
+        }
+        std::cout << current_num << std::endl;
+        sum = sum + current_num;
+    }
+
+    return sum;
+}
+
+template <typename T>
+void Polynomial<T>::print() {
+    //boolean used for adding the plus sign
+    bool first_number_checked = false;
+    for (auto it = poly.begin(); it != poly.end(); ++it)
+    {
+        if (first_number_checked) {
+            std::cout << " + ";
+        }
+        else {
+            first_number_checked = true;
+        }
+        if (it->deg() > 0) {
+            std::cout << it->k() << "x^" << it->deg();
+        }
+        else {
+            std::cout << it->k();
+        }
+    }
 }
