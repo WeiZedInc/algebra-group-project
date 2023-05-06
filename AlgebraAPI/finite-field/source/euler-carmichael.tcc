@@ -5,7 +5,7 @@ T EulerTotientFunction(T n) {
     if (n <= 0)
         throw std::logic_error("Euler totient function is not defiend on non Natural values");
 	long double res = n;
-	for (int p = 2; p * p <= n; p++)
+	for (T p = 2; p * p <= n; p++)
 	{
 		if (n % p == 0)
 		{
