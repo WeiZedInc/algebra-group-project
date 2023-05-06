@@ -20,14 +20,14 @@ private:
     bool PerronTest();
     bool CohnTest();
     bool RootTest();
-    bool isPrime(T num); //crutial part for some test; any ideas for better algorithm are welcomed
+    bool isPrime(T num); // crutial part for some test; any ideas for better algorithm are welcomed
     long long findPower(int i, int deg);
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 public:
-    Polynomial(T mod) : numMod(mod) {};
+    Polynomial(T mod) : numMod(mod){};
     Polynomial(std::vector<std::pair<T, size_t>>, T);
-    Polynomial(std::pair<T, size_t>* arr, size_t n, T);
+    Polynomial(std::pair<T, size_t> *arr, size_t n, T);
 
     ~Polynomial() = default;
 
@@ -50,10 +50,10 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////
 
-    Polynomial<T> operator+(const Polynomial<T>&) const;
-    Polynomial<T> operator-(const Polynomial<T>&) const;
-    Polynomial<T> operator*(const Polynomial<T>&) const;
-    bool operator==(const Polynomial<T>&) const;
+    Polynomial<T> operator+(const Polynomial<T> &) const;
+    Polynomial<T> operator-(const Polynomial<T> &) const;
+    Polynomial<T> operator*(const Polynomial<T> &) const;
+    bool operator==(const Polynomial<T> &) const;
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -63,15 +63,15 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////
 
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T>&) const;
+    std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
 
-    Polynomial<T> gcd(const Polynomial<T>&) const;
+    Polynomial<T> gcd(const Polynomial<T> &) const;
 
     //////////////////////////////////////////////////////////////////////////////
 
     static Polynomial<T> getPolynomialByOrder(size_t);
 
-    bool isIrreducable();
+    bool isIrreducable() const;
 };
 
 #endif
@@ -95,7 +95,7 @@ Node<T> Polynomial<T>::operator[](const size_t i)
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& os, Node<T>& p)
+std::ostream &operator<<(std::ostream &os, Node<T> &p)
 {
     return os << '{' << p.deg() << ", " << p.k().getValue() << '}';
 }
@@ -117,7 +117,7 @@ Polynomial<T> Polynomial<T>::der() const
             new_koef = 0;
             new_pow = 0;
         }
-        current_newnode = { new_pow, new_koef };
+        current_newnode = {new_pow, new_koef};
         returned_field.addNode(current_newnode);
     }
 
@@ -228,7 +228,7 @@ Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial
  * @return Polynomial<T> The result of adding two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
+Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
 {
     Polynomial<T> result(this->degree);
     result.degree = std::max(this->degree, other.degree);
@@ -236,8 +236,10 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
     auto it = this->poly.begin();
     auto io = other.poly.begin();
 
-    while (it != this->poly.end() && io != other.poly.end()) {
-        if (it->deg() == io->deg()) {
+    while (it != this->poly.end() && io != other.poly.end())
+    {
+        if (it->deg() == io->deg())
+        {
             modNum<T> t1 = it->k();
             modNum<T> t2 = io->k();
             modNum<T> temp = t1 + t2;
@@ -246,26 +248,30 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
             it++;
             io++;
         }
-        else if (it->deg() > io->deg()) {
+        else if (it->deg() > io->deg())
+        {
             modNum<T> t = it->k();
             modNum<T> temp = t + (modNum<T>(0));
             result.addNode(temp.getValue(), it->deg());
             it++;
         }
-        else {
+        else
+        {
             modNum<T> t = io->k();
             modNum<T> temp = t + (modNum<T>(0));
             result.addNode(temp.getValue(), io->deg());
             io++;
         }
     }
-    while (it != this->poly.end()) {
+    while (it != this->poly.end())
+    {
         modNum<T> t = it->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), it->deg());
         it++;
     }
-    while (io != other.poly.end()) {
+    while (io != other.poly.end())
+    {
         modNum<T> t = io->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), io->deg());
@@ -280,7 +286,7 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
  * @return Polynomial<T> The result of subtracting two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
+Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
 {
     Polynomial<T> result(this->degree);
     result.degree = std::max(this->degree, other.degree);
@@ -317,13 +323,15 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
             io++;
         }
     }
-    while (it != this->poly.end()) {
+    while (it != this->poly.end())
+    {
         modNum<T> t = it->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), it->deg());
         it++;
     }
-    while (io != other.poly.end()) {
+    while (io != other.poly.end())
+    {
         modNum<T> t = io->k();
         modNum<T> temp = (modNum<T>(0, numMod)) - t;
         result.addNode(temp.getValue(), io->deg());
@@ -339,7 +347,7 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
  * @return Polynomial<T> The result of multiplying two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const
+Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
 {
     if (this->getNumMod() != other.getNumMod())
     {
@@ -381,14 +389,18 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const
  * @brief Overloaded equality comparison operator for Polynomial objects.
  * @param other The Polynomial object to compare to.
  * @return True if the Polynomials are equal, false otherwise.
-*/
+ */
 template <typename T>
-bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
-    if (this->poly.size() == other.poly.size()) {
+bool Polynomial<T>::operator==(const Polynomial<T> &other) const
+{
+    if (this->poly.size() == other.poly.size())
+    {
         auto it = this->poly.begin();
         auto io = other.poly.begin();
-        while (it != this->poly.end() && io != other.poly.end()) {
-            if (it->deg() != io->deg() || (it->k()).getValue() != (io->k()).getValue()) return false;
+        while (it != this->poly.end() && io != other.poly.end())
+        {
+            if (it->deg() != io->deg() || (it->k()).getValue() != (io->k()).getValue())
+                return false;
             it++;
             io++;
         }
@@ -398,29 +410,37 @@ bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
 }
 
 template <typename T>
-bool Polynomial<T>::empty() {
-    if (poly.size > 0) return false;
+bool Polynomial<T>::empty()
+{
+    if (poly.size > 0)
+        return false;
     else
         return true;
 }
 
-
 template <typename T>
-bool Polynomial<T>::isIrreducable() {
+bool Polynomial<T>::isIrreducable() const
+{
     auto k = poly.end();
     k--;
     Node<T> first = *poly.begin();
     Node<T> last = *k;
-    if (first.deg() == 1) return true;
-    if (last.deg() != 0) return false;
-    if (first.k() == 1 && PerronTest()) return true;
-    if (CohnTest()) return true;
-    if (RootTest()) return false;
+    if (first.deg() == 1)
+        return true;
+    if (last.deg() != 0)
+        return false;
+    if (first.k() == 1 && PerronTest())
+        return true;
+    if (CohnTest())
+        return true;
+    if (RootTest())
+        return false;
     return true;
 }
 
 template <typename T>
-bool Polynomial<T>::RootTest() {
+bool Polynomial<T>::RootTest()
+{
     for (int i = 1; i < numMod; i++)
     {
         T sum = 0;
@@ -431,13 +451,15 @@ bool Polynomial<T>::RootTest() {
             sum = (sum + temp.k() * power) % numMod;
         }
 
-        if (sum == 0) return true;
+        if (sum == 0)
+            return true;
     }
     return false;
 }
 
 template <typename T>
-long long Polynomial<T>::findPower(int i, int deg) {
+long long Polynomial<T>::findPower(int i, int deg)
+{
     long long power = 1;
     for (int j = 1; j <= deg; j++)
     {
@@ -448,7 +470,8 @@ long long Polynomial<T>::findPower(int i, int deg) {
 }
 
 template <typename T>
-bool Polynomial<T>::PerronTest() {
+bool Polynomial<T>::PerronTest()
+{
     auto i = poly.begin();
     i++;
     Node<T> second = *(i);
@@ -461,13 +484,15 @@ bool Polynomial<T>::PerronTest() {
         sum = sum + temp.k();
     }
 
-    if (second.k() > sum) return true;
+    if (second.k() > sum)
+        return true;
     else
         return false;
 }
 
 template <typename T>
-bool Polynomial<T>::CohnTest() {
+bool Polynomial<T>::CohnTest()
+{
     T sum = 0;
 
     auto k = poly.begin();
@@ -491,7 +516,8 @@ bool Polynomial<T>::CohnTest() {
 }
 
 template <typename T>
-bool Polynomial<T>::isPrime(T num) {
+bool Polynomial<T>::isPrime(T num)
+{
     T check = sqrt(num);
 
     for (int i = 2; i <= check; i++)
@@ -499,4 +525,3 @@ bool Polynomial<T>::isPrime(T num) {
             return false;
     return true;
 }
-

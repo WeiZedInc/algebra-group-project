@@ -48,6 +48,14 @@ private:
     size_t degree = 0;
     T numMod = 0;
 
+    ///////////////////////Irreducable test///////////////////////////////////////////////////////
+    bool PerronTest();
+    bool CohnTest();
+    bool RootTest();
+    bool isPrime(T num); // crutial part for some test; any ideas for better algorithm are welcomed
+    long long findPower(int i, int deg);
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
 public:
     Polynomial(T mod) : numMod(mod){};
     Polynomial(std::vector<std::pair<T, size_t>>, T);
@@ -77,6 +85,7 @@ public:
     Polynomial<T> operator+(const Polynomial<T> &) const;
     Polynomial<T> operator-(const Polynomial<T> &) const;
     Polynomial<T> operator*(const Polynomial<T> &) const;
+    bool operator==(const Polynomial<T> &) const;
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +102,8 @@ public:
     //////////////////////////////////////////////////////////////////////////////
 
     static Polynomial<T> getPolynomialByOrder(size_t);
+
+    bool isIrreducable() const;
 };
 #endif
 
