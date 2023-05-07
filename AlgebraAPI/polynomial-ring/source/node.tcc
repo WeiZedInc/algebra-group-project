@@ -78,13 +78,13 @@ bool Node<T>::operator<=(const Node<T> &p2) const
 template <typename T>
 bool Node<T>::operator==(const Node<T> &p2) const
 {
-    return degree == p2.degree;
+    return degree == p2.degree && koef == p2.koef;
 }
 
 template <typename T>
 bool Node<T>::operator!=(const Node<T> &p2) const
 {
-    return degree != p2.degree;
+    return degree != p2.degree && koef != p2.koef;
 }
 
 template <typename T>
