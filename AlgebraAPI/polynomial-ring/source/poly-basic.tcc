@@ -49,7 +49,7 @@ public:
     void removeNode(const Node<T>); // by value
     void removeNode(const size_t);  // by degree
 
-    size_t getDegree() const { return degree; };
+    size_t getDegree() const { if (poly.empty()) return INT_MIN; else return degree; };
     T getNumMod() const { return numMod; }
 
     void print() const;
@@ -164,6 +164,12 @@ void Polynomial<T>::print() const
 {
     // boolean used for adding the plus sign
     bool first_number_checked = false;
+    if (poly.empty())
+    {
+         std::cout << 0;
+         return;
+    }
+
     for (auto it = poly.begin(); it != poly.end(); ++it)
     {
         if (first_number_checked)
@@ -378,15 +384,12 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
         it++;
     }
 
-    auto temp = result.poly.begin();
-    while (temp != result.poly.end())
-    {
-        if (temp->k() == 0)
+   auto temp = result.poly.begin();
+    while (temp != result.poly.end()) {
+        if ((temp->k()).getValue() == 0)
             temp = result.poly.erase(temp);
-        else
-            temp++;
+        temp++;
     }
-
     return result;
 }
 
@@ -599,8 +602,8 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
     int numDeg = this->getDegree();
     int denomDeg = other.getDegree();
 
-    if (denomDeg < 0) 
-        throw std::invalid_argument("Divisor must have at least one one-zero coefficient");
+    if (other.poly.empty()) 
+        throw std::invalid_argument("Divisor must have at least one non-zero coefficient");
     if (numDeg < denomDeg) 
         throw std::invalid_argument("The degree of the divisor cannot exceed that of the numerator");
     

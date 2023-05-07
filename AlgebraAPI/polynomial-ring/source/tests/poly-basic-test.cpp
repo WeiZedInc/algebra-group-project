@@ -83,7 +83,6 @@ TEST_CASE("Testing")
         Polynomial<int> p3(5);
         p3.addNode(2, 0);
         p3.addNode(2, 1);
-        p3.addNode(0, 2);
         p3.addNode(4, 3);
         p3.addNode(4, 4);
 
@@ -104,6 +103,23 @@ TEST_CASE("Testing")
         p2.addNode(3,0);
 
         std::pair<Polynomial<int>, Polynomial<int>> res = p1 / p2;
+
+        Polynomial<int> test = res.first * p2 + res.second;
+
+        REQUIRE(p1 == test);
+    }
+
+    SUBCASE("Test 2 long division")
+    {
+        Polynomial<int> p1(11);
+        p1.addNode(5,1);
+        p1.addNode(10,0);
+
+         Polynomial<int> p2(11);
+        p2.addNode(5,0);
+
+        std::pair<Polynomial<int>, Polynomial<int>> res = p1 / p2;
+
         Polynomial<int> test = res.first * p2 + res.second;
 
         REQUIRE(p1 == test);
