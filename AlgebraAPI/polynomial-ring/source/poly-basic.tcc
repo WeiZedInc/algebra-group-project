@@ -604,24 +604,42 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
 
     if (other.poly.empty()) 
         throw std::invalid_argument("Divisor must have at least one non-zero coefficient");
-    if (numDeg < denomDeg) 
+    else if (this->getNumMod() != other.getNumMod())
+        throw std::invalid_argument("Can't add Polynomials with diferent modulas");
+    else if (numDeg < denomDeg) 
         throw std::invalid_argument("The degree of the divisor cannot exceed that of the numerator");
-    
-    Polynomial<T> remainder = this->copy();
-    Polynomial<T> quotient(this->getNumMod());
-
-    while (numDeg >= denomDeg) 
+    else if (denomDeg == 0)
     {
-        Polynomial<T> denomTmp = other.shiftRight(numDeg-denomDeg);
-        quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg-denomDeg);
-        
-        Polynomial<T> num(quotient.getNumMod());
-        num.addNode(quotient.getCoeff(numDeg-denomDeg), 0);
+        Polynomial<T> remainder(this->getNumMod());
+        Polynomial<T> quotient(this->getNumMod());
+        T val = other.poly.begin()->k().getValue();
 
-        denomTmp = denomTmp * num;
-        remainder = remainder - denomTmp;
-        numDeg = remainder.getDegree();
+        for (auto it = poly.begin(); it != poly.end(); ++it)
+        {
+            quotient.addNode(it->k().getValue() / val, it->deg());
+        }
+
+        return std::make_pair(quotient, remainder);
     }
-    return std::make_pair(quotient, remainder);
+    else
+    {
+        Polynomial<T> remainder = this->copy();
+        Polynomial<T> quotient(this->getNumMod());
+
+        while (numDeg >= denomDeg) 
+        {
+            Polynomial<T> denomTmp = other.shiftRight(numDeg-denomDeg);
+            quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg-denomDeg);
+            
+            Polynomial<T> num(quotient.getNumMod());
+            num.addNode(quotient.getCoeff(numDeg-denomDeg), 0);
+
+            denomTmp = denomTmp * num;
+            remainder = remainder - denomTmp;
+            numDeg = remainder.getDegree();
+        }
+
+        return std::make_pair(quotient, remainder);
+    }
 }
 

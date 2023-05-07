@@ -88,8 +88,10 @@ TEST_CASE("Testing")
 
         REQUIRE(p3 == (p1 * p2));
     }
-
-    SUBCASE("Test long division")
+}
+TEST_CASE("Testing division")
+{
+    SUBCASE("Test 1")
     {
         Polynomial<int> p1(40);
         p1.addNode(2,4);
@@ -109,14 +111,36 @@ TEST_CASE("Testing")
         REQUIRE(p1 == test);
     }
 
-    SUBCASE("Test 2 long division")
+    SUBCASE("Test 2")
     {
-        Polynomial<int> p1(11);
-        p1.addNode(5,1);
-        p1.addNode(10,0);
+        Polynomial<int> p1(5);
+        p1.addNode(3,4);
+        p1.addNode(1,3);
+        p1.addNode(2,2);
+        p1.addNode(1,0);
 
-         Polynomial<int> p2(11);
-        p2.addNode(5,0);
+        Polynomial<int> p2(5);
+        p2.addNode(1,2);
+        p2.addNode(4,1);
+        p2.addNode(2,0);
+
+        std::pair<Polynomial<int>, Polynomial<int>> res = p1 / p2;
+        Polynomial<int> test = res.first * p2 + res.second;
+
+        REQUIRE(p1 == test);
+    }
+
+    SUBCASE("Test 3 - divisor - constant")
+    {
+       Polynomial<int> p1(40);
+        p1.addNode(6,4);
+        p1.addNode(27,3);
+        p1.addNode(36,2);
+        p1.addNode(9,1);
+        p1.addNode(27,0);
+
+         Polynomial<int> p2(40);
+        p2.addNode(3,0);
 
         std::pair<Polynomial<int>, Polynomial<int>> res = p1 / p2;
 
@@ -124,4 +148,37 @@ TEST_CASE("Testing")
 
         REQUIRE(p1 == test);
     }
+
+    SUBCASE("Test 4 - p2 empty")
+    {
+       Polynomial<int> p1(40);
+        p1.addNode(6,4);
+        p1.addNode(27,3);
+        p1.addNode(36,2);
+        p1.addNode(9,1);
+        p1.addNode(27,0);
+
+        Polynomial<int> p2(40);
+
+        CHECK_THROWS_WITH(p1/p2, "Divisor must have at least one non-zero coefficient");
+
+    }
+
+    SUBCASE("Test 5 - numerator degree < divisor degree")
+    {
+        Polynomial<int> p1(40);
+        p1.addNode(2,4);
+        p1.addNode(27,3);
+        p1.addNode(36,2);
+        p1.addNode(10,1);
+        p1.addNode(27,0);
+
+        Polynomial<int> p2(40);
+        p2.addNode(2,1);
+        p2.addNode(3,0);
+        
+        CHECK_THROWS_WITH(p2/p1, "The degree of the divisor cannot exceed that of the numerator");
+    }
+
+    
 }
