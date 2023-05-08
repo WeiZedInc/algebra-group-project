@@ -20,10 +20,12 @@ class modNum {
     T div(T value1, T value2, T mod) const;
 
    public:
-    modNum(T value = 0, T MOD = 1) : value(value % MOD), MOD(MOD) {
+    modNum(T _value = 0, T _MOD = 1) {
         if (MOD <= 0) {
             throw std::invalid_argument("modulus should be positive");
         }
+        value = _value % _MOD;
+        MOD = _MOD;
     }
 
     T getValue() const;

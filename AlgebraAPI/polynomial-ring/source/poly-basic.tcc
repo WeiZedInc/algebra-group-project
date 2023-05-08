@@ -23,7 +23,7 @@ private:
     bool isPrime(T num); // crutial part for some test; any ideas for better algorithm are welcomed
     long long findPower(int i, int deg);
     /////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     ///////////////////////For polynomial long division//////////////////////////////////////////
     T getCoeff(const size_t power);
     Polynomial<T> copy() const;
@@ -49,7 +49,13 @@ public:
     void removeNode(const Node<T>); // by value
     void removeNode(const size_t);  // by degree
 
-    size_t getDegree() const { if (poly.empty()) return INT_MIN; else return degree; };
+    size_t getDegree() const
+    {
+        if (poly.empty())
+            return std::numeric_limits<int>::min();
+        else
+            return degree;
+    };
     T getNumMod() const { return numMod; }
 
     void print() const;
@@ -166,8 +172,8 @@ void Polynomial<T>::print() const
     bool first_number_checked = false;
     if (poly.empty())
     {
-         std::cout << 0;
-         return;
+        std::cout << 0;
+        return;
     }
 
     for (auto it = poly.begin(); it != poly.end(); ++it)
@@ -225,7 +231,7 @@ void Polynomial<T>::addNode(const Node<T> node)
 template <typename T>
 void Polynomial<T>::addNode(const T num, size_t deg)
 {
-    Node<T> a(modNum(num, numMod), deg);
+    Node<T> a(modNum(num % numMod, numMod), deg);
     this->addNode(a);
 }
 
@@ -240,7 +246,7 @@ Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial
  * @return Polynomial<T> The result of adding two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
+Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
 {
     Polynomial<T> result(this->degree);
     result.degree = std::max(this->degree, other.degree);
@@ -262,7 +268,7 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
             it++;
             io++;
         }
-        else if (it->deg() > io->deg()) 
+        else if (it->deg() > io->deg())
         {
             modNum<T> t = it->k();
             modNum<T> temp = t + (modNum<T>(0));
@@ -283,13 +289,15 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
             io++;
         }
     }
-    while (it != this->poly.end()) {
+    while (it != this->poly.end())
+    {
         modNum<T> t = it->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), it->deg());
         it++;
     }
-    while (io != other.poly.end()) {
+    while (io != other.poly.end())
+    {
         modNum<T> t = io->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), io->deg());
@@ -308,7 +316,7 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
  * @return Polynomial<T> The result of subtracting two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
+Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
 {
     Polynomial<T> result(this->degree);
     result.degree = std::max(this->degree, other.degree);
@@ -351,13 +359,15 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
             io++;
         }
     }
-    while (it != this->poly.end()) {
+    while (it != this->poly.end())
+    {
         modNum<T> t = it->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), it->deg());
         it++;
     }
-    while (io != other.poly.end()) {
+    while (io != other.poly.end())
+    {
         modNum<T> t = io->k();
         modNum<T> temp = (modNum<T>(0, numMod)) - t;
         result.addNode(temp.getValue(), io->deg());
@@ -376,7 +386,7 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
  * @return Polynomial<T> The result of multiplying two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const
+Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
 {
     if (this->getNumMod() != other.getNumMod())
     {
@@ -421,14 +431,18 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const
  * @brief Overloaded equality comparison operator for Polynomial objects.
  * @param other The Polynomial object to compare to.
  * @return True if the Polynomials are equal, false otherwise.
-*/
+ */
 template <typename T>
-bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
-    if (this->poly.size() == other.poly.size()) {
+bool Polynomial<T>::operator==(const Polynomial<T> &other) const
+{
+    if (this->poly.size() == other.poly.size())
+    {
         auto it = this->poly.begin();
         auto io = other.poly.begin();
-        while (it != this->poly.end() && io != other.poly.end()) {
-            if (it->deg() != io->deg() || (it->k()).getValue() != (io->k()).getValue()) return false;
+        while (it != this->poly.end() && io != other.poly.end())
+        {
+            if (it->deg() != io->deg() || (it->k()).getValue() != (io->k()).getValue())
+                return false;
             it++;
             io++;
         }
@@ -556,7 +570,7 @@ bool Polynomial<T>::isPrime(T num)
 
 /**
  * @brief Copies polynomшial
- * @param 
+ * @param
  * @return Polynom copy
  */
 template <typename T>
@@ -595,9 +609,10 @@ T Polynomial<T>::getCoeff(const size_t power)
  * @return Right-shifted polynomial
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::shiftRight(int positions) const{
-     if (positions <= 0) 
-         return *this;
+Polynomial<T> Polynomial<T>::shiftRight(int positions) const
+{
+    if (positions <= 0)
+        return *this;
     int deg = this->getDegree();
 
     Polynomial<T> tmp = this->copy();
@@ -617,16 +632,16 @@ Polynomial<T> Polynomial<T>::shiftRight(int positions) const{
  * @return std::pair of quotient and remainder
  */
 template <typename T>
-std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomial<T> &other) const 
+std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomial<T> &other) const
 {
     int numDeg = this->getDegree();
     int denomDeg = other.getDegree();
 
-    if (other.poly.empty()) 
+    if (other.poly.empty())
         throw std::invalid_argument("Divisor must have at least one non-zero coefficient");
     else if (this->getNumMod() != other.getNumMod())
         throw std::invalid_argument("Can't add Polynomials with diferent modulas");
-    else if (numDeg < denomDeg) 
+    else if (numDeg < denomDeg)
         throw std::invalid_argument("The degree of the divisor cannot exceed that of the numerator");
     else if (denomDeg == 0)
     {
@@ -646,13 +661,13 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
         Polynomial<T> remainder = this->copy();
         Polynomial<T> quotient(this->getNumMod());
 
-        while (numDeg >= denomDeg) 
+        while (numDeg >= denomDeg)
         {
-            Polynomial<T> denomTmp = other.shiftRight(numDeg-denomDeg);
-            quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg-denomDeg);
-            
+            Polynomial<T> denomTmp = other.shiftRight(numDeg - denomDeg);
+            quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg - denomDeg);
+
             Polynomial<T> num(quotient.getNumMod());
-            num.addNode(quotient.getCoeff(numDeg-denomDeg), 0);
+            num.addNode(quotient.getCoeff(numDeg - denomDeg), 0);
 
             denomTmp = denomTmp * num;
             remainder = remainder - denomTmp;
@@ -664,13 +679,13 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
 }
 
 template <typename T>
-Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const 
+Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
 {
     Polynomial<T> g = this->copy(), h = other.copy();
 
     while (!h.poly.empty())
     {
-        auto divRes = g /h;
+        auto divRes = g / h;
         g = h;
         h = divRes.second;
     }
