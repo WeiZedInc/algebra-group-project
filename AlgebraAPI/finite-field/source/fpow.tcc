@@ -28,15 +28,13 @@ number_length(T1 n, T1 b) {
     return len;
 }
 /**
- *  @brief Converting the number T1o the Montgomery form
- *  @param  x value
- *  @param  n module
- *  @param  r some simple number that was used before
- *
- *
- *  @return returns a real number
- */
 
+@brief Calculates k such that b^k > n
+@tparam T1 Type of input number and base
+@param n Input number
+@param b Base
+@return Value of k
+*/
 template <typename T1>
 T1
 get_k(T1 n, T1 b) {
@@ -82,11 +80,9 @@ get_t(T1 n) {
 template <typename T1>
 modNum<T1>
 fpow(modNum<T1> value, size_t power) {
-    if (value == 0, degree == 0) {
-        throw std::invalid_argument("0 pow 0 undefined");
+    if (value == 0, power == 0) {
+        return 1;
     }
-    value = (value * value) % n;
-    degree /= 2;
 
     T1 n = value.getMod();
     T1 two = 2;
@@ -95,15 +91,15 @@ fpow(modNum<T1> value, size_t power) {
     T1 t = get_t(n);
     value = (value * t) % n;
 
-    while (degree > 0) {
-        if (b % 2) {
+    while (power > 0) {
+        if (power % 2) {
             r = (r * value) % n;
         }
         value = (value * value) % n;
-        degree /= 2;
+        power /= 2;
     }
 
-    return (r * t) % n;
+    return modNum<T1>((r * t) % n, value.getMod());
 }
 
 #endif
