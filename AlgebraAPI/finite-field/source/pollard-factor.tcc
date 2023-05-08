@@ -12,8 +12,6 @@ using namespace modular;
  *  @brief Calculating GCD
  *  @param a first number
  *  @param b second number
- *
- *
  *  @return GCD
  */
 template <typename T1, typename T2>
@@ -25,8 +23,6 @@ gcd(T1 a, T2 b) {
 /**
  *  @brief Checks if the number is prime or not
  *  @param a first number
- *
- *
  *  @return true or false
  */
 template <typename T1>
@@ -42,8 +38,6 @@ isPrimeSimple(T1 a) {
  *  @brief Calculating a polynomial in x computed modulo mod
  *  @param x value
  *  @param mod modulo
- *
- *
  *  @return polynomial in x computed modulo mod
  */
 template <typename T1>
@@ -81,16 +75,15 @@ pollardRhO(T1 n) {
 /**
  *  @brief Factorization using Pollard's rho algorithm
  *  @param value number
- *
- *
  *  @return vector of factors
  */
 template <typename T1>
 std::vector<modNum<T1>>
 factorize(modNum<T1> value) {
-    if (value < 1)
+    modNum<T1> one(1,value.getMod());
+    if (value < one)
         throw std::invalid_argument(std::to_string(value.getValue()) + " is less than 1");
-    else if (value == 1)
+    else if (value == one)
         return std::vector<modNum<T1>>{};
     else if (isPrimeSimple(value.getValue()))
         return std::vector<modNum<T1>>{value};
@@ -110,5 +103,41 @@ factorize(modNum<T1> value) {
 
     return factors;
 }
+
+/**
+ *  @brief Factorization using naive algorithm
+ *  @param value number
+ *  @return vector of factors
+ */
+template <typename T1>
+std::vector<modNum<T1>>
+naiveFactorize(modNum<T1> m) 
+{
+    modNum<T1> one(1,m.getMod());
+    if (m <  one)
+        throw std::invalid_argument(std::to_string(m.getValue()) + " is less than 1");
+    else if (m == one)
+        return std::vector<modNum<T1>>{};
+    
+    std::vector<modNum<T1>> factors;
+
+    modNum<T1> p (2, m.getMod());
+    while (p * p <= m) 
+    {
+        if (m.getValue() % p.getValue() == 0) 
+        {
+            m = m / p;
+            factors.push_back(p);
+        } 
+        else 
+            p = p + one;
+    }
+
+    if (m > one) 
+        factors.push_back(m);
+
+    return factors;
+}
+
 
 #endif
