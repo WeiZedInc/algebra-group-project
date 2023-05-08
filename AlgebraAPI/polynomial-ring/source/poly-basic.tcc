@@ -643,3 +643,17 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
     }
 }
 
+template <typename T>
+Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const 
+{
+    Polynomial<T> g = this->copy(), h = other.copy();
+
+    while (!h.poly.empty())
+    {
+        auto divRes = g /h;
+        g = h;
+        h = divRes.second;
+    }
+
+    return g;
+}

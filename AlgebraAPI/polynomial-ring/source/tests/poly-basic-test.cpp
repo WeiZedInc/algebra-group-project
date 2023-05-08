@@ -89,7 +89,7 @@ TEST_CASE("Testing")
         REQUIRE(p3 == (p1 * p2));
     }
 }
-TEST_CASE("Testing division")
+TEST_CASE("Testing divisionь, gcd")
 {
     SUBCASE("Test 1")
     {
@@ -180,5 +180,23 @@ TEST_CASE("Testing division")
         CHECK_THROWS_WITH(p2/p1, "The degree of the divisor cannot exceed that of the numerator");
     }
 
-    
+    SUBCASE("Test 6 - gcd")
+    {
+        Polynomial<int> p1(2);
+        p1.addNode(1,2);
+        p1.addNode(1,0);
+
+
+        Polynomial<int> p2(2);
+        p2.addNode(1,1);
+        p2.addNode(1,0);
+
+        auto gcd = p1.gcd(p2);
+        Polynomial<int> expected(2);
+        expected.addNode(1,1);
+        expected.addNode(1,0);
+        REQUIRE(gcd == expected);
+    }
+
+
 }
