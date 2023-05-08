@@ -57,13 +57,19 @@ private:
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////For polynomial long division//////////////////////////////////////////
-    T getCoeff(const size_t power);
+    modNum<T> getCoeff(const size_t power);
     Polynomial<T> copy() const;
     Polynomial<T> shiftRight(int positions) const;
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 public:
-    Polynomial(T mod) : numMod(mod){};
+    Polynomial(T mod)
+    { 
+        if (isPrime(mod))
+            numMod = mod;
+        else
+            throw std::invalid_argument("Mod should be prime");
+    };
     Polynomial(std::vector<std::pair<T, size_t>>, T);
     Polynomial(std::pair<T, size_t> *arr, size_t n, T);
 
@@ -81,7 +87,13 @@ public:
     void removeNode(const Node<T>); // by value
     void removeNode(const size_t);  // by degree
 
-    size_t getDegree() const { return degree; };
+    size_t getDegree() const
+    {
+        if (poly.empty())
+            return std::numeric_limits<int>::min();
+        else
+            return degree;
+    };
     T getNumMod() const { return numMod; }
 
     void print() const;
@@ -102,6 +114,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////
 
     std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
+    std::pair<Polynomial<T>, Polynomial<T>> operator/(const modNum<T> &) const;
 
     Polynomial<T> gcd(const Polynomial<T> &) const;
 

@@ -63,6 +63,10 @@ template <typename T1>
 std::vector<modNum<T1>> factorize(
     modNum<T1> value);   // number factorization using Polard algorithm
 
+template <typename T1>
+std::vector<modNum<T1>> naiveFactorize(
+    modNum<T1> value);   // number factorization using naive algorithm
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename T1>

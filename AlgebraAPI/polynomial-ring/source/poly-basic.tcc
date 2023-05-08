@@ -32,7 +32,13 @@ private:
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 public:
-    Polynomial(T mod) : numMod(mod){};
+    Polynomial(T mod)
+    { 
+        if (isPrime(mod))
+            numMod = mod;
+        else
+            throw std::invalid_argument("Mod should be prime");
+    };
     Polynomial(std::vector<std::pair<T, size_t>>, T);
     Polynomial(std::pair<T, size_t> *arr, size_t n, T);
 
@@ -53,7 +59,7 @@ public:
     size_t getDegree() const
     {
         if (poly.empty())
-            return INT_MIN;
+            return std::numeric_limits<int>::min();
         else
             return degree;
     };
@@ -77,6 +83,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////
 
     std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
+    std::pair<Polynomial<T>, Polynomial<T>> operator/(const modNum<T> &) const;
 
     Polynomial<T> gcd(const Polynomial<T> &) const;
 
@@ -604,8 +611,28 @@ Polynomial<T> Polynomial<T>::shiftRight(int positions) const
 }
 
 /**
+ * @brief Polynomial division by number
+ * @param other divisor(modNum)
+ * @return std::pair of quotient and remainder
+ */
+template <typename T>
+std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const modNum<T> &other) const
+{
+    Polynomial<T> remainder(this->getNumMod());
+    Polynomial<T> quotient(this->getNumMod());
+
+    for (auto it = poly.begin(); it != poly.end(); ++it)
+    {
+        auto val3 = it->k() / other;
+        quotient.addNode(val3.getValue(), it->deg());
+    }
+
+    return std::make_pair(quotient, remainder);
+}
+
+/**
  * @brief Polynomial long division
- * @param other Divisor
+ * @param other Divisor(polynomial)
  * @return std::pair of quotient and remainder
  */
 template <typename T>
@@ -622,18 +649,8 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
         throw std::invalid_argument("The degree of the divisor cannot exceed that of the numerator");
     else if (denomDeg == 0)
     {
-        Polynomial<T> remainder(this->getNumMod());
-        Polynomial<T> quotient(this->getNumMod());
-        modNum<T> val = other.poly.begin()->k();
-
-        for (auto it = poly.begin(); it != poly.end(); ++it)
-        {
-            modNum<T> val2 = it->k();
-            auto val3 = val2 / val;
-            quotient.addNode(val3.getValue(), it->deg()); // modnum
-        }
-
-        return std::make_pair(quotient, remainder);
+        modNum<T> numb (other.poly.begin()->k().getValue(), other.getNumMod());
+        return *this / numb;
     }
     else
     {
@@ -643,21 +660,14 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
         while (numDeg >= denomDeg)
         {
             Polynomial<T> denomTmp = other.shiftRight(numDeg - denomDeg);
-            // std::cout << "denomTmp  "; denomTmp.print();
-            auto x1 = remainder.getCoeff(numDeg);
-            auto x2 = denomTmp.getCoeff(numDeg);
-            auto x = x1 / x2;
-            quotient.addNode(x.getValue(), numDeg - denomDeg);
-            // std::cout << "quotient  ";quotient.print();
+            auto val = remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg);
+            quotient.addNode(val.getValue(), numDeg - denomDeg);
 
             Polynomial<T> num(quotient.getNumMod());
             num.addNode(quotient.getCoeff(numDeg - denomDeg).getValue(), 0);
 
             denomTmp = denomTmp * num;
-            // std::cout << "remainder  ";remainder.print();
-            //  std::cout << "denomTmp  "; denomTmp.print();
             remainder = remainder - denomTmp;
-            // std::cout << "remainder  ";remainder.print();
             numDeg = remainder.getDegree();
         }
 
@@ -665,6 +675,11 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
     }
 }
 
+/**
+ * @brief Polynomials Greatest Common Divisor
+ * @param other Other polynomial
+ * @return GCD polynomial
+ */
 template <typename T>
 Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
 {
@@ -672,13 +687,22 @@ Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
 
     while (!h.poly.empty())
     {
-        // g.print();
-        // h.print();
         auto divRes = g / h;
-        // divRes.first.print();
-        // divRes.second.print();
         g = h;
         h = divRes.second;
+    }
+
+    modNum<T> numb (g.poly.begin()->k().getValue(), g.getNumMod());
+
+    auto res = g / numb;
+    g = res.first;
+
+    if(!g.poly.empty() && g.poly.front().k() > 1)
+    {
+        modNum<T> numb (g.poly.begin()->k().getValue(), g.getNumMod());
+
+        auto res = g / numb;
+        g = res.first;
     }
 
     return g;
