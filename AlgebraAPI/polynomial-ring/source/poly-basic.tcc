@@ -23,6 +23,12 @@ private:
     bool isPrime(T num); // crutial part for some test; any ideas for better algorithm are welcomed
     long long findPower(int i, int deg);
     /////////////////////////////////////////////////////////////////////////////////////////////
+    
+    ///////////////////////For polynomial long division//////////////////////////////////////////
+    T getCoeff(const size_t power);
+    Polynomial<T> copy() const;
+    Polynomial<T> shiftRight(int positions) const;
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
 public:
     Polynomial(T mod) : numMod(mod){};
@@ -43,7 +49,7 @@ public:
     void removeNode(const Node<T>); // by value
     void removeNode(const size_t);  // by degree
 
-    size_t getDegree() const { return degree; };
+    size_t getDegree() const { if (poly.empty()) return INT_MIN; else return degree; };
     T getNumMod() const { return numMod; }
 
     void print() const;
@@ -158,6 +164,12 @@ void Polynomial<T>::print() const
 {
     // boolean used for adding the plus sign
     bool first_number_checked = false;
+    if (poly.empty())
+    {
+         std::cout << 0;
+         return;
+    }
+
     for (auto it = poly.begin(); it != poly.end(); ++it)
     {
         if (first_number_checked)
@@ -373,13 +385,11 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
         it++;
     }
 
-    auto temp = result.poly.begin();
-    while (temp != result.poly.end())
-    {
-        if (temp->k() == 0)
+   auto temp = result.poly.begin();
+    while (temp != result.poly.end()) {
+        if ((temp->k()).getValue() == 0)
             temp = result.poly.erase(temp);
-        else
-            temp++;
+        temp++;
     }
 
     return result;
@@ -524,4 +534,128 @@ bool Polynomial<T>::isPrime(T num)
         if (num % i == 0)
             return false;
     return true;
+}
+
+/**
+ * @brief Copies polynomшial
+ * @param 
+ * @return Polynom copy
+ */
+template <typename T>
+Polynomial<T> Polynomial<T>::copy() const
+{
+    Polynomial<T> newPol(this->getNumMod());
+    for (auto it = this->begin(); it != this->end(); ++it)
+        newPol.addNode(Node<T>(it->k(), it->deg()));
+
+    return newPol;
+}
+
+/**
+ * @brief Gets coefficient of monomial
+ * @param power Power of monomial
+ * @return coefficient of monomial
+ */
+template <typename T>
+T Polynomial<T>::getCoeff(const size_t power)
+{
+    if (power < 0 || power > this->getDegree())
+        throw std::out_of_range("Index out of range");
+
+    for (auto it = poly.begin(); it != poly.end(); ++it)
+    {
+        if (power == it->deg())
+            return it->k().getValue();
+    }
+
+    throw std::out_of_range("Index out of range");
+}
+
+/**
+ * @brief Shifts the polynomial to the right
+ * @param positions Number of positions
+ * @return Right-shifted polynomial
+ */
+template <typename T>
+Polynomial<T> Polynomial<T>::shiftRight(int positions) const{
+     if (positions <= 0) 
+         return *this;
+    int deg = this->getDegree();
+
+    Polynomial<T> tmp = this->copy();
+
+    for (auto it = poly.begin(); it != poly.end(); ++it)
+    {
+        tmp.addNode(it->k().getValue(), it->deg() + positions);
+        tmp.poly.remove(Node<T>(it->k(), it->deg()));
+    }
+
+    return tmp;
+}
+
+/**
+ * @brief Polynomial long division
+ * @param other Divisor
+ * @return std::pair of quotient and remainder
+ */
+template <typename T>
+std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomial<T> &other) const 
+{
+    int numDeg = this->getDegree();
+    int denomDeg = other.getDegree();
+
+    if (other.poly.empty()) 
+        throw std::invalid_argument("Divisor must have at least one non-zero coefficient");
+    else if (this->getNumMod() != other.getNumMod())
+        throw std::invalid_argument("Can't add Polynomials with diferent modulas");
+    else if (numDeg < denomDeg) 
+        throw std::invalid_argument("The degree of the divisor cannot exceed that of the numerator");
+    else if (denomDeg == 0)
+    {
+        Polynomial<T> remainder(this->getNumMod());
+        Polynomial<T> quotient(this->getNumMod());
+        T val = other.poly.begin()->k().getValue();
+
+        for (auto it = poly.begin(); it != poly.end(); ++it)
+        {
+            quotient.addNode(it->k().getValue() / val, it->deg());
+        }
+
+        return std::make_pair(quotient, remainder);
+    }
+    else
+    {
+        Polynomial<T> remainder = this->copy();
+        Polynomial<T> quotient(this->getNumMod());
+
+        while (numDeg >= denomDeg) 
+        {
+            Polynomial<T> denomTmp = other.shiftRight(numDeg-denomDeg);
+            quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg-denomDeg);
+            
+            Polynomial<T> num(quotient.getNumMod());
+            num.addNode(quotient.getCoeff(numDeg-denomDeg), 0);
+
+            denomTmp = denomTmp * num;
+            remainder = remainder - denomTmp;
+            numDeg = remainder.getDegree();
+        }
+
+        return std::make_pair(quotient, remainder);
+    }
+}
+
+template <typename T>
+Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const 
+{
+    Polynomial<T> g = this->copy(), h = other.copy();
+
+    while (!h.poly.empty())
+    {
+        auto divRes = g /h;
+        g = h;
+        h = divRes.second;
+    }
+
+    return g;
 }
