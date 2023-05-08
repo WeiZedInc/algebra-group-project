@@ -692,11 +692,6 @@ Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
         h = divRes.second;
     }
 
-    modNum<T> numb (g.poly.begin()->k().getValue(), g.getNumMod());
-
-    auto res = g / numb;
-    g = res.first;
-
     if(!g.poly.empty() && g.poly.front().k() > 1)
     {
         modNum<T> numb (g.poly.begin()->k().getValue(), g.getNumMod());
