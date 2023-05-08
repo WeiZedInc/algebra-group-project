@@ -610,6 +610,11 @@ Polynomial<T> Polynomial<T>::shiftRight(int positions) const
     return tmp;
 }
 
+/**
+ * @brief Polynomial division by number
+ * @param other divisor(modNum)
+ * @return std::pair of quotient and remainder
+ */
 template <typename T>
 std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const modNum<T> &other) const
 {
@@ -627,7 +632,7 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const modNum<T>
 
 /**
  * @brief Polynomial long division
- * @param other Divisor
+ * @param other Divisor(polynomial)
  * @return std::pair of quotient and remainder
  */
 template <typename T>
@@ -670,6 +675,11 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
     }
 }
 
+/**
+ * @brief Polynomials Greatest Common Divisor
+ * @param other Other polynomial
+ * @return GCD polynomial
+ */
 template <typename T>
 Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
 {
@@ -686,6 +696,14 @@ Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
 
     auto res = g / numb;
     g = res.first;
+
+    if(!g.poly.empty() && g.poly.front().k() > 1)
+    {
+        modNum<T> numb (g.poly.begin()->k().getValue(), g.getNumMod());
+
+        auto res = g / numb;
+        g = res.first;
+    }
 
     return g;
 }
