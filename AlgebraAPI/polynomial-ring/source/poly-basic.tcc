@@ -667,7 +667,10 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
             num.addNode(quotient.getCoeff(numDeg - denomDeg).getValue(), 0);
 
             denomTmp = denomTmp * num;
+            // std::cout << "remainder  ";remainder.print();
+            //  std::cout << "denomTmp  "; denomTmp.print();
             remainder = remainder - denomTmp;
+            // std::cout << "remainder  ";remainder.print();
             numDeg = remainder.getDegree();
         }
 
@@ -687,7 +690,11 @@ Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
 
     while (!h.poly.empty())
     {
+        // g.print();
+        // h.print();
         auto divRes = g / h;
+        // divRes.first.print();
+        // divRes.second.print();
         g = h;
         h = divRes.second;
     }
