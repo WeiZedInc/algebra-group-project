@@ -1,3 +1,4 @@
+#include <climits>
 #include <list>
 #include <vector>
 #include <iostream>
@@ -25,7 +26,7 @@ private:
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////For polynomial long division//////////////////////////////////////////
-    T getCoeff(const size_t power);
+    modNum<T> getCoeff(const size_t power);
     Polynomial<T> copy() const;
     Polynomial<T> shiftRight(int positions) const;
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +53,7 @@ public:
     size_t getDegree() const
     {
         if (poly.empty())
-            return std::numeric_limits<int>::min();
+            return INT_MIN;
         else
             return degree;
     };
@@ -231,8 +232,11 @@ void Polynomial<T>::addNode(const Node<T> node)
 template <typename T>
 void Polynomial<T>::addNode(const T num, size_t deg)
 {
-    Node<T> a(modNum(num % numMod, numMod), deg);
-    this->addNode(a);
+    if (num % numMod)
+    {
+        Node<T> a(modNum(num % numMod, numMod), deg);
+        this->addNode(a);
+    }
 }
 
 template <typename T>
@@ -261,10 +265,8 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
             modNum<T> t1 = it->k();
             modNum<T> t2 = io->k();
             modNum<T> temp = t1 + t2;
-
             if (temp.getValue() != 0)
                 result.addNode(temp.getValue(), it->deg());
-
             it++;
             io++;
         }
@@ -272,20 +274,14 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
         {
             modNum<T> t = it->k();
             modNum<T> temp = t + (modNum<T>(0));
-
-            if (temp.getValue() != 0)
-                result.addNode(temp.getValue(), it->deg());
-
+            result.addNode(temp.getValue(), it->deg());
             it++;
         }
         else
         {
             modNum<T> t = io->k();
             modNum<T> temp = t + (modNum<T>(0));
-
-            if (temp.getValue() != 0)
-                result.addNode(temp.getValue(), io->deg());
-
+            result.addNode(temp.getValue(), io->deg());
             io++;
         }
     }
@@ -303,10 +299,6 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
         result.addNode(temp.getValue(), io->deg());
         io++;
     }
-
-    if (result.poly.empty())
-        result.addNode(Node<T>(0, 0));
-
     return result;
 }
 
@@ -319,7 +311,6 @@ template <typename T>
 Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
 {
     Polynomial<T> result(this->numMod);
-    result.degree = std::max(this->degree, other.degree);
 
     auto it = this->poly.begin();
     auto io = other.poly.begin();
@@ -342,20 +333,14 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
         {
             modNum<T> t = it->k();
             modNum<T> temp = t + (modNum<T>(0));
-
-            if (temp.getValue() != 0)
-                result.addNode(temp.getValue(), it->deg());
-
+            result.addNode(temp.getValue(), it->deg());
             it++;
         }
         else
         {
             modNum<T> t = io->k();
             modNum<T> temp = (modNum<T>(0, numMod)) - t;
-
-            if (temp.getValue() != 0)
-                result.addNode(temp.getValue(), io->deg());
-
+            result.addNode(temp.getValue(), io->deg());
             io++;
         }
     }
@@ -373,9 +358,6 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
         result.addNode(temp.getValue(), io->deg());
         io++;
     }
-
-    if (result.poly.empty())
-        result.addNode(Node<T>(0, 0));
 
     return result;
 }
@@ -417,13 +399,8 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
     {
         if ((temp->k()).getValue() == 0)
             temp = result.poly.erase(temp);
-        else
-            temp++;
+        temp++;
     }
-
-    if (result.poly.empty())
-        result.addNode(Node<T>(0, 0));
-
     return result;
 }
 
@@ -589,7 +566,7 @@ Polynomial<T> Polynomial<T>::copy() const
  * @return coefficient of monomial
  */
 template <typename T>
-T Polynomial<T>::getCoeff(const size_t power)
+modNum<T> Polynomial<T>::getCoeff(const size_t power)
 {
     if (power < 0 || power > this->getDegree())
         throw std::out_of_range("Index out of range");
@@ -597,7 +574,7 @@ T Polynomial<T>::getCoeff(const size_t power)
     for (auto it = poly.begin(); it != poly.end(); ++it)
     {
         if (power == it->deg())
-            return it->k().getValue();
+            return it->k();
     }
 
     throw std::out_of_range("Index out of range");
@@ -647,11 +624,13 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
     {
         Polynomial<T> remainder(this->getNumMod());
         Polynomial<T> quotient(this->getNumMod());
-        T val = other.poly.begin()->k().getValue();
+        modNum<T> val = other.poly.begin()->k();
 
         for (auto it = poly.begin(); it != poly.end(); ++it)
         {
-            quotient.addNode(it->k().getValue() / val, it->deg());
+            modNum<T> val2 = it->k();
+            auto val3 = val2 / val;
+            quotient.addNode(val3.getValue(), it->deg()); // modnum
         }
 
         return std::make_pair(quotient, remainder);
@@ -664,13 +643,21 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
         while (numDeg >= denomDeg)
         {
             Polynomial<T> denomTmp = other.shiftRight(numDeg - denomDeg);
-            quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg - denomDeg);
+            // std::cout << "denomTmp  "; denomTmp.print();
+            auto x1 = remainder.getCoeff(numDeg);
+            auto x2 = denomTmp.getCoeff(numDeg);
+            auto x = x1 / x2;
+            quotient.addNode(x.getValue(), numDeg - denomDeg);
+            // std::cout << "quotient  ";quotient.print();
 
             Polynomial<T> num(quotient.getNumMod());
-            num.addNode(quotient.getCoeff(numDeg - denomDeg), 0);
+            num.addNode(quotient.getCoeff(numDeg - denomDeg).getValue(), 0);
 
             denomTmp = denomTmp * num;
+            // std::cout << "remainder  ";remainder.print();
+            //  std::cout << "denomTmp  "; denomTmp.print();
             remainder = remainder - denomTmp;
+            // std::cout << "remainder  ";remainder.print();
             numDeg = remainder.getDegree();
         }
 
@@ -685,7 +672,11 @@ Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const
 
     while (!h.poly.empty())
     {
+        // g.print();
+        // h.print();
         auto divRes = g / h;
+        // divRes.first.print();
+        // divRes.second.print();
         g = h;
         h = divRes.second;
     }
