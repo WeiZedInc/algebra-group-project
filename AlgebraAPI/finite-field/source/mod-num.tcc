@@ -20,7 +20,7 @@ class modNum {
     T div(T value1, T value2, T mod) const;
 
    public:
-    modNum(T value = 0, T MOD = 1) : value(value), MOD(MOD) {
+    modNum(T value = 0, T MOD = 1) : value(value % MOD), MOD(MOD) {
         if (MOD <= 0) {
             throw std::invalid_argument("modulus should be positive");
         }
@@ -117,7 +117,7 @@ modNum<T>::mult(T value1, T value2, T MOD) const {
         value1 = (value1 * 2) % MOD;
         value2 >>= 1;
     }
-    return result;
+    return result % MOD;
 }
 template <typename T>
 T
@@ -173,7 +173,7 @@ modNum<T>::inverseValue(T value1, T mod) const {
 template <typename T>
 T
 modNum<T>::div(T value1, T value2, T mod) const {
-    return value1 * inverseValue(value2, mod);
+    return (value1 * inverseValue(value2, mod)) % mod;
 }
 
 template <typename T>
