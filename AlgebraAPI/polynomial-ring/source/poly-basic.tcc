@@ -240,9 +240,9 @@ Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial
  * @return Polynomial<T> The result of adding two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
+Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
 {
-    Polynomial<T> result(this->numMod);
+    Polynomial<T> result(this->degree);
     result.degree = std::max(this->degree, other.degree);
 
     auto it = this->poly.begin();
@@ -255,40 +255,50 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
             modNum<T> t1 = it->k();
             modNum<T> t2 = io->k();
             modNum<T> temp = t1 + t2;
+
             if (temp.getValue() != 0)
                 result.addNode(temp.getValue(), it->deg());
+
             it++;
             io++;
         }
-        else if (it->deg() > io->deg())
+        else if (it->deg() > io->deg()) 
         {
             modNum<T> t = it->k();
             modNum<T> temp = t + (modNum<T>(0));
-            result.addNode(temp.getValue(), it->deg());
+
+            if (temp.getValue() != 0)
+                result.addNode(temp.getValue(), it->deg());
+
             it++;
         }
         else
         {
             modNum<T> t = io->k();
             modNum<T> temp = t + (modNum<T>(0));
-            result.addNode(temp.getValue(), io->deg());
+
+            if (temp.getValue() != 0)
+                result.addNode(temp.getValue(), io->deg());
+
             io++;
         }
     }
-    while (it != this->poly.end())
-    {
+    while (it != this->poly.end()) {
         modNum<T> t = it->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), it->deg());
         it++;
     }
-    while (io != other.poly.end())
-    {
+    while (io != other.poly.end()) {
         modNum<T> t = io->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), io->deg());
         io++;
     }
+
+    if (result.poly.empty())
+        result.addNode(Node<T>(0, 0));
+
     return result;
 }
 
@@ -298,9 +308,9 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const
  * @return Polynomial<T> The result of subtracting two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
+Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
 {
-    Polynomial<T> result(this->numMod);
+    Polynomial<T> result(this->degree);
     result.degree = std::max(this->degree, other.degree);
 
     auto it = this->poly.begin();
@@ -324,31 +334,38 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
         {
             modNum<T> t = it->k();
             modNum<T> temp = t + (modNum<T>(0));
-            result.addNode(temp.getValue(), it->deg());
+
+            if (temp.getValue() != 0)
+                result.addNode(temp.getValue(), it->deg());
+
             it++;
         }
         else
         {
             modNum<T> t = io->k();
             modNum<T> temp = (modNum<T>(0, numMod)) - t;
-            result.addNode(temp.getValue(), io->deg());
+
+            if (temp.getValue() != 0)
+                result.addNode(temp.getValue(), io->deg());
+
             io++;
         }
     }
-    while (it != this->poly.end())
-    {
+    while (it != this->poly.end()) {
         modNum<T> t = it->k();
         modNum<T> temp = t + (modNum<T>(0));
         result.addNode(temp.getValue(), it->deg());
         it++;
     }
-    while (io != other.poly.end())
-    {
+    while (io != other.poly.end()) {
         modNum<T> t = io->k();
         modNum<T> temp = (modNum<T>(0, numMod)) - t;
         result.addNode(temp.getValue(), io->deg());
         io++;
     }
+
+    if (result.poly.empty())
+        result.addNode(Node<T>(0, 0));
 
     return result;
 }
@@ -359,7 +376,7 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const
  * @return Polynomial<T> The result of multiplying two polynomials.
  */
 template <typename T>
-Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
+Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const
 {
     if (this->getNumMod() != other.getNumMod())
     {
@@ -367,7 +384,7 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
     }
 
     std::size_t s = this->poly.size() + other.poly.size() - 1;
-    Polynomial<T> result(this->numMod);
+    Polynomial<T> result(this->degree);
     result.degree = s - 1;
     auto it = this->poly.begin();
 
@@ -385,12 +402,17 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
         it++;
     }
 
-   auto temp = result.poly.begin();
-    while (temp != result.poly.end()) {
+    auto temp = result.poly.begin();
+    while (temp != result.poly.end())
+    {
         if ((temp->k()).getValue() == 0)
             temp = result.poly.erase(temp);
-        temp++;
+        else
+            temp++;
     }
+
+    if (result.poly.empty())
+        result.addNode(Node<T>(0, 0));
 
     return result;
 }
@@ -399,18 +421,14 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
  * @brief Overloaded equality comparison operator for Polynomial objects.
  * @param other The Polynomial object to compare to.
  * @return True if the Polynomials are equal, false otherwise.
- */
+*/
 template <typename T>
-bool Polynomial<T>::operator==(const Polynomial<T> &other) const
-{
-    if (this->poly.size() == other.poly.size())
-    {
+bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
+    if (this->poly.size() == other.poly.size()) {
         auto it = this->poly.begin();
         auto io = other.poly.begin();
-        while (it != this->poly.end() && io != other.poly.end())
-        {
-            if (it->deg() != io->deg() || (it->k()).getValue() != (io->k()).getValue())
-                return false;
+        while (it != this->poly.end() && io != other.poly.end()) {
+            if (it->deg() != io->deg() || (it->k()).getValue() != (io->k()).getValue()) return false;
             it++;
             io++;
         }
