@@ -49,7 +49,7 @@ public:
     void removeNode(const Node<T>); // by value
     void removeNode(const size_t);  // by degree
 
-    size_t getDegree() const { return degree; };
+    size_t getDegree() const { if (poly.empty()) return INT_MIN; else return degree; };
     T getNumMod() const { return numMod; }
 
     void print() const;
@@ -164,6 +164,12 @@ void Polynomial<T>::print() const
 {
     // boolean used for adding the plus sign
     bool first_number_checked = false;
+    if (poly.empty())
+    {
+         std::cout << 0;
+         return;
+    }
+
     for (auto it = poly.begin(); it != poly.end(); ++it)
     {
         if (first_number_checked)
@@ -378,15 +384,12 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const
         it++;
     }
 
-    auto temp = result.poly.begin();
-    while (temp != result.poly.end())
-    {
-        if (temp->k() == 0)
+   auto temp = result.poly.begin();
+    while (temp != result.poly.end()) {
+        if ((temp->k()).getValue() == 0)
             temp = result.poly.erase(temp);
-        else
-            temp++;
+        temp++;
     }
-
     return result;
 }
 
@@ -599,26 +602,58 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::operator/(const Polynomia
     int numDeg = this->getDegree();
     int denomDeg = other.getDegree();
 
-    if (denomDeg < 0) 
-        throw std::invalid_argument("Divisor must have at least one one-zero coefficient");
-    if (numDeg < denomDeg) 
+    if (other.poly.empty()) 
+        throw std::invalid_argument("Divisor must have at least one non-zero coefficient");
+    else if (this->getNumMod() != other.getNumMod())
+        throw std::invalid_argument("Can't add Polynomials with diferent modulas");
+    else if (numDeg < denomDeg) 
         throw std::invalid_argument("The degree of the divisor cannot exceed that of the numerator");
-    
-    Polynomial<T> remainder = this->copy();
-    Polynomial<T> quotient(this->getNumMod());
-
-    while (numDeg >= denomDeg) 
+    else if (denomDeg == 0)
     {
-        Polynomial<T> denomTmp = other.shiftRight(numDeg-denomDeg);
-        quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg-denomDeg);
-        
-        Polynomial<T> num(quotient.getNumMod());
-        num.addNode(quotient.getCoeff(numDeg-denomDeg), 0);
+        Polynomial<T> remainder(this->getNumMod());
+        Polynomial<T> quotient(this->getNumMod());
+        T val = other.poly.begin()->k().getValue();
 
-        denomTmp = denomTmp * num;
-        remainder = remainder - denomTmp;
-        numDeg = remainder.getDegree();
+        for (auto it = poly.begin(); it != poly.end(); ++it)
+        {
+            quotient.addNode(it->k().getValue() / val, it->deg());
+        }
+
+        return std::make_pair(quotient, remainder);
     }
-    return std::make_pair(quotient, remainder);
+    else
+    {
+        Polynomial<T> remainder = this->copy();
+        Polynomial<T> quotient(this->getNumMod());
+
+        while (numDeg >= denomDeg) 
+        {
+            Polynomial<T> denomTmp = other.shiftRight(numDeg-denomDeg);
+            quotient.addNode(remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg), numDeg-denomDeg);
+            
+            Polynomial<T> num(quotient.getNumMod());
+            num.addNode(quotient.getCoeff(numDeg-denomDeg), 0);
+
+            denomTmp = denomTmp * num;
+            remainder = remainder - denomTmp;
+            numDeg = remainder.getDegree();
+        }
+
+        return std::make_pair(quotient, remainder);
+    }
 }
 
+template <typename T>
+Polynomial<T> Polynomial<T>::gcd(const Polynomial<T> &other) const 
+{
+    Polynomial<T> g = this->copy(), h = other.copy();
+
+    while (!h.poly.empty())
+    {
+        auto divRes = g /h;
+        g = h;
+        h = divRes.second;
+    }
+
+    return g;
+}
