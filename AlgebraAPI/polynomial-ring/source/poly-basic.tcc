@@ -242,7 +242,7 @@ Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial
 template <typename T>
 Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
 {
-    Polynomial<T> result(this->degree);
+    Polynomial<T> result(this->numMod);
     result.degree = std::max(this->degree, other.degree);
 
     auto it = this->poly.begin();
@@ -310,7 +310,7 @@ Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const
 template <typename T>
 Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const
 {
-    Polynomial<T> result(this->degree);
+    Polynomial<T> result(this->numMod);
     result.degree = std::max(this->degree, other.degree);
 
     auto it = this->poly.begin();
@@ -384,7 +384,7 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const
     }
 
     std::size_t s = this->poly.size() + other.poly.size() - 1;
-    Polynomial<T> result(this->degree);
+    Polynomial<T> result(this->numMod);
     result.degree = s - 1;
     auto it = this->poly.begin();
 
