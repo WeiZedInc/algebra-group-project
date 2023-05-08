@@ -6,7 +6,7 @@ using namespace modular;
 
 TEST_CASE("Testing")
 {
-    SUBCASE("Test addition")
+    SUBCASE("Test addition 1")
     {
         Polynomial<int> p1(5);
         p1.addNode(2, 0);
@@ -24,7 +24,45 @@ TEST_CASE("Testing")
         REQUIRE(p3 == (p1 + p2));
     }
 
-    SUBCASE("Test subtraction")
+    SUBCASE("Test addition 2")
+    {
+        Polynomial<int> p1(5);
+        p1.addNode(2, 0);
+        p1.addNode(3, 1);
+
+        Polynomial<int> p2(5);
+        p2.addNode(1, 2);
+        p2.addNode(4, 3);
+
+        Polynomial<int> p3(5);
+        p3.addNode(2, 0);
+        p3.addNode(3, 1);
+        p3.addNode(1, 2);
+        p3.addNode(4, 3);
+
+        REQUIRE(p3 == (p1 + p2));
+    }
+
+    SUBCASE("Test addition 3")
+    {
+        Polynomial<int> p1(7);
+        p1.addNode(4, 0);
+        p1.addNode(2, 1);
+        p1.addNode(8, 2);
+        p1.addNode(7, 3);
+
+        Polynomial<int> p2(7);
+        p2.addNode(0, 0);
+
+        Polynomial<int> p3(7);
+        p3.addNode(4, 0);
+        p3.addNode(2, 1);
+        p3.addNode(1, 2);
+
+        REQUIRE(p3 == (p1 + p2));
+    }
+
+    SUBCASE("Test subtraction 1")
     {
         Polynomial<int> p1(5);
         p1.addNode(2, 0);
@@ -44,7 +82,47 @@ TEST_CASE("Testing")
         REQUIRE(p3 == (p1 - p2));
     }
 
-    SUBCASE("Test multiplication1")
+    SUBCASE("Test subtraction 2")
+    {
+        Polynomial<int> p1(5);
+        p1.addNode(3, 0);
+        p1.addNode(5, 1);
+        p1.addNode(8, 2);
+        p1.addNode(12, 3);
+
+        Polynomial<int> p2(5);
+        p2.addNode(0, 0);
+
+        Polynomial<int> p3(5);
+        p3.addNode(3, 0);
+        p3.addNode(3, 2);
+        p3.addNode(2, 3);
+
+        REQUIRE(p3 == (p1 - p2));
+    }
+
+    SUBCASE("Test subtraction 3")
+    {
+        Polynomial<int> p1(2);
+        p1.addNode(3, 0);
+        p1.addNode(7, 1);
+        p1.addNode(6, 2);
+        p1.addNode(9, 3);
+
+        Polynomial<int> p2(2);
+        p2.addNode(4, 0);
+        p2.addNode(3, 1);
+        p2.addNode(5, 2);
+
+        Polynomial<int> p3(2);
+        p3.addNode(1, 0);
+        p3.addNode(1, 2);
+        p3.addNode(1, 3);
+
+        REQUIRE(p3 == (p1 - p2));
+    }
+
+    SUBCASE("Test multiplication 1")
     {
         Polynomial<int> p1(5);
         p1.addNode(3, 5);
@@ -68,7 +146,7 @@ TEST_CASE("Testing")
         REQUIRE(p3 == (p1 * p2));
     }
 
-    SUBCASE("Test multiplication2")
+    SUBCASE("Test multiplication 2")
     {
         Polynomial<int> p1(5);
         p1.addNode(2, 0);
@@ -85,6 +163,39 @@ TEST_CASE("Testing")
         p3.addNode(2, 1);
         p3.addNode(4, 3);
         p3.addNode(4, 4);
+
+        REQUIRE(p3 == (p1 * p2));
+    }
+
+    SUBCASE("Test multiplication 3")
+    {
+        Polynomial<int> p1(2);
+        p1.addNode(1, 0);
+        p1.addNode(1, 1);
+
+        Polynomial<int> p2(2);
+        p2.addNode(1, 0);
+        p2.addNode(1, 1);
+
+        Polynomial<int> p3(2);
+        p3.addNode(1, 0);
+        p3.addNode(1, 2);
+
+        REQUIRE(p3 == (p1 * p2));
+    }
+
+    SUBCASE("Test multiplication 4")
+    {
+        Polynomial<int> p1(2);
+        p1.addNode(1, 0);
+        p1.addNode(3, 1);
+        p1.addNode(2, 3);
+
+        Polynomial<int> p2(2);
+        p2.addNode(0, 0);
+
+        Polynomial<int> p3(2);
+        p3.addNode(0, 0);
 
         REQUIRE(p3 == (p1 * p2));
     }
