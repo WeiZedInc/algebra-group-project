@@ -54,9 +54,9 @@ class modNum {
 /////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
 modNum<T1> pow(modNum<T1> value, modNum<T1> base,
-               modNum<T1> MOD);                     // regular pow
+               modNum<T1> MOD);                 // regular pow
 template <typename T1>
-modNum<T1> fpow(modNum<T1> value, size_t degree);   // fast pow
+modNum<T1> fpow(modNum<T1> value, T1 degree);   // fast pow
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
@@ -74,8 +74,8 @@ modNum<T1> sqrt(modNum<T1> value);   // discrete square root
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
-size_t log(modNum<T1> value,
-           modNum<T1> base);   // discrete logarithm
+T1 log(modNum<T1> value,
+       modNum<T1> base);   // discrete logarithm
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 

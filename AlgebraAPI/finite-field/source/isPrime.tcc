@@ -47,7 +47,7 @@ isPrime(modNum<T1> base, size_t k) {
 
         if (y != 1 && y != value - 1) {
             for (T1 j = 0; j < s && y != value - 1; j++) {
-                y = (fpow(modNum<T1>(y, value), 2).getValue());
+                y = (fpow(modNum<T1>(y, value), static_cast<T1>(2)).getValue());
 
                 // If y == 1, value is composite
                 if (y == 1)

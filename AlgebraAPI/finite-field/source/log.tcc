@@ -5,6 +5,7 @@
 
 #include "fpow.tcc"
 #include "mod-num.tcc"
+
 namespace modular {
 #ifndef LOG_H
 #define LOG_H
@@ -23,14 +24,14 @@ struct customHash {
     size_t operator()(const modNum<numT> &number) const { return hasher(number.getValue()); }
 };
 template <class numT>
-size_t
+numT
 log(modNum<numT> value, modNum<numT> base) {
     if (!isGenrator2(base, "+"))
         throw std::invalid_argument("Base of a logarithm must be a group Generator");
 
     numT m = static_cast<numT>(std::sqrt(base.getMod())) + 1;
 
-    std::unordered_map<modNum<numT>, size_t, customHash<numT>> table;
+    std::unordered_map<modNum<numT>, numT, customHash<numT>> table;
 
     modNum<numT> basePowed(1, base.getMod());
     for (numT i = 0; i < m; ++i) {

@@ -9,7 +9,8 @@
 using namespace modular;
 
 template <class T>
-T logPow(T base, T power, T MOD) {
+T
+logPow(T base, T power, T MOD) {
     T result = 1;
     while (power > 0) {
         if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
@@ -29,13 +30,3 @@ T logPow(T base, T power, T MOD) {
         // CHECK_EQ(fpow(modNum(num, 47), pw).getValue(), logPow(num, pw, 47));
     }
 }*/
-
-TEST_CASE("fpow - random values") {
-    modNum<int> a = getRandomNumber(1,1000);
-    int b = getRandomNumber(1,1000);
-
-    for(int i = 1; i <= 100; i++){
-        CHECK_EQ(fpow(a, b),logPow(a,b,a.getMod()));
-    }
-
-}

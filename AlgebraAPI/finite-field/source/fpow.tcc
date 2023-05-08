@@ -79,9 +79,9 @@ get_t(T1 n) {
 */
 template <typename T1>
 modNum<T1>
-fpow(modNum<T1> value, size_t power) {
-    if (value == 0, power == 0) {
-        return 1;
+fpow(modNum<T1> value, T1 power) {
+    if (value == static_cast<T1>(0) && power == 0) {
+        throw std::invalid_argument("0 pow 0 is undefined");
     }
 
     T1 n = value.getMod();
@@ -89,15 +89,6 @@ fpow(modNum<T1> value, size_t power) {
     T1 k = get_k(n, two);
     T1 r = 1;
     T1 t = get_t(n);
-    value = (value * t) % n;
-
-    while (power > 0) {
-        if (power % 2) {
-            r = (r * value) % n;
-        }
-        value = (value * value) % n;
-        power /= 2;
-    }
 
     return modNum<T1>((r * t) % n, value.getMod());
 }

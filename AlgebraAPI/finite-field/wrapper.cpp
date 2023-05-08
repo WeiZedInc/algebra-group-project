@@ -7,6 +7,7 @@
 #include <stdexcept>
 
 #include "mod-math.h"
+#include "source/custom-hash.h"
 #define EXPORT extern "C" __declspec(dllexport)
 
 using namespace modular;
@@ -142,7 +143,8 @@ fastPow(char *num, char *degree, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
         mpz_class numA, numMod;
-        size_t numDegree = static_cast<size_t>(atoll(degree));
+        mpz_class numDegree;
+        numDegree.set_str(degree, 10);
 
         numA.set_str(num, 10);
 
@@ -274,11 +276,11 @@ discreteLog(char *num, char *base, char *mod, char *errorStr) {
 
         modNum<mpz_class> a1(numA, numMod), b1(numB, numMod);
 
-        size_t res;
+        mpz_class res;
 
         res = modular::log(a1, b1);
         resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, std::to_string(res).c_str());
+        strcpy(resStr, res.get_str().c_str());
 
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -440,6 +442,8 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
     }
+
+    return false;
 }
 
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
