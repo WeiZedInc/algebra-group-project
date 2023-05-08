@@ -28,12 +28,12 @@ log(modNum<numT> value, modNum<numT> base) {
     if (!isGenrator2(base, "+"))
         throw std::invalid_argument("Base of a logarithm must be a group Generator");
 
-    size_t m = static_cast<size_t>(std::sqrt(base.getMod())) + 1;
+    numT m = static_cast<numT>(std::sqrt(base.getMod())) + 1;
 
     std::unordered_map<modNum<numT>, size_t, customHash<numT>> table;
 
     modNum<numT> basePowed(1, base.getMod());
-    for (size_t i = 0; i < m; ++i) {
+    for (numT i = 0; i < m; ++i) {
         table.insert({basePowed, i});
         basePowed = base * basePowed;
     }
@@ -41,7 +41,7 @@ log(modNum<numT> value, modNum<numT> base) {
     modNum<numT> alphaInversed = fpow(base.inv(), m);
     modNum<numT> gamma = value;
 
-    for (size_t i = 0; i < m; ++i) {
+    for (numT i = 0; i < m; ++i) {
         if (table.find(gamma) != table.end()) {
             return i * m + table[gamma];
         }

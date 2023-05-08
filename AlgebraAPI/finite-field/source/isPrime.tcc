@@ -43,11 +43,11 @@ isPrime(modNum<T1> base, size_t k) {
         T1 rand_number = rand() % (value - 4) + 2;
 
         // Compute y = rand_number^up mod value
-        T1 y = fpow(modNum(rand_number, value), up).getValue();
+        T1 y = fpow(modNum<T1>(rand_number, value), up).getValue();
 
         if (y != 1 && y != value - 1) {
             for (T1 j = 0; j < s && y != value - 1; j++) {
-                y = (fpow(modNum(y, value), 2).getValue());
+                y = (fpow(modNum<T1>(y, value), 2).getValue());
 
                 // If y == 1, value is composite
                 if (y == 1)

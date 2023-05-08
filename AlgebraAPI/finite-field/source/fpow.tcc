@@ -97,7 +97,7 @@ fpow(modNum<T1> base, size_t power) {
         baseVal = (baseVal * baseVal) % base.getMod();
         power = power / 2;   // Can also use power >>= 1; to make code even faster
     }
-    return modNum(result, base.getMod());
+    return modNum<T1>(result, base.getMod());
 }
 
 #endif
