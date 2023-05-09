@@ -11,8 +11,13 @@ TEST_CASE("Testing Pollard factorization") {
     using T = long long;
 
     SUBCASE("Test1") {
-        T mod = 100000;
+        T mod = 16323010999;
         
+        std::vector<modNum<T>> pf0 = factorize(modNum<T>(4853343967, mod));
+        std::vector<modNum<T>> factors0{modNum<T>(55817, mod), modNum<T>(86951, mod)};
+        sort(pf0.begin(), pf0.end());
+        REQUIRE(pf0 == factors0);
+
         std::vector<modNum<T>> pf1 = factorize(modNum<T>(10403, mod));
         std::vector<modNum<T>> factors1{modNum<T>(101, mod), modNum<T>(103, mod)};
         sort(pf1.begin(), pf1.end());
