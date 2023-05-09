@@ -111,33 +111,35 @@ factorize(modNum<T1> value) {
  */
 template <typename T1>
 std::vector<modNum<T1>>
-naiveFactorize(modNum<T1> m) 
+naiveFactorize(modNum<T1> m)
 {
-    modNum<T1> one(1,m.getMod());
-    if (m <  one)
-        throw std::invalid_argument(std::to_string(m.getValue()) + " is less than 1");
-    else if (m == one)
-        return std::vector<modNum<T1>>{};
-    
-    std::vector<modNum<T1>> factors;
+   modNum<T1> one(1,m.getMod());
+   if (m <  one)
+       throw std::invalid_argument(std::to_string(m.getValue()) + " is less than 1");
+   else if (m == one)
+       return std::vector<modNum<T1>>{};
 
-    modNum<T1> p (2, m.getMod());
-    while (p * p <= m) 
-    {
-        if (m.getValue() % p.getValue() == 0) 
-        {
-            m = m / p;
-            factors.push_back(p);
-        } 
-        else 
-            p = p + one;
+   std::vector<modNum<T1>> factors;
+
+    T1 p = 2;
+    while (p * p <= m.getValue())
+     {
+       if (m.getValue() % p == 0)
+       {
+           m = modNum<T1>( m.getValue() / p, m.getMod());
+           factors.push_back(modNum<T1>(p, m.getMod()));
+       }
+       else{
+           p++;
+       }
     }
 
-    if (m > one) 
-        factors.push_back(m);
+    if (m > one)
+       factors.push_back(m);
 
     return factors;
 }
+
 
 
 #endif
