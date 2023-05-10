@@ -87,10 +87,10 @@ template <typename T1>
 T1 orderOfElement(modNum<T1> value);
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename T1>
-modNum<T1> eulerFunction(modNum<T1> value);   // Euler function
+template <typename T, typename floating = double>
+modNum<T> eulerFunction(modNum<T> num);   // Euler function
 
-template <typename T1>
+template <typename T1, typename floating = double>
 modNum<T1> carmichaelFunction(modNum<T1> value);   // Carmichael function
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,6 +99,7 @@ bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 
 }   // namespace modular
 
+#include "source/euler-carmichael.tcc"
 #include "source/fpow.tcc"
 #include "source/isPrime.tcc"
 #include "source/log.tcc"

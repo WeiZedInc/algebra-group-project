@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include <algorithm>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <iostream>
 #include <limits>
@@ -52,31 +53,27 @@ addition(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of the subtraction in string form
  *    @note memory should be manualy freed by delete[]
  *    */
-/*
+
 char *
 subtraction(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numB, numMod;
-
-        numA.set_str(a, 10);
-        numB.set_str(b, 10);
-        numMod.set_str(mod, 10);
+        cpp_int numA(a), numB(b), numMod(mod);
 
         modNum<cpp_int> a1(numA, numMod), b1(numB, numMod), res;
+
         res = a1 - b1;
 
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.getValue().str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
     }
 
     return resStr;
-
 }
-*/
+
 /**
  *
  *    @brief Multiply two numbers modulo mod
@@ -86,22 +83,19 @@ subtraction(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of the multiplication in string form
  *    @note memory should be manualy freed by delete[]
  */
-/*
+
 char *
 multiplication(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numB, numMod;
-
-        numA.set_str(a, 10);
-        numB.set_str(b, 10);
-        numMod.set_str(mod, 10);
+        cpp_int numA(a), numB(b), numMod(mod);
 
         modNum<cpp_int> a1(numA, numMod), b1(numB, numMod), res;
+
         res = a1 * b1;
 
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.getValue().str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -109,7 +103,7 @@ multiplication(char *a, char *b, char *mod, char *errorStr) {
 
     return resStr;
 }
-*/
+
 /**
  *
  *    @brief Performs modular division of two large integers.
@@ -120,46 +114,36 @@ multiplication(char *a, char *b, char *mod, char *errorStr) {
  *    @note memory should be manualy freed by delete[]
  */
 
-/*
 char *
 division(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numB, numMod;
-
-        numA.set_str(a, 10);
-        numB.set_str(b, 10);
-        numMod.set_str(mod, 10);
+        cpp_int numA(a), numB(b), numMod(mod);
 
         modNum<cpp_int> a1(numA, numMod), b1(numB, numMod), res;
+
         res = a1 / b1;
 
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.getValue().str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
     }
     return resStr;
 }
-*/
-/*
+
 char *
-fastPow(char *num, char *degree, char *mod, char *errorStr) {
+fastPow(char *a, char *degree, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numMod;
-        cpp_int numDegree;
-        numDegree.set_str(degree, 10);
-
-        numA.set_str(num, 10);
-
-        numMod.set_str(mod, 10);
+        cpp_int numA(a), numDegree(degree), numMod(mod);
 
         modNum<cpp_int> a1(numA, numMod), res;
+
         res = fpow(a1, numDegree);
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.getValue().str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -167,23 +151,18 @@ fastPow(char *num, char *degree, char *mod, char *errorStr) {
 
     return resStr;
 }
-*/
-/*
+
 char *
 inverse(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numMod;
-
-        numA.set_str(num, 10);
-
-        numMod.set_str(mod, 10);
+        cpp_int numA(num), numMod(mod);
 
         modNum<cpp_int> a1(numA, numMod), res;
 
         res = a1.inv();
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.getValue().str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -191,7 +170,7 @@ inverse(char *num, char *mod, char *errorStr) {
 
     return resStr;
 }
-*/
+
 /**
  *
  *    @brief Factorize a number modulo a given modulus.
@@ -208,11 +187,7 @@ char **
 factorize(size_t &size, char *num, char *mod, char *errorStr) {
     char **resStr = nullptr;
     try {
-        cpp_int numA, numMod;
-
-        numA.set_str(num, 10);
-
-        numMod.set_str(mod, 10);
+        cpp_int numA(num), numMod(mod);
 
         modNum<cpp_int> a1(numA, numMod);
 
@@ -223,7 +198,7 @@ factorize(size_t &size, char *num, char *mod, char *errorStr) {
 
         for (int i = 0; i < res.size(); ++i) {
             resStr[i] = new char[MESSAGE_LEN];
-            strcpy(resStr[i], res[i].getValue().get_str().c_str());
+            strcpy(resStr[i], res[i].getValue().str().c_str());
         }
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -232,7 +207,6 @@ factorize(size_t &size, char *num, char *mod, char *errorStr) {
     return resStr;
 }
 */
-
 /**
  *
  *    @brief Calculate the discrete square root of a given number modulo a given modulus
@@ -382,23 +356,18 @@ isGenerator(char *num, char *mod, char *errorStr) {
  * modulo m.
  *    */
 
-/*
 char *
 eulerFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numMod;
-
-        numA.set_str(num, 10);
-
-        numMod.set_str(mod, 10);
+        cpp_int numA(num), numMod(mod);
 
         modNum<cpp_int> a1(numA, numMod), res;
 
-        res = modular::eulerFunction(a1);
+        res = modular::eulerFunction<cpp_int, double>(a1);
 
         resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.getValue().str().c_str());
 
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -407,7 +376,6 @@ eulerFunction(char *num, char *mod, char *errorStr) {
     return resStr;
 }
 
-*/
 /**
  *
  *    @brief Calculates the Carmichael Function λ(n) for a given number n and modulus mod
@@ -475,12 +443,12 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
 int
 main() {
-    char a[] = "1111111111";
+    char a[] = "272440612037865607952868223312";
     char b[] = "1";
     char mod[] = "272440612037865607952868223313";
     char err[200];
 
-    char *res2 = addition(a, b, mod, err);
+    char *res2 = eulerFunction(a, mod, err);
 
     if (res2 != nullptr) {
         printf("%s", res2);
