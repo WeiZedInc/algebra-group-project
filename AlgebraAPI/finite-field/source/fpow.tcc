@@ -78,7 +78,7 @@ get_t(T1 n) {
 */
 template <typename T1>
 modNum<T1>
-fpow(modNum<T1> value, T1 power) {
+fpowdiif(modNum<T1> value, T1 power) {
     if (value == static_cast<T1>(0) && power == 0) {
         throw std::invalid_argument("0 pow 0 is undefined");
     }
@@ -91,5 +91,27 @@ fpow(modNum<T1> value, T1 power) {
 
     return modNum<T1>((r * t) % n, value.getMod());
 }
+template <typename T>
+T
+logPow(T base, T power, T MOD) {
+    T result = 1;
+    while (power > 0) {
+        if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
+            result = (result * base) % MOD;
+        }
+        base = (base * base) % MOD;
+        power = power / 2;   // Can also use power >>= 1; to make code even faster
+    }
+    return result;
+}
 
+template <typename T1>
+modNum<T1>
+fpow(modNum<T1> value, T1 power) {
+    if (value == static_cast<T1>(0) && power == 0) {
+        throw std::invalid_argument("0 pow 0 is undefined");
+    }
+
+    return modNum(logPow(value.getValue(), power, value.getMod()), value.getMod());
+}
 #endif
