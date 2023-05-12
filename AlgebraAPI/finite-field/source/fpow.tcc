@@ -1,5 +1,4 @@
 #include "mod-num.tcc"
-namespace modular {
 
 // include guard:
 #ifndef ALGEBRA_INVERSION_AND_DIVISION
@@ -94,4 +93,3 @@ fpow(modNum<T1> value, T1 power) {
 }
 
 #endif
-}   // namespace modular

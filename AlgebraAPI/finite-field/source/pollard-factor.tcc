@@ -1,12 +1,17 @@
 #include <cmath>
 #include <iostream>
+#include <string>
+#include <utility>
 #include <vector>
 
 #include "mod-num.tcc"
 
+using namespace std;
+
+namespace modular {
+
 #ifndef POLLARD_FACTORIZATION
 #define POLLARD_FACTORIZATION
-using namespace modular;
 
 /**
  *  @brief Calculating GCD
@@ -28,7 +33,7 @@ gcd(T1 a, T2 b) {
 template <typename T1>
 bool
 isPrimeSimple(T1 a) {
-    for (int i = 2; i <= std::sqrt(a); ++i)
+    for (int i = 2; i <= sqrt(a); ++i)
         if (a % i == 0)
             return false;
     return true;
@@ -78,27 +83,27 @@ pollardRhO(T1 n) {
  *  @return vector of factors
  */
 template <typename T1>
-std::vector<modNum<T1>>
+vector<modNum<T1>>
 factorize(modNum<T1> value) {
-    modNum<T1> one(1,value.getMod());
+    modNum<T1> one(1, value.getMod());
     if (value < one)
-        throw std::invalid_argument(std::to_string(value.getValue()) + " is less than 1");
+        throw invalid_argument(to_string(value.getValue()) + " is less than 1");
     else if (value == one)
-        return std::vector<modNum<T1>>{};
+        return vector<modNum<T1>>{};
     else if (isPrimeSimple(value.getValue()))
-        return std::vector<modNum<T1>>{value};
+        return vector<modNum<T1>>{value};
 
-    std::vector<modNum<T1>> factors;
+    vector<modNum<T1>> factors;
 
     T1 divisor = pollardRhO(value.getValue());
     if (isPrimeSimple(divisor))
         factors.push_back(modNum<T1>(divisor, value.getMod()));
     else {
-        std::vector<modNum<T1>> tmp = factorize(modNum<T1>(divisor, value.getMod()));
+        vector<modNum<T1>> tmp = factorize(modNum<T1>(divisor, value.getMod()));
         factors.insert(factors.end(), tmp.begin(), tmp.end());
     }
 
-    std::vector<modNum<T1>> tmp = factorize(modNum<T1>(value.getValue() / divisor, value.getMod()));
+    vector<modNum<T1>> tmp = factorize(modNum<T1>(value.getValue() / divisor, value.getMod()));
     factors.insert(factors.end(), tmp.begin(), tmp.end());
 
     return factors;
@@ -110,36 +115,31 @@ factorize(modNum<T1> value) {
  *  @return vector of factors
  */
 template <typename T1>
-std::vector<modNum<T1>>
-naiveFactorize(modNum<T1> m)
-{
-   modNum<T1> one(1,m.getMod());
-   if (m <  one)
-       throw std::invalid_argument(std::to_string(m.getValue()) + " is less than 1");
-   else if (m == one)
-       return std::vector<modNum<T1>>{};
+vector<modNum<T1>>
+naiveFactorize(modNum<T1> m) {
+    modNum<T1> one(1, m.getMod());
+    if (m < one)
+        throw invalid_argument(to_string(m.getValue()) + " is less than 1");
+    else if (m == one)
+        return vector<modNum<T1>>{};
 
-   std::vector<modNum<T1>> factors;
+    vector<modNum<T1>> factors;
 
     T1 p = 2;
-    while (p * p <= m.getValue())
-     {
-       if (m.getValue() % p == 0)
-       {
-           m = modNum<T1>( m.getValue() / p, m.getMod());
-           factors.push_back(modNum<T1>(p, m.getMod()));
-       }
-       else{
-           p++;
-       }
+    while (p * p <= m.getValue()) {
+        if (m.getValue() % p == 0) {
+            m = modNum<T1>(m.getValue() / p, m.getMod());
+            factors.push_back(modNum<T1>(p, m.getMod()));
+        } else {
+            p++;
+        }
     }
 
     if (m > one)
-       factors.push_back(m);
+        factors.push_back(m);
 
     return factors;
 }
 
-
-
 #endif
+}   // namespace modular

@@ -1,7 +1,7 @@
 #include <random>
 
 #include "fpow.tcc"
-namespace modular {
+
 #ifndef TASK_10
 #define TASK_10
 
@@ -64,4 +64,3 @@ isPrime(modNum<T1> base, size_t k) {
     return true;
 }
 #endif
-}   // namespace modular

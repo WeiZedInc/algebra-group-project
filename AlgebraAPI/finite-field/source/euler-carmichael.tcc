@@ -2,26 +2,27 @@
 
 #include "mod-num.tcc"
 
-namespace modular {
+using namespace std;
+
 #ifndef EULER_CARMICAEL
 #define EULER_CARMICAEL
 template <typename T, typename floating = double>
 floating
 EulerFunction(T n) {
     if (n <= 0)
-        throw std::logic_error("Euler totient function is not defiend on non Natural values");
-    floating res = static_cast<floating>(n);
+        throw logic_error("Euler totient function is not defiend on non Natural values");
+    floating res = n.get_d();   // suitable only when T is mpz_class
     floating one(1.0);
 
     for (T p = 2; p * p <= n; p += 1) {
         if (n % p == 0) {
             while (n % p == 0) n /= p;
-            res *= (one - (one / static_cast<floating>(p)));
+            res *= (one - (one / p.get_d()));
         }
     }
 
     if (n > 1)
-        res -= res / static_cast<floating>(n);
+        res -= res / (n.get_d());
     return res;
 }
 
@@ -43,12 +44,12 @@ modNum<T>
 CarmichaelFunction(modNum<T> num) {
     T n = num.getValue();
     if (n <= 0)
-        throw std::logic_error("Carmichael function is not defiend on non Natural values");
+        throw logic_error("Carmichael function is not defiend on non Natural values");
 
     if (n == 1)
         return 1;
 
-    std::vector<T> factors;
+    vector<T> factors;
     for (T i = 2; i * i <= n; i += 2) {
         T w = 0;
         while (n % i == 0) {
@@ -71,4 +72,3 @@ CarmichaelFunction(modNum<T> num) {
 }
 
 #endif
-}   // namespace modular

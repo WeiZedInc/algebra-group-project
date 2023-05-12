@@ -1,8 +1,12 @@
-namespace modular {
+
+
 #ifndef TASK2_TCC
 #define TASK2_TCC
 #include <cassert>
 #include <iostream>
+#include <string>
+
+using namespace std;
 
 #ifndef MOD_NUM
 #define MOD_NUM
@@ -22,7 +26,7 @@ class modNum {
    public:
     modNum(T _value = 0, T _MOD = 1) {
         if (_MOD <= 0) {
-            throw std::invalid_argument("modulus should be positive");
+            throw invalid_argument("modulus should be positive");
         }
         value = _value % _MOD;
         MOD = _MOD;
@@ -59,13 +63,13 @@ class modNum {
  * @param  value2 The second value to add.
  * @param MOD  The modulo value
  * @return The sum of the two values modulo MOD
- * @throws std::invalid_argument if MOD is non - positive
+ * @throws invalid_argument if MOD is non - positive
  */
 template <typename T>
 T
 modNum<T>::add(T value1, T value2, T MOD) const {
     if (MOD <= 0) {
-        throw std::invalid_argument("modulus should be positive");
+        throw invalid_argument("modulus should be positive");
     }
     T result = value1 + value2;
     result %= MOD;
@@ -80,13 +84,13 @@ modNum<T>::add(T value1, T value2, T MOD) const {
  *  @param  value2 The second value to be subtracted.
  *  @param MOD The modulo value
  *  @return The result of the subtraction with modulo operation.
- *  @throws std::invalid_argument if MOD is non-positive
+ *  @throws invalid_argument if MOD is non-positive
  */
 template <typename T>
 T
 modNum<T>::subs(T value1, T value2, T MOD) const {
     if (MOD <= 0) {
-        throw std::invalid_argument("modulus should be positive");
+        throw invalid_argument("modulus should be positive");
     }
     T result = value1 - value2;
     result %= MOD;
@@ -101,13 +105,13 @@ modNum<T>::subs(T value1, T value2, T MOD) const {
  *  @param  value2 The second value to multiply.
  *  @param MOD The modulo value
  *  @return The result of the multipilcation with modulo operation.
- *  @throws std::invalid_argument if MOD is non-positive
+ *  @throws invalid_argument if MOD is non-positive
  */
 template <typename T>
 T
 modNum<T>::mult(T value1, T value2, T MOD) const {
     if (MOD <= 0) {
-        throw std::invalid_argument("modulus should be positive");
+        throw invalid_argument("modulus should be positive");
     }
     value1 = (value1 % MOD + MOD) % MOD;
     value2 = (value2 % MOD + MOD) % MOD;
@@ -154,8 +158,8 @@ modNum<T>::inverseValue(T value1, T mod) const {
 
     T gcdResult = gcdExtended(value1, mod, &x, &y);
     if (gcdResult != 1) {
-        std::string errormsg = "Inverse does not exist here.";
-        throw std::invalid_argument(errormsg);
+        string errormsg = "Inverse does not exist here.";
+        throw invalid_argument(errormsg);
     } else {
         x = (x % mod + mod) % mod;
         return x;
@@ -187,7 +191,7 @@ template <typename T>
 void
 modNum<T>::setMod(T MOD) {
     if (MOD <= 0) {
-        throw std::invalid_argument("modulus should be positive");
+        throw invalid_argument("modulus should be positive");
     }
     this->MOD = MOD;
 }
@@ -220,4 +224,3 @@ modNum<T>::operator/(const modNum<T> &other) const {
 }
 
 #endif   // TASK2_TCC
-}   // namespace modular

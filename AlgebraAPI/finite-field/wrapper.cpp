@@ -1,8 +1,7 @@
+#include <gmpxx.h>
 #include <string.h>
 
 #include <algorithm>
-#include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -12,7 +11,6 @@
 #define EXPORT extern "C" __declspec(dllexport)
 
 using namespace modular;
-using namespace boost::multiprecision;
 const size_t MESSAGE_LEN = 200;
 
 /**
@@ -29,13 +27,14 @@ char *
 addition(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA(a), numB(b), numMod(mod);
+        mpz_class numA, numB, numMod;
+        numA.set_str(a, 10), numB.set_str(b, 10), numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), b1(numB, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
         res = a1 + b1;
 
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().str().c_str());
+        strcpy(resStr, res.getValue().get_str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -58,14 +57,15 @@ char *
 subtraction(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA(a), numB(b), numMod(mod);
+        mpz_class numA, numB, numMod;
+        numA.set_str(a, 10), numB.set_str(b, 10), numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), b1(numB, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
 
         res = a1 - b1;
 
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().str().c_str());
+        strcpy(resStr, res.getValue().get_str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -88,14 +88,16 @@ char *
 multiplication(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA(a), numB(b), numMod(mod);
+        mpz_class numA, numB, numMod;
 
-        modNum<cpp_int> a1(numA, numMod), b1(numB, numMod), res;
+        numA.set_str(a, 10), numB.set_str(b, 10), numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
 
         res = a1 * b1;
 
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().str().c_str());
+        strcpy(resStr, res.getValue().get_str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -118,14 +120,15 @@ char *
 division(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA(a), numB(b), numMod(mod);
+        mpz_class numA, numB, numMod;
+        numA.set_str(a, 10), numB.set_str(b, 10), numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), b1(numB, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod), res;
 
         res = a1 / b1;
 
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().str().c_str());
+        strcpy(resStr, res.getValue().get_str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -137,13 +140,14 @@ char *
 fastPow(char *a, char *degree, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA(a), numDegree(degree), numMod(mod);
+        mpz_class numA, numDegree, numMod;
+        numA.set_str(a, 10), numDegree.set_str(degree, 10), numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), res;
 
         res = fpow(a1, numDegree);
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().str().c_str());
+        strcpy(resStr, res.getValue().get_str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -156,13 +160,14 @@ char *
 inverse(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA(num), numMod(mod);
+        mpz_class numA, numMod;
+        numA.set_str(num, 10), numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), res;
 
         res = a1.inv();
         char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().str().c_str());
+        strcpy(resStr, res.getValue().get_str().c_str());
         return resStr;
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
@@ -187,18 +192,18 @@ char **
 factorize(size_t &size, char *num, char *mod, char *errorStr) {
     char **resStr = nullptr;
     try {
-        cpp_int numA(num), numMod(mod);
+        mpz_class numA(num), numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod);
+        modNum<mpz_class> a1(numA, numMod);
 
-        std::vector<modNum<cpp_int>> res = modular::factorize(a1);
+        std::vector<modNum<mpz_class>> res = modular::factorize(a1);
 
         resStr = new char *[res.size()];
         size = res.size();
 
         for (int i = 0; i < res.size(); ++i) {
             resStr[i] = new char[MESSAGE_LEN];
-            strcpy(resStr[i], res[i].getValue().str().c_str());
+            strcpy(resStr[i], res[i].getValue().get_str().c_str());
         }
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -221,13 +226,13 @@ char *
 discreteSqrt(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numMod;
+        mpz_class numA, numMod;
 
         numA.set_str(num, 10);
 
         numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), res;
 
         res = modular::sqrt(a1);
         char *resStr = new char[MESSAGE_LEN];
@@ -255,16 +260,16 @@ char *
 discreteLog(char *num, char *base, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numB, numMod;
+        mpz_class numA, numB, numMod;
 
         numA.set_str(num, 10);
         numB.set_str(base, 10);
 
         numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), b1(numB, numMod);
+        modNum<mpz_class> a1(numA, numMod), b1(numB, numMod);
 
-        cpp_int res;
+        mpz_class res;
 
         res = modular::log(a1, b1);
         resStr = new char[MESSAGE_LEN];
@@ -296,13 +301,13 @@ char *
 orderOfElement(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numMod, res;
+        mpz_class numA, numMod, res;
 
         numA.set_str(num, 10);
 
         numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod);
+        modNum<mpz_class> a1(numA, numMod);
 
         res = modular::orderOfElement(a1);
 
@@ -329,13 +334,13 @@ bool
 isGenerator(char *num, char *mod, char *errorStr) {
     try {
         char *resStr = nullptr;
-        cpp_int numA, numMod, res;
+        mpz_class numA, numMod, res;
 
         numA.set_str(num, 10);
 
         numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod);
+        modNum<mpz_class> a1(numA, numMod);
 
         return modular::isGenrator(a1);
     } catch (const std::exception &e) {
@@ -360,14 +365,15 @@ char *
 eulerFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA(num), numMod(mod);
+        mpz_class numA, numMod;
+        numA.set_str(num, 10), numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), res;
 
-        res = modular::eulerFunction<cpp_int, double>(a1);
+        res = modular::eulerFunction<mpz_class, double>(a1);
 
         resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().str().c_str());
+        strcpy(resStr, res.getValue().get_str().c_str());
 
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -388,13 +394,13 @@ char *
 carmichaelFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
-        cpp_int numA, numMod;
+        mpz_class numA, numMod;
 
         numA.set_str(num, 10);
 
         numMod.set_str(mod, 10);
 
-        modNum<cpp_int> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod), res;
 
         res = modular::carmichaelFunction(a1);
 
@@ -421,14 +427,14 @@ carmichaelFunction(char *num, char *mod, char *errorStr) {
 bool
 isPrime(char *num, char *mod, char *iterations, char *errorStr) {
     try {
-        cpp_int numA, numMod, res;
+        mpz_class numA, numMod, res;
 
         numA.set_str(num, 10);
 
         numMod.set_str(mod, 10);
         size_t iters = atoll(iterations);
 
-        modNum<cpp_int> a1(numA, numMod);
+        modNum<mpz_class> a1(numA, numMod);
 
         return modular::isPrime(a1, iters);
 
@@ -443,7 +449,7 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
 int
 main() {
-    char a[] = "272440612037865607952868223312";
+    char a[] = "272440612037952868223312";
     char b[] = "1";
     char mod[] = "272440612037865607952868223313";
     char err[200];
@@ -456,3 +462,17 @@ main() {
     } else
         std::cout << err << std::endl;
 }
+
+/*
+
+em++ -O3 -s MODULARIZE=1 -s "EXPORT_NAME='testModule'" -s  -s "EXPORTED_FUNCTIONS=['_addition']" \
+-o myModule.wasm wrapper.cpp  -I/usr/include
+
+em++ -o test.js test.cpp "EXPORTED_FUNCTIONS=['_addition']" -s EXPORT_NAME='testModule'" -s
+MODULARIZE=1 -L/${HOME}/opt/lib/libgmp.a -I${HOME}/opt/include
+
+
+
+
+
+*/
