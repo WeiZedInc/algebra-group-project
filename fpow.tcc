@@ -1,11 +1,9 @@
-#ifndef ALGEBRA_INVERSION_AND_DIVISION
-#define ALGEBRA_INVERSION_AND_DIVISION
-#include <iostream>
-#include"../mod-math.h"
 #include "mod-num.tcc"
 
-using namespace std;
-using namespace modular;
+// include guard:
+#ifndef ALGEBRA_INVERSION_AND_DIVISION
+#define ALGEBRA_INVERSION_AND_DIVISION
+
 /**
 @file fpow.tcc
 @brief Implementation of Montgomery modular exponentiation algorithm
@@ -109,7 +107,7 @@ logPow(T base, T power, T MOD) {
 
 template <typename T1>
 modNum<T1>
-modular::fpow(modNum<T1> value, T1 power) {
+fpow(modNum<T1> value, T1 power) {
     if (value == static_cast<T1>(0) && power == 0) {
         throw std::invalid_argument("0 pow 0 is undefined");
     }
