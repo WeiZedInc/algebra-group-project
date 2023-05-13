@@ -6,6 +6,7 @@
 
 #include "../../../doctest.h"
 #include "utils.h"
+using namespace modular;
 
 template <class T>
 T

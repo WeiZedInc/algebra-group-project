@@ -8,6 +8,8 @@
 
 using namespace std;
 
+namespace modular {
+
 #ifndef POLLARD_FACTORIZATION
 #define POLLARD_FACTORIZATION
 
@@ -140,3 +142,4 @@ naiveFactorize(modNum<T1> m) {
 }
 
 #endif
+}   // namespace modular
