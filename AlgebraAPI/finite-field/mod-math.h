@@ -131,4 +131,10 @@ template <typename T1>
 bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 
 } // namespace modular
+
+#include "source/mod-num.tcc"
+#include "source/factorization.tcc"
+#include "source/fpow.tcc"
+#include "source/isPrime.tcc"
+
 #endif

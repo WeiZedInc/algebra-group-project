@@ -2,7 +2,6 @@
 #define ALGEBRA_INVERSION_AND_DIVISION
 #include <iostream>
 #include"../mod-math.h"
-#include "mod-num.tcc"
 
 using namespace std;
 using namespace modular;

@@ -5,7 +5,6 @@
 #include <iostream>
 #include <string>
 #include"../mod-math.h"
-#include "mod-num.tcc"
 
 using namespace std;
 using namespace modular;
