@@ -1,8 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "../../../doctest.h"
 #include "../../mod-math.h"
-#include "../mod-num.tcc"
-#include "../factorization.tcc"
 #include "utils.h"
 #include <random>
 

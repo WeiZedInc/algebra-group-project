@@ -1,9 +1,11 @@
 #include <random>
 
-#include "fpow.tcc"
+#include "../mod-math.h"
 
 #ifndef TASK_10
 #define TASK_10
+
+using namespace modular;
 
 /**
  *  @brief Probabilistic check of a number for simplicity (Miller-Rabin test)
@@ -16,7 +18,7 @@
 
 template <typename T1>
 bool
-isPrime(modNum<T1> base, size_t k) {
+modular::isPrime(modNum<T1> base, size_t k) {
     T1 value = base.getValue();
 
     // Edge case
