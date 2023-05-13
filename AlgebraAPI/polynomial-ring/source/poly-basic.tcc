@@ -5,7 +5,6 @@
 #include <cmath>
 #include "node.tcc"
 #include "../../finite-field/mod-math.h"
-#include "../../finite-field/source/mod-num.tcc"
 
 using namespace modular;
 
