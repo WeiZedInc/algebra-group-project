@@ -1,10 +1,11 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "../pollard-factor.tcc"
-
+#include "../../../doctest.h"
+#include "../../mod-math.h"
+#include "../mod-num.tcc"
+#include "../factorization.tcc"
+#include "utils.h"
 #include <random>
 
-#include "../../../doctest.h"
-#include "utils.h"
 using namespace modular;
 
 TEST_CASE("Testing Pollard factorization") {
@@ -53,7 +54,7 @@ TEST_CASE("Testing Pollard factorization") {
 
     SUBCASE("Test3") {
         T mod = getRandomNumber(1, getRandomNumber(1, 100000));
-        modNum<T> a(getRandomNumber(1, getRandomNumber(1, 100000)), mod);
+        modNum<T> a(getRandomNumber(1, getRandomNumber(100000, 200000)), mod);
 
         std::vector<modNum<T>> f1 = factorize(a);
 

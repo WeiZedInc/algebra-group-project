@@ -1,6 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "../../../doctest.h"
 #include "../../mod-math.h"
+#include "../mod-num.tcc"
 #include "utils.h"
 #include <random>
 
@@ -10,8 +11,8 @@ TEST_CASE("Testing modNum class with random values")
 {
     using T = int;
     const int MOD = getRandomPrimeNumber(13, 200);
-    modNum<T> a(getRandomNumber(1, MOD - 1), MOD);
-    modNum<T> b(getRandomNumber(1, MOD - 1), MOD);
+     modNum<T> a(getRandomNumber(1, MOD - 1), MOD);
+     modNum<T> b(getRandomNumber(1, MOD - 1), MOD);
 
     SUBCASE("Test addition")
     {

@@ -2,7 +2,6 @@
 #include <list>
 #include <iostream>
 #include <vector>
-#include "../finite-field/mod-math.h"
 
 using namespace modular;
 

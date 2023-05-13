@@ -1,10 +1,11 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "../pollard-factor.tcc"
-
+#include "../../../doctest.h"
+#include "../../mod-math.h"
+#include "../mod-num.tcc"
+#include "../factorization.tcc"
+#include "utils.h"
 #include <random>
 
-#include "../../../doctest.h"
-#include "utils.h"
 using namespace modular;
 
 TEST_CASE("Testing Naive factorization") {
