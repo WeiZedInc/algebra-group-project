@@ -1,8 +1,11 @@
-#include <climits>
+#include <limits>
 #include <list>
 #include <vector>
 #include <iostream>
+#include <cmath>
 #include "node.tcc"
+#include "../../finite-field/mod-math.h"
+#include "../../finite-field/source/mod-num.tcc"
 
 using namespace modular;
 
@@ -544,7 +547,7 @@ bool Polynomial<T>::CohnTest()
 template <typename T>
 bool Polynomial<T>::isPrime(T num)
 {
-    T check = sqrt(num);
+    auto check = sqrt(num);
 
     for (int i = 2; i <= check; i++)
         if (num % i == 0)

@@ -1,11 +1,12 @@
-
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "../fpow.tcc"
-
-#include <iostream>
-
 #include "../../../doctest.h"
+#include "../../mod-math.h"
+#include "../mod-num.tcc"
+#include "../fpow.tcc"
 #include "utils.h"
+#include <random>
+
+using namespace modular;
 
 template <class T>
 T

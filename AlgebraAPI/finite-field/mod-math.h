@@ -1,55 +1,89 @@
+#ifndef MOD_NUM
+#define MOD_NUM
+
 #include <stdexcept>
 #include <string>
 #include <vector>
 
 namespace modular {
 
-#ifndef MOD_NUM
-#define MOD_NUM
 template <typename T>
 class modNum {
    private:
     mutable T value, MOD;
-
+    
     T add(T value1, T value2, T MOD) const;
     T subs(T value1, T value2, T MOD) const;
     T mult(T value1, T value2, T MOD) const;
-
+    T gcdExtended(T a, T b, T *x, T *y) const;
     T inverseValue(T value1, T mod) const;
     T div(T value1, T value2, T mod) const;
 
    public:
-    modNum(T value = 0, T MOD = 1) : value(value), MOD(MOD) {
-        if (MOD <= 0) {
+    modNum(T _value = 0, T _MOD = 1) {
+        if (_MOD <= 0) {
             throw std::invalid_argument("modulus should be positive");
         }
+        value = _value % _MOD;
+        MOD = _MOD;
     }
-
-    T gcdExtended(T a, T b, T *x, T *y) const;
 
     T getValue() const;
     T getMod() const { return MOD; };
     void setMod(T MOD);
-    void setValue(T _value) { value = _value; }
 
-    bool operator==(const modNum &other) const { return value == other.value && MOD == other.MOD; }
+    bool operator==(const modNum<T> &other) const {
+        return value == other.value && MOD == other.MOD;
+    }
 
-    bool operator<(const modNum &other) const { return value < other.value; }
+    bool operator<(const modNum<T> &other) const { return value < other.value; }
 
-    bool operator<=(const modNum &other) const { return value <= other.value; }
+    bool operator<=(const modNum<T> &other) const { return value <= other.value; }
 
-    bool operator>(const modNum &other) const { return value > other.value; }
+    bool operator>(const modNum<T> &other) const { return value > other.value; }
 
-    bool operator>=(const modNum &other) const { return value >= other.value; }
+    bool operator>=(const modNum<T> &other) const { return value >= other.value; }
 
-    modNum inv();
+    modNum<T> inv();
 
-    modNum<T> operator+(const modNum &other) const;
-    modNum<T> operator-(const modNum &other) const;
-    modNum<T> operator*(const modNum &other) const;
-    modNum<T> operator/(const modNum &other) const;
+    modNum<T> operator+(const modNum<T> &other) const;
+    modNum<T> operator-(const modNum<T> &other) const;
+    modNum<T> operator*(const modNum<T> &other) const;
+    modNum<T> operator/(const modNum<T> &other) const;
+
+    // Strategy pattern
+    template <typename T1>
+    class Factorization
+    {
+    public:
+        virtual ~Factorization() = default;
+        virtual std::vector<modNum<T1>> factor(modNum<T1> value) = 0;
+    };
+
+    template <typename T1>
+    class Pollard : public Factorization<T1>
+    {
+    public: 
+        std::vector<modNum<T1>> factor(modNum<T1> value) override;
+    };
+
+    template <typename T1>
+    class Naive : public Factorization<T1>
+    {
+    public: 
+        std::vector<modNum<T1>> factor(modNum<T1> m) override;
+    };
+
+    private:
+    Factorization<T> *levelStrat;
+
+    public:
+    std::vector<modNum<T>> factorize(Factorization<T>* strat) 
+    {
+        levelStrat = strat;
+        return levelStrat->factor(*this);
+    }
 };
-#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
@@ -59,13 +93,12 @@ template <typename T1>
 modNum<T1> fpow(modNum<T1> value, T1 degree);   // fast pow
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename T1>
-std::vector<modNum<T1>> factorize(
-    modNum<T1> value);   // number factorization using Polard algorithm
+
+template<typename T1>
+std::vector<modNum<T1>> factorize(modNum<T1> value);         // number factorization using Polard algorithm
 
 template <typename T1>
-std::vector<modNum<T1>> naiveFactorize(
-    modNum<T1> value);   // number factorization using naive algorithm
+std::vector<modNum<T1>> naiveFactorize(modNum<T1> value);   // number factorization using naive algorithm
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,11 +130,5 @@ modNum<T1> carmichaelFunction(modNum<T1> value);   // Carmichael function
 template <typename T1>
 bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 
-}   // namespace modular
-
-#include "source/euler-carmichael.tcc"
-#include "source/fpow.tcc"
-#include "source/isPrime.tcc"
-#include "source/log.tcc"
-#include "source/mod-num.tcc"
-#include "source/pollard-factor.tcc"
+} // namespace modular
+#endif

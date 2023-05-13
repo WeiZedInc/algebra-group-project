@@ -1,61 +1,13 @@
-
-
 #ifndef TASK2_TCC
 #define TASK2_TCC
+
 #include <cassert>
 #include <iostream>
 #include <string>
+#include"../mod-math.h"
 
 using namespace std;
-
-#ifndef MOD_NUM
-#define MOD_NUM
-
-template <typename T>
-class modNum {
-   private:
-    mutable T value, MOD;
-
-    T add(T value1, T value2, T MOD) const;
-    T subs(T value1, T value2, T MOD) const;
-    T mult(T value1, T value2, T MOD) const;
-    T gcdExtended(T a, T b, T *x, T *y) const;
-    T inverseValue(T value1, T mod) const;
-    T div(T value1, T value2, T mod) const;
-
-   public:
-    modNum(T _value = 0, T _MOD = 1) {
-        if (_MOD <= 0) {
-            throw invalid_argument("modulus should be positive");
-        }
-        value = _value % _MOD;
-        MOD = _MOD;
-    }
-
-    T getValue() const;
-    T getMod() const { return MOD; };
-    void setMod(T MOD);
-
-    bool operator==(const modNum<T> &other) const {
-        return value == other.value && MOD == other.MOD;
-    }
-
-    bool operator<(const modNum<T> &other) const { return value < other.value; }
-
-    bool operator<=(const modNum<T> &other) const { return value <= other.value; }
-
-    bool operator>(const modNum<T> &other) const { return value > other.value; }
-
-    bool operator>=(const modNum<T> &other) const { return value >= other.value; }
-
-    modNum<T> inv();
-
-    modNum<T> operator+(const modNum<T> &other) const;
-    modNum<T> operator-(const modNum<T> &other) const;
-    modNum<T> operator*(const modNum<T> &other) const;
-    modNum<T> operator/(const modNum<T> &other) const;
-};
-#endif
+using namespace modular;
 
 /**
  * @brief Adds two values modulo MOD.
@@ -222,5 +174,4 @@ modNum<T>
 modNum<T>::operator/(const modNum<T> &other) const {
     return modNum<T>(div(value, other.value, MOD), MOD);
 }
-
 #endif   // TASK2_TCC
