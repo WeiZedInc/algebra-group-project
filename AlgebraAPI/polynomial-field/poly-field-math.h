@@ -7,24 +7,41 @@ using namespace modular;
 #define POLY_FIELD
 
 template <typename T>
+bool
+isPrimeSimpleFunction(T num) {
+    T check = sqrt(num);
+
+    for (int i = 2; i <= check; i++)
+        if (num % i == 0)
+            return false;
+    return true;
+}
+
+template <typename T>
 typename std::vector<T> nodes;
 
 template <typename T>
-class PolynomialField : public Polynomial<modNum<T>> {
+class PolynomialField : public Polynomial<T> {
    protected:
     size_t polyMod;
-    size_t order = 0;   // degree of polynom
 
    public:
+    PolynomialField(T mod, T polymod) {
+        if (isPrimeSimpleFunction(mod))
+            this->numMod = mod;
+        else
+            throw std::invalid_argument("Mod should be prime");
+        this->polyMod = polymod;
+    }
     PolynomialField() = default;
-    PolynomialField(T mod, T polymod);
+
     PolynomialField<T> operator+(const PolynomialField<T> &) const;
     PolynomialField<T> operator-(const PolynomialField<T> &) const;
     PolynomialField<T> operator*(const PolynomialField<T> &) const;
     PolynomialField<T> operator*(T num) const;
     bool operator==(const PolynomialField<T> &) const;
     PolynomialField<T> pow(size_t k);
-    void addNode(const T num, size_t deg) const;
+    void addNode(const T num, size_t deg);
 
     static std::vector<PolynomialField<T>> findKIrreducible(size_t k);
 

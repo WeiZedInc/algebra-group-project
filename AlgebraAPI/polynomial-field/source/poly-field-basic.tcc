@@ -36,6 +36,7 @@ class PolynomialField : public Polynomial<T> {
         this->polyMod = polymod;
     }
     PolynomialField() = default;
+
     PolynomialField<T> operator+(const PolynomialField<T> &) const;
     PolynomialField<T> operator-(const PolynomialField<T> &) const;
     PolynomialField<T> operator*(const PolynomialField<T> &) const;
@@ -57,6 +58,11 @@ class PolynomialField : public Polynomial<T> {
     bool isGenerator();
 };
 
+#endif
+
+#ifndef POLY_FIELD_BASICS_IMPLEMENTATION
+#define POLY_FIELD_BASICS_IMPLEMENTATION
+
 template <typename T>
 void
 PolynomialField<T>::addNode(const T num, size_t deg) {
@@ -68,11 +74,47 @@ PolynomialField<T>
 PolynomialField<T>::operator+(const PolynomialField<T> &other) const {
     if (other.polyMod != this->polyMod) {
         throw std::invalid_argument("Polynomial degree modulas are different");
-    } else {
-        PolynomialField<T> res(this->numMod, this->polyMod);
-        res = this->Polynomial<T>::operator+(other);
-        return res;
     }
+    PolynomialField<T> result(this->numMod, this->polyMod);
+    result.degree = std::max(this->degree, other.degree);
+
+    auto it = this->poly.begin();
+    auto io = other.poly.begin();
+
+    while (it != this->poly.end() && io != other.poly.end()) {
+        if (it->deg() == io->deg()) {
+            modNum<T> t1 = it->k();
+            modNum<T> t2 = io->k();
+            modNum<T> temp = t1 + t2;
+            if (temp.getValue() != 0)
+                result.addNode(temp.getValue(), it->deg());
+            it++;
+            io++;
+        } else if (it->deg() > io->deg()) {
+            modNum<T> t = it->k();
+            modNum<T> temp = t + (modNum<T>(0));
+            result.addNode(temp.getValue(), it->deg());
+            it++;
+        } else {
+            modNum<T> t = io->k();
+            modNum<T> temp = t + (modNum<T>(0));
+            result.addNode(temp.getValue(), io->deg());
+            io++;
+        }
+    }
+    while (it != this->poly.end()) {
+        modNum<T> t = it->k();
+        modNum<T> temp = t + (modNum<T>(0));
+        result.addNode(temp.getValue(), it->deg());
+        it++;
+    }
+    while (io != other.poly.end()) {
+        modNum<T> t = io->k();
+        modNum<T> temp = t + (modNum<T>(0));
+        result.addNode(temp.getValue(), io->deg());
+        io++;
+    }
+    return result;
 }
 
 template <typename T>
@@ -80,11 +122,50 @@ PolynomialField<T>
 PolynomialField<T>::operator-(const PolynomialField<T> &other) const {
     if (other.polyMod != this->polyMod) {
         throw std::invalid_argument("Polynomial degree modulas are different");
-    } else {
-        PolynomialField<T> res(this->numMod, this->polyMod);
-        res = this->Polynomial<T>::operator-(other);
-        return res;
     }
+
+    PolynomialField<T> result(this->numMod, this->polyMod);
+
+    auto it = this->poly.begin();
+    auto io = other.poly.begin();
+
+    while (it != this->poly.end() && io != other.poly.end()) {
+        if (it->deg() == io->deg()) {
+            modNum<T> t1 = it->k();
+            modNum<T> t2 = io->k();
+            modNum<T> temp = t1 - (t2);
+
+            if (temp.getValue() != 0)
+                result.addNode(temp.getValue(), it->deg());
+
+            it++;
+            io++;
+        } else if (it->deg() > io->deg()) {
+            modNum<T> t = it->k();
+            modNum<T> temp = t + (modNum<T>(0));
+            result.addNode(temp.getValue(), it->deg());
+            it++;
+        } else {
+            modNum<T> t = io->k();
+            modNum<T> temp = (modNum<T>(0, this->numMod)) - t;
+            result.addNode(temp.getValue(), io->deg());
+            io++;
+        }
+    }
+    while (it != this->poly.end()) {
+        modNum<T> t = it->k();
+        modNum<T> temp = t + (modNum<T>(0));
+        result.addNode(temp.getValue(), it->deg());
+        it++;
+    }
+    while (io != other.poly.end()) {
+        modNum<T> t = io->k();
+        modNum<T> temp = (modNum<T>(0, this->numMod)) - t;
+        result.addNode(temp.getValue(), io->deg());
+        io++;
+    }
+
+    return result;
 }
 
 template <typename T>
