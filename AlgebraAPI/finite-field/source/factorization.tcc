@@ -4,7 +4,8 @@
 #include <cassert>
 #include <iostream>
 #include <string>
-#include"../mod-math.h"
+
+#include "../mod-math.h"
 
 using namespace std;
 using namespace modular;
@@ -15,7 +16,7 @@ using namespace modular;
  *  @param b second number
  *  @return GCD
  */
-template<typename T1, typename T2>
+template <typename T1, typename T2>
 T2
 gcd(T1 a, T2 b) {
     return b == 0 ? a : gcd(b, a % b);
@@ -26,7 +27,7 @@ gcd(T1 a, T2 b) {
  *  @param a first number
  *  @return true or false
  */
-template<typename T1>
+template <typename T1>
 bool
 isPrimeSimple(T1 a) {
     for (int i = 2; i <= sqrt(a); ++i)
@@ -41,7 +42,7 @@ isPrimeSimple(T1 a) {
  *  @param mod modulo
  *  @return polynomial in x computed modulo mod
  */
-template<typename T1>
+template <typename T1>
 T1
 F(T1 x, T1 mod) {
     T1 a = rand() % 10;
@@ -55,15 +56,15 @@ F(T1 x, T1 mod) {
  *
  *  @return factor
  */
-template<typename T1>
+template <typename T1>
 T1
 pollardRhO(T1 n) {
     if (n % 2 == 0)
         return 2;
 
-        T1 x = 2;
-        T1 y = 2;
-        T1 d = 1;
+    T1 x = 2;
+    T1 y = 2;
+    T1 d = 1;
 
     while (d == 1) {
         x = F(x, n);
@@ -78,13 +79,13 @@ pollardRhO(T1 n) {
  *  @param value number
  *  @return vector of factors
  */
-template<typename T1>
-template<typename T2>
-std::vector<modNum<T2>> 
+template <typename T1>
+template <typename T2>
+std::vector<modNum<T2>>
 modNum<T1>::Pollard<T2>::factor(modNum<T2> value) {
     modNum<T2> one(1, value.getMod());
     if (value < one)
-        throw invalid_argument(to_string(value.getValue()) + " is less than 1");
+        throw invalid_argument("value is less than 1");
     else if (value == one)
         return vector<modNum<T2>>{};
     else if (isPrimeSimple(value.getValue()))
@@ -111,9 +112,9 @@ modNum<T1>::Pollard<T2>::factor(modNum<T2> value) {
  *  @param value number
  *  @return vector of factors
  */
-template<typename T1>
-template<typename T2>
-std::vector<modNum<T2>> 
+template <typename T1>
+template <typename T2>
+std::vector<modNum<T2>>
 modNum<T1>::Naive<T2>::factor(modNum<T2> m) {
     modNum<T2> one(1, m.getMod());
     if (m < one)
@@ -139,15 +140,16 @@ modNum<T1>::Naive<T2>::factor(modNum<T2> m) {
     return factors;
 }
 
-template<typename T1>
-std::vector<modNum<T1>> modular::factorize(modNum<T1> value)
-{   
+template <typename T1>
+std::vector<modNum<T1>>
+modular::factorize(modNum<T1> value) {
     typename modNum<T1>::template Pollard<T1> strat;
     return value.factorize(&strat);
 }
 
 template <typename T1>
-std::vector<modNum<T1>> modular::naiveFactorize(modNum<T1> value)   // number factorization using naive algorithm
+std::vector<modNum<T1>>
+modular::naiveFactorize(modNum<T1> value)   // number factorization using naive algorithm
 {
     typename modNum<T1>::template Naive<T1> strat;
     return value.factorize(&strat);

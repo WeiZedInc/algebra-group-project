@@ -294,9 +294,6 @@ discreteLog(char *num, char *base, char *mod, char *errorStr) {
  *  @return string representation of the order of the element
  */
 
-/*
-
-
 char *
 orderOfElement(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
@@ -319,7 +316,6 @@ orderOfElement(char *num, char *mod, char *errorStr) {
 
     return resStr;
 }
-*/
 
 /**
  *
@@ -329,7 +325,6 @@ orderOfElement(char *num, char *mod, char *errorStr) {
  *    @return true if num is a generator, false otherwise
  *    */
 
-/*
 bool
 isGenerator(char *num, char *mod, char *errorStr) {
     try {
@@ -342,14 +337,13 @@ isGenerator(char *num, char *mod, char *errorStr) {
 
         modNum<mpz_class> a1(numA, numMod);
 
-        return modular::isGenrator(a1);
+        return modular::isGenerator(a1);
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
     }
     return false;
 }
 
-*/
 /**
  *
  *    @brief Calculates Euler's totient function of a given number modulo m.

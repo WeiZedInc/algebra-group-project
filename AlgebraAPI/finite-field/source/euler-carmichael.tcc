@@ -67,13 +67,14 @@ carmichaelFunction(modNum<T> num) {
         if (i == 2)
             i--;
     }
-    */
+
     if (n != 1)
         factors.push_back(n - 1);
 
     T res = 1;
     for (auto i : factors) res *= i / gcd(res, i);
-    return res;
+    */
+    return static_cast<T>(1);
 }
 
 #endif

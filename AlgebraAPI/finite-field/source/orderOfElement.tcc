@@ -1,3 +1,4 @@
+#include <map>
 #include <utility>
 
 #include "factorization.tcc"
@@ -11,11 +12,10 @@ template <typename T>
 T
 orderOfElement(modNum<T> a) {
     T t = a.getMod();
-    T g = std::gcd(a.getValue(), a.getMod());
 
     modNum<T> a1, one(static_cast<T>(1), a.getMod());
 
-    vector<modNum<T>> factors = factorize(modNum(t - 1, t + 1));
+    vector<modNum<T>> factors = factorize(modNum<T>(t - 1, t + 1));
 
     std::map<modNum<T>, size_t> factorsCombined;
 
