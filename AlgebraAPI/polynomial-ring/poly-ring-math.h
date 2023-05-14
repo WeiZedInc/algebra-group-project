@@ -1,20 +1,21 @@
 #pragma once
-#include <list>
 #include <iostream>
+#include <list>
 #include <vector>
+
+#include "../finite-field/mod-math.h"
 
 using namespace modular;
 
 #ifndef POLY_NODE_H
 #define POLY_NODE_H
 template <typename T>
-class Node
-{
-private:
+class Node {
+   protected:
     size_t degree;
     modNum<T> koef;
 
-public:
+   public:
     Node();
     Node(modNum<T> koef, size_t degree);
     ~Node() = default;
@@ -39,10 +40,10 @@ public:
 
 #ifndef POLYNOMIAL
 #define POLYNOMIAL
+
 template <typename T>
-class Polynomial
-{
-private:
+class Polynomial {
+   protected:
     std::list<Node<T>> poly;
     size_t degree = 0;
     T numMod = 0;
@@ -51,7 +52,8 @@ private:
     bool PerronTest();
     bool CohnTest();
     bool RootTest();
-    bool isPrime(T num); // crutial part for some test; any ideas for better algorithm are welcomed
+    bool isPrime(
+        T num);   // crutial part for some test; any ideas for better algorithm are welcomed
     long long findPower(int i, int deg);
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,20 +63,20 @@ private:
     Polynomial<T> shiftRight(int positions) const;
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-public:
-    Polynomial(T mod)
-    { 
+   public:
+    Polynomial(T mod) {
         if (isPrime(mod))
             numMod = mod;
         else
             throw std::invalid_argument("Mod should be prime");
     };
+    Polynomial() = default;
     Polynomial(std::vector<std::pair<T, size_t>>, T);
     Polynomial(std::pair<T, size_t> *arr, size_t n, T);
 
     ~Polynomial() = default;
 
-    Node<T> operator[](const size_t i); // use only when really necessary
+    Node<T> operator[](const size_t i);   // use only when really necessary
 
     bool empty();
     typename std::list<Node<T>>::const_iterator begin() const { return poly.begin(); };
@@ -83,11 +85,10 @@ public:
     void addNode(const Node<T>);
     void addNode(const T, size_t);
 
-    void removeNode(const Node<T>); // by value
-    void removeNode(const size_t);  // by degree
+    void removeNode(const Node<T>);   // by value
+    void removeNode(const size_t);    // by degree
 
-    size_t getDegree() const
-    {
+    size_t getDegree() const {
         if (poly.empty())
             return std::numeric_limits<int>::min();
         else
@@ -106,7 +107,7 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////
 
-    Polynomial<T> der() const; // deriveative
+    Polynomial<T> der() const;   // deriveative
     modNum<T> evaluate(const T) const;
     modNum<T> evaluate(const modNum<T>) const;
 
@@ -123,6 +124,7 @@ public:
 
     bool isIrreducable() const;
 };
+
 #endif
 
 #include "source/node.tcc"

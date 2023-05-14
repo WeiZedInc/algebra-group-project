@@ -1,5 +1,5 @@
-#include "../polynomial-ring/poly-ring-math.h"
 #include "../finite-field/mod-math.h"
+#include "../polynomial-ring/poly-ring-math.h"
 
 using namespace modular;
 
@@ -10,13 +10,12 @@ template <typename T>
 typename std::vector<T> nodes;
 
 template <typename T>
-class PolynomialField : public Polynomial<modNum<T>>
-{
-private:
+class PolynomialField : public Polynomial<modNum<T>> {
+   protected:
     size_t polyMod;
-    size_t order = 0; // degree of polynom
+    size_t order = 0;   // degree of polynom
 
-public:
+   public:
     PolynomialField() = default;
     PolynomialField(T mod, T polymod);
     PolynomialField<T> operator+(const PolynomialField<T> &) const;
