@@ -1,3 +1,4 @@
+#include <cmath>
 #include <vector>
 
 #include "mod-num.tcc"
@@ -51,6 +52,7 @@ carmichaelFunction(modNum<T> num) {
         return modNum<T>(static_cast<T>(1), num.getMod());
 
     vector<T> factors;
+    /*
     for (T i = 2; i * i <= n; i += 2) {
         T w = 0;
         while (n % i == 0) {
@@ -58,12 +60,13 @@ carmichaelFunction(modNum<T> num) {
             n /= i;
         }
         if (i == 2 && w >= 3)
-            factors.push_back((pow(i, w - 1) * (i - 1)) / 2);
+            factors.push_back((std::pow(i, w - 1) * (i - 1)) / 2);
         else if (i >= 2 && w > 0)
-            factors.push_back(pow(i, w - 1) * (i - 1));
+            factors.push_back(std::pow(i, w - 1) * (i - 1));
         if (i == 2)
             i--;
     }
+    */
     if (n != 1)
         factors.push_back(n - 1);
 
@@ -74,4 +77,4 @@ carmichaelFunction(modNum<T> num) {
 
 #endif
 
-}
+}   // namespace modular
