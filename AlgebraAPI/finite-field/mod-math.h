@@ -11,7 +11,7 @@ template <typename T>
 class modNum {
    private:
     mutable T value, MOD;
-    
+
     T add(T value1, T value2, T MOD) const;
     T subs(T value1, T value2, T MOD) const;
     T mult(T value1, T value2, T MOD) const;
@@ -53,33 +53,29 @@ class modNum {
 
     // Strategy pattern
     template <typename T1>
-    class Factorization
-    {
-    public:
+    class Factorization {
+       public:
         virtual ~Factorization() = default;
         virtual std::vector<modNum<T1>> factor(modNum<T1> value) = 0;
     };
 
     template <typename T1>
-    class Pollard : public Factorization<T1>
-    {
-    public: 
+    class Pollard : public Factorization<T1> {
+       public:
         std::vector<modNum<T1>> factor(modNum<T1> value) override;
     };
 
     template <typename T1>
-    class Naive : public Factorization<T1>
-    {
-    public: 
+    class Naive : public Factorization<T1> {
+       public:
         std::vector<modNum<T1>> factor(modNum<T1> m) override;
     };
 
-    private:
+   private:
     Factorization<T> *levelStrat;
 
-    public:
-    std::vector<modNum<T>> factorize(Factorization<T>* strat) 
-    {
+   public:
+    std::vector<modNum<T>> factorize(Factorization<T> *strat) {
         levelStrat = strat;
         return levelStrat->factor(*this);
     }
@@ -94,11 +90,13 @@ modNum<T1> fpow(modNum<T1> value, T1 degree);   // fast pow
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-template<typename T1>
-std::vector<modNum<T1>> factorize(modNum<T1> value);         // number factorization using Polard algorithm
+template <typename T1>
+std::vector<modNum<T1>> factorize(
+    modNum<T1> value);   // number factorization using Polard algorithm
 
 template <typename T1>
-std::vector<modNum<T1>> naiveFactorize(modNum<T1> value);   // number factorization using naive algorithm
+std::vector<modNum<T1>> naiveFactorize(
+    modNum<T1> value);   // number factorization using naive algorithm
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -123,18 +121,19 @@ T1 orderOfElement(modNum<T1> value);
 template <typename T, typename floating = double>
 modNum<T> eulerFunction(modNum<T> num);   // Euler function
 
-template <typename T1, typename floating = double>
+template <typename T1>
 modNum<T1> carmichaelFunction(modNum<T1> value);   // Carmichael function
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
 bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 
-} // namespace modular
+}   // namespace modular
 
-#include "source/mod-num.tcc"
+#include "source/euler-carmichael.tcc"
 #include "source/factorization.tcc"
 #include "source/fpow.tcc"
 #include "source/isPrime.tcc"
+#include "source/mod-num.tcc"
 
 #endif

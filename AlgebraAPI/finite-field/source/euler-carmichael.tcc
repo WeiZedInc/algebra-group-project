@@ -3,6 +3,7 @@
 #include "mod-num.tcc"
 
 using namespace std;
+namespace modular {
 
 #ifndef EULER_CARMICAEL
 #define EULER_CARMICAEL
@@ -41,13 +42,13 @@ gcd(int a, int b) {
 
 template <typename T>
 modNum<T>
-CarmichaelFunction(modNum<T> num) {
+carmichaelFunction(modNum<T> num) {
     T n = num.getValue();
     if (n <= 0)
         throw logic_error("Carmichael function is not defiend on non Natural values");
 
     if (n == 1)
-        return 1;
+        return modNum<T>(static_cast<T>(1), num.getMod());
 
     vector<T> factors;
     for (T i = 2; i * i <= n; i += 2) {
@@ -72,3 +73,5 @@ CarmichaelFunction(modNum<T> num) {
 }
 
 #endif
+
+}

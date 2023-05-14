@@ -362,7 +362,7 @@ isGenerator(char *num, char *mod, char *errorStr) {
  *    */
 
 char *
-eulerFunction(char *num, char *mod, char *errorStr) {
+eulerFunctionWrapper(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
         mpz_class numA, numMod;
@@ -388,10 +388,11 @@ eulerFunction(char *num, char *mod, char *errorStr) {
  *    @param num the number for which to calculate the Carmichael Function
  *    @param mod the modulus used to calculate the Carmichael Function
  *   @return The value of the Carmichael Function as a string
- *   */
-/**
+ *
+ */
+
 char *
-carmichaelFunction(char *num, char *mod, char *errorStr) {
+carmichaelFunctionWrapper(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
         mpz_class numA, numMod;
@@ -413,14 +414,14 @@ carmichaelFunction(char *num, char *mod, char *errorStr) {
 
     return resStr;
 }
-*/
+
 /**
  *
  *    @brief Determines if a given number is prime using the Miller-Rabin primality test
  *    @param num A char pointer to the number being checked for primality
  *    @param mod A char pointer to the modulus used to perform the modular arithmetic
- *    @param iterations A char pointer to the number of iterations used to perform the Miller-Rabin
- * test
+ *    @param iterations A char pointer to the number of iterations used to perform the
+ * Miller-Rabin test
  *    @return A boolean value indicating whether the given number is prime (true) or not (false)
  *   */
 /*
@@ -454,7 +455,7 @@ main() {
     char mod[] = "272440612037865607952868223313";
     char err[200];
 
-    char *res2 = eulerFunction(a, mod, err);
+    char *res2 = eulerFunctionWrapper(a, mod, err);
 
     if (res2 != nullptr) {
         printf("%s", res2);
