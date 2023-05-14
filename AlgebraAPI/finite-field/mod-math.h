@@ -135,6 +135,7 @@ bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 #include "source/fpow.tcc"
 #include "source/isGenerator.tcc"
 #include "source/isPrime.tcc"
+#include "source/log.tcc"
 #include "source/mod-num.tcc"
 #include "source/orderOfElement.tcc"
 

@@ -255,7 +255,6 @@ discreteSqrt(char *num, char *mod, char *errorStr) {
  *    @return a string representation of the computed logarithm
  *    */
 
-/*
 char *
 discreteLog(char *num, char *base, char *mod, char *errorStr) {
     char *resStr = nullptr;
@@ -281,8 +280,6 @@ discreteLog(char *num, char *base, char *mod, char *errorStr) {
 
     return resStr;
 }
-
-*/
 
 /**
  *
@@ -443,16 +440,17 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
 int
 main() {
-    char a[] = "3154459520710929124445565811";
-    char b[] = "1";
-    char mod[] = "83196498571306820506585069715989";
+    char a[] = "1";
+    char b[] = "2";
+    char mod[] = "5";
     char iter[] = "123123";
     char err[200];
 
-    bool res2 = isPrime(a, mod, iter, err);
+    char *res2 = discreteLog(a, b, mod, err);
+    std::string s(res2);
 
-    if (true) {
-        std::cout << res2;
+    if (res2) {
+        std::cout << s;
         std::cout << std::endl;
     } else
         std::cout << err << std::endl;

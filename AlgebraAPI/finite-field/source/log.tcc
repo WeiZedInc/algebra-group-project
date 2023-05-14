@@ -4,17 +4,13 @@
 #include <vector>
 
 #include "fpow.tcc"
+#include "isGenerator.tcc"
 #include "mod-num.tcc"
 
 namespace modular {
 #ifndef LOG_H
 #define LOG_H
 
-template <class numT>
-bool
-isGenrator2(modNum<numT>, std::string) {
-    return true;
-}
 template <class numT>
 struct customHash {
    private:
@@ -23,13 +19,16 @@ struct customHash {
    public:
     size_t operator()(const modNum<numT> &number) const { return hasher(number.getValue()); }
 };
+
 template <class numT>
 numT
 log(modNum<numT> value, modNum<numT> base) {
-    if (!isGenrator2(base, "+"))
+    if (!isGenerator(base))
         throw std::invalid_argument("Base of a logarithm must be a group Generator");
 
-    numT m = static_cast<numT>(std::sqrt(base.getMod())) + 1;
+    numT m = std::sqrt(base.getMod());
+    if (m * m < base.getMod())
+        m++;
 
     std::unordered_map<modNum<numT>, numT, customHash<numT>> table;
 
@@ -44,6 +43,10 @@ log(modNum<numT> value, modNum<numT> base) {
 
     for (numT i = 0; i < m; ++i) {
         if (table.find(gamma) != table.end()) {
+            std::cout << i << std::endl;
+            std::cout << m << std::endl;
+            std::cout << table[gamma] << std::endl;
+
             return i * m + table[gamma];
         }
         gamma = gamma * alphaInversed;
