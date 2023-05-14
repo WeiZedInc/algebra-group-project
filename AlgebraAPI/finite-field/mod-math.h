@@ -112,7 +112,7 @@ T1 log(modNum<T1> value,
 
 // needs clarifications
 template <typename T1>
-bool isGenrator(modNum<T1> value);   // is element a multyplicative group generator
+bool isGenerator(modNum<T1> value);   // is element a multyplicative group generator
 
 template <typename T1>
 T1 orderOfElement(modNum<T1> value);
@@ -133,7 +133,9 @@ bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 #include "source/euler-carmichael.tcc"
 #include "source/factorization.tcc"
 #include "source/fpow.tcc"
+#include "source/isGenerator.tcc"
 #include "source/isPrime.tcc"
 #include "source/mod-num.tcc"
+#include "source/orderOfElement.tcc"
 
 #endif

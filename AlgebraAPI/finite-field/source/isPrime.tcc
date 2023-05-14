@@ -1,11 +1,9 @@
 #include <random>
 
 #include "../mod-math.h"
-
+namespace modular {
 #ifndef TASK_10
 #define TASK_10
-
-using namespace modular;
 
 /**
  *  @brief Probabilistic check of a number for simplicity (Miller-Rabin test)
@@ -66,3 +64,4 @@ modular::isPrime(modNum<T1> base, size_t k) {
     return true;
 }
 #endif
+}   // namespace modular

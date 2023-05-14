@@ -424,7 +424,7 @@ carmichaelFunctionWrapper(char *num, char *mod, char *errorStr) {
  * Miller-Rabin test
  *    @return A boolean value indicating whether the given number is prime (true) or not (false)
  *   */
-/*
+
 bool
 isPrime(char *num, char *mod, char *iterations, char *errorStr) {
     try {
@@ -445,20 +445,20 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
 
     return false;
 }
- */
 
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
 int
 main() {
-    char a[] = "272440612037952868223312";
+    char a[] = "3154459520710929124445565811";
     char b[] = "1";
-    char mod[] = "272440612037865607952868223313";
+    char mod[] = "83196498571306820506585069715989";
+    char iter[] = "123123";
     char err[200];
 
-    char *res2 = eulerFunctionWrapper(a, mod, err);
+    bool res2 = isPrime(a, mod, iter, err);
 
-    if (res2 != nullptr) {
-        printf("%s", res2);
+    if (true) {
+        std::cout << res2;
         std::cout << std::endl;
     } else
         std::cout << err << std::endl;
@@ -471,9 +471,5 @@ em++ -O3 -s MODULARIZE=1 -s "EXPORT_NAME='testModule'" -s  -s "EXPORTED_FUNCTION
 
 em++ -o test.js test.cpp "EXPORTED_FUNCTIONS=['_addition']" -s EXPORT_NAME='testModule'" -s
 MODULARIZE=1 -L/${HOME}/opt/lib/libgmp.a -I${HOME}/opt/include
-
-
-
-
 
 */
