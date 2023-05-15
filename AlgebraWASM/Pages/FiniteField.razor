@@ -34,7 +34,7 @@
 				<button @onclick="Add"> Add </button>
 				<button @onclick="Subtract"> Subtract </button>
 				<button @onclick="Multiply"> Multiply </button>
-					<p>@result</p>
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "3":
@@ -44,10 +44,7 @@
 				<input type="text" @bind-value="@secondInputBox" />
 				<button @onclick="Inversion"> Inversion </button>
 				<button @onclick="Division"> Division </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "4":
@@ -56,10 +53,7 @@
 				<input type="text" @bind-value="@firstInputBox" />
 				<input type="text" @bind-value="@secondInputBox" />  @*pow*@
 				<button @onclick="FastPow"> Fast Pow </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "5":
@@ -67,10 +61,7 @@
 				<p>Enter two numbers:</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Polard"> Polard </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "6":
@@ -78,10 +69,7 @@
 				<p>Enter two numbers:</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="QuadSqrt"> QuadSqrt </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "7":
@@ -91,10 +79,7 @@
 				<input type="text" @bind-value="@secondInputBox" />
 				<button @onclick="isGenerator"> isGenerator </button>
 				<button @onclick="DscLog"> Calculate </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "8":
@@ -103,10 +88,7 @@
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Order"> Order </button>
 				<button @onclick="isGenerator"> isGenerator </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "9":
@@ -115,10 +97,7 @@
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Euiler"> Euiler </button>
 				<button @onclick="Carmichael"> Carmichael </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		case "10":
@@ -127,10 +106,7 @@
 				<input type="text" @bind-value="@firstInputBox" />
 				<input type="text" @bind-value="@secondInputBox" />
 				<button @onclick="isPrime"> isPrime </button>
-				@if (isResultVisible)
-				{
-					<p>@result</p>
-				}
+				<p>Result: @result</p>
 			</div>
 			break;
 		default:
@@ -143,7 +119,6 @@
 
 
 @code {
-	public bool isResultVisible { get; set; } = false;
 	public string selected { get; set; } = "";
 	public string result { get; set; } = "";
 	public string errStr { get; set; } = "";
@@ -153,7 +128,6 @@
 
 	private void SelectedMethod(ChangeEventArgs e)
 	{
-		isResultVisible = false;
 		result = "";
 		errStr = "";
 		if (!string.IsNullOrWhiteSpace((string)e.Value))
@@ -193,14 +167,66 @@
 		}
 	}
 
-	private void Subtract()
+	private unsafe void Subtract()
 	{
-		//MethodWrapper.addition();
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = MethodWrapper.subtraction(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 
-	private void Multiply()
+	private unsafe void Multiply()
 	{
-		//MethodWrapper.addition();
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = MethodWrapper.multiplication(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 
 	private void Inversion()
