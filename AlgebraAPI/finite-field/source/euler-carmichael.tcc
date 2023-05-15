@@ -12,7 +12,7 @@ namespace modular {
 
 template <typename T, typename floating>
 floating
-EulerrFunction(T n) {
+EulerFunction(T n) {
     if (n <= static_cast<T>(0))
         throw logic_error("Euler totient function is not defiend on non Natural values");
 
@@ -34,7 +34,7 @@ EulerrFunction(T n) {
 template <typename T, typename floating>
 modNum<T>
 eulerFunction(modNum<T> num) {
-    return modNum<T>(static_cast<T>(EulerrFunction(num.getValue())), num.getMod());
+    return modNum<T>(static_cast<T>(EulerFunction<T, floating>(num.getValue())), num.getMod());
 }
 
 template <typename T>
