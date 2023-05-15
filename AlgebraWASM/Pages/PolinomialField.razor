@@ -1,6 +1,27 @@
 ﻿@page "/polinomial-field"
+<select @onchange="SelectedMethod">
+    <option value=15>15. Розклад кругового многочлена на незвідні.</option>
+    <option value=16>16. Знаходження К незвібних многочленів.</option>
+    <option value=17>17. Перевірка чи є многочлен незвідним.</option>
+    <option value=18>18. Додавання, віднімання, множення двох многочленів. Нормування. Швидке піднесення у степінь.</option>
+    <option value=19>19. Знаходження оберненого многочлена (алгоритм Евкліда).</option>
+    <option value=20>20. Знаходження порядку незвідного многочлена.</option>
+    
+</select>
+
+<p>
+    Номер обраного методу:  @selected
+</p>
 
 
 @code {
-    
+    public int selected { get; set; } = -1;
+
+    private void SelectedMethod(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            selected = (int)e.Value;
+        }
+    }
 }
