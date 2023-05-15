@@ -206,6 +206,24 @@ divide(std::vector<T> p, std::vector<T> q) {
  * @param N The order of the cyclotomic polynomial.
  * @return The cyclotomic polynomial as a vector.
  */
+
+template <typename T1, typename T2>
+T1
+GCD(T1 a, T2 b) {
+    return GCD(a, static_cast<T1>(b));
+}
+
+template <typename T1, typename T1>
+T1
+GCD(T1 a, T1 b) {
+    if (a < b)
+        return GCD(b, a);
+    if (b == static_cast<T1>(0))
+        return static_cast<T1>(a);
+
+    return GCD(b, static_cast<T1>(a % b));
+}
+
 template <typename T>
 vector<T>
 getCyclotomicPolynomialRaw(T N) {
@@ -259,7 +277,7 @@ getCyclotomicPolynomialRaw(T N) {
         v.at(0) = 1;
         v.at(v.size() / 2) = -1;
         v.at(v.size() - 1) = 1;
-    } else if (std::gcd(N, 9) == 9 && power_of(N, 3)) {
+    } else if (GCD(N, 9) == static_cast<T1>(1) && power_of(N, 3)) {
         v.resize(static_cast<size_t>(N / 1.5) + 1);
         v.at(0) = 1;
         v.at(v.size() / 2) = 1;
