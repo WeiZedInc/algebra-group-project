@@ -1,81 +1,11 @@
-#include <cmath>
-
-#include "../../finite-field/mod-math.h"
-#include "../../polynomial-ring/poly-ring-math.h"
-
-using namespace modular;
-
-#ifndef POLY_FIELD
-#define POLY_FIELD
-
-template <typename T>
-bool
-isPrimeSimpleFunction(T num) {
-    T check = sqrt(num);
-
-    for (int i = 2; i <= check; i++)
-        if (num % i == 0)
-            return false;
-    return true;
-}
-
-template <typename T>
-typename std::vector<T> nodes;
-template <typename T>
-
-class PolynomialField {
-   protected:
-    T numMod;
-
-    Polynomial<T> value;
-    Polynomial<T> MOD;
-
-   public:
-    PolynomialField(T mod, Polynomial<T> polyMod) {
-        if (isPrimeSimpleFunction(mod)) {
-            this->numMod = mod;
-            this->MOD = polyMod;
-        } else
-            throw std::invalid_argument("Mod should be prime");
-    }
-
-    PolynomialField(T mod, Polynomial<T> polyMod, Polynomial<T> val) {
-        if (isPrimeSimpleFunction(mod)) {
-            this->numMod = mod;
-            this->MOD = polyMod;
-            this->value = val;
-        } else
-            throw std::invalid_argument("Mod should be prime");
-    }
-    PolynomialField() = default;
-
-    PolynomialField<T> operator+(const PolynomialField<T> &) const;
-    PolynomialField<T> operator-(const PolynomialField<T> &) const;
-    PolynomialField<T> operator*(const PolynomialField<T> &) const;
-    PolynomialField<T> operator*(T num) const;
-
-    bool operator==(const PolynomialField<T> &) const;
-    PolynomialField<T> pow(T k);
-
-    void addNode(const T num, size_t deg);
-
-    static std::vector<PolynomialField<T>> findKIrreducible(size_t k);
-
-    bool isIrreducible();
-
-    void normalize();
-
-    PolynomialField<T> inv();
-
-    size_t getOrder();
-
-    bool isGenerator();
-};
-
-#endif
-
 #ifndef POLY_FIELD_BASICS_IMPLEMENTATION
 #define POLY_FIELD_BASICS_IMPLEMENTATION
+
+#include <cmath>
+
+#include "../poly-field-math.h"
+
+using namespace modular;
 
 template <typename T>
 void

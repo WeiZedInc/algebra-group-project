@@ -1,10 +1,9 @@
-#include "../finite-field/mod-math.h"
+#ifndef POLY_FIELD
+#define POLY_FIELD
+
 #include "../polynomial-ring/poly-ring-math.h"
 
 using namespace modular;
-
-#ifndef POLY_FIELD
-#define POLY_FIELD
 
 template <typename T>
 bool
@@ -61,5 +60,7 @@ class PolynomialField {
 
     bool isGenerator();
 };
+
+#include "source//poly-field-basic.tcc"
 
 #endif
