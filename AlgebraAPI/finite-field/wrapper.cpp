@@ -257,7 +257,7 @@ factorizeSimple(size_t &size, char *num, char *mod, char *errorStr) {
  *    */
 
 /*
-char *
+char **
 discreteSqrt(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
