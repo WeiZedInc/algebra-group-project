@@ -277,7 +277,7 @@ getCyclotomicPolynomialRaw(T N) {
         v.at(0) = 1;
         v.at(v.size() / 2) = -1;
         v.at(v.size() - 1) = 1;
-    } else if (GCD(N, 9) == static_cast<T1>(1) && power_of(N, 3)) {
+    } else if (GCD(N, 9) == static_cast<T>(1) && power_of(N, 3)) {
         v.resize(static_cast<size_t>(N / 1.5) + 1);
         v.at(0) = 1;
         v.at(v.size() / 2) = 1;
