@@ -10,8 +10,8 @@
 #include <sstream>
 #include <unordered_map>
 #include <vector>
+#include "../poly-ring-math.h"
 
-namespace modular {
 /**
  * Overloaded stream insertion operator for std::vector<int32_t>.
  * Outputs the vector as a polynomial expression.
@@ -20,6 +20,7 @@ namespace modular {
  * @param v The vector to be printed.
  * @return Reference to the output stream.
  */
+template<typename T>
 std::ostream &
 operator<<(std::ostream &os, const std::vector<int32_t> &v) {
     std::stringstream ss;
@@ -60,12 +61,13 @@ operator<<(std::ostream &os, const std::vector<int32_t> &v) {
  * @param q The second polynomial vector.
  * @return The result of subtracting p from q.
  */
-std::vector<int32_t>
-subtract(const std::vector<int32_t> &p, const std::vector<int32_t> &q) {
-    std::vector<int32_t> v(p);
+template<typename T>
+std::vector<T>
+subtract(const std::vector<T> &p, const std::vector<T> &q) {
+    std::vector<T> v(p);
     v.resize(std::max(p.size(), q.size()));
 
-    for (size_t n = 0; n < q.size(); ++n) {
+    for (T n = 0; n < q.size(); ++n) {
         v.at(q.size() - 1 - n) -= q.at(q.size() - 1 - n);
     }
     while (!v.empty() && v.back() == 0) {
@@ -82,25 +84,26 @@ subtract(const std::vector<int32_t> &p, const std::vector<int32_t> &q) {
  * @param k The recursion parameter (default = 1).
  * @return The transformed vector.
  */
-std::vector<std::complex<long double>>
-fft(const std::vector<std::complex<long double>> &v, int32_t n, int32_t k = 1) {
+template<typename T>
+std::vector<std::complex<T>>
+fft(const std::vector<std::complex<T>> &v, int n, int k = 1) {
     if (abs(n) == abs(k)) {
-        return {std::accumulate(v.begin(), v.end(), std::complex<long double>())};
+        return {std::accumulate(v.begin(), v.end(), std::complex<T>())};
     }
-    std::array<std::vector<std::complex<long double>>, 2> u{};
+    std::array<std::vector<std::complex<T>>, 2> u{};
     u.at(0).reserve(v.size() + 1);
     u.at(1).reserve(v.size() + 1);
-    for (size_t i = 0; i < v.size(); ++i) {
+    for (T i = 0; i < v.size(); ++i) {
         u.at(i % 2).push_back(v.at(i));
     }
-    std::array<std::vector<std::complex<long double>>, 2> w{fft(u.at(0), n, k << 1),
+    std::array<std::vector<std::complex<T>>, 2> w{fft(u.at(0), n, k << 1),
                                                             fft(u.at(1), n, k << 1)};
-    std::vector<std::complex<long double>> a;
+    std::vector<std::complex<T>> a;
     a.resize(abs(n / k));
-    std::complex<long double> m;
-    for (size_t i = 0, j = a.size() >> 1; i < j; ++i) {
-        m = std::exp(std::complex<long double>(2 * M_PI * k * i / n) *
-                     std::complex<long double>(0, 1));
+    std::complex<T> m;
+    for (T i = 0, j = a.size() >> 1; i < j; ++i) {
+        m = std::exp(std::complex<T>(2 * M_PI * k * i / n) *
+                     std::complex<T>(0, 1));
 
         a.at(i) = a.at(i + j) = m * w.at(1).at(i);
         a.at(i) = w.at(0).at(i) + a.at(i);
@@ -116,23 +119,24 @@ fft(const std::vector<std::complex<long double>> &v, int32_t n, int32_t k = 1) {
  * @param q The second polynomial vector.
  * @return The result of multiplying p by q.
  */
-std::vector<int32_t>
-multiply(const std::vector<int32_t> &p, const std::vector<int32_t> &q) {
-    int32_t n = 1 << static_cast<int32_t>(log2(p.size() + q.size() - 2) + 1);
+template<typename T>
+std::vector<T>
+multiply(const std::vector<T> &p, const std::vector<T> &q) {
+    int32_t n = 1 << static_cast<T>(log2(p.size() + q.size() - 2) + 1);
 
-    std::vector<std::complex<long double>> a =
-        fft(std::vector<std::complex<long double>>(p.begin(), p.end()), n);
-    std::vector<std::complex<long double>> b =
-        fft(std::vector<std::complex<long double>>(q.begin(), q.end()), n);
-    std::vector<std::complex<long double>> c;
-    std::vector<int32_t> d;
+    std::vector<std::complex<T>> a =
+        fft(std::vector<std::complex<T>>(p.begin(), p.end()), n);
+    std::vector<std::complex<T>> b =
+        fft(std::vector<std::complex<T>>(q.begin(), q.end()), n);
+    std::vector<std::complex<T>> c;
+    std::vector<T> d;
     c.reserve(n);
 
     /* for (size_t i = 0; i < n; ++i) { c.push_back(a.at(i) * b.at(i)); } */
     std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(c),
-                   std::multiplies<std::complex<long double>>());
-    for (const std::complex<long double> &m : fft(c, n, -1)) {
-        d.push_back(static_cast<int32_t>(round((m / std::complex<long double>(n)).real())));
+                   std::multiplies<std::complex<T>>());
+    for (const std::complex<T> &m : fft(c, n, -1)) {
+        d.push_back(static_cast<T>(round((m / std::complex<T>(n)).real())));
     }
     while (!d.empty() && d.back() == 0) {
         d.pop_back();
@@ -147,12 +151,13 @@ multiply(const std::vector<int32_t> &p, const std::vector<int32_t> &q) {
  * @param q The second polynomial vector.
  * @return The result of multiplying p by q.
  */
-std::vector<int32_t>
-multiply_foil(const std::vector<int32_t> &p, const std::vector<int32_t> &q) {
+template<typename T>
+std::vector<T>
+multiply_foil(const std::vector<T> &p, const std::vector<T> &q) {
     /* this version of multiply uses the foil method */
-    std::vector<int32_t> v(p.size() + q.size(), 0);
-    for (size_t n = 0; n < p.size(); ++n) {
-        for (size_t m = 0; m < q.size(); ++m) {
+    std::vector<T> v(p.size() + q.size(), 0);
+    for (T n = 0; n < p.size(); ++n) {
+        for (T m = 0; m < q.size(); ++m) {
             v.at(n + m) += p.at(n) * q.at(m);
         }
     }
@@ -169,14 +174,15 @@ multiply_foil(const std::vector<int32_t> &p, const std::vector<int32_t> &q) {
  * @param q The divisor polynomial vector.
  * @return The result of dividing p by q.
  */
-std::vector<int32_t>
-divide(std::vector<int32_t> p, std::vector<int32_t> q) {
-    std::vector<int32_t> terms(std::max(p.size(), q.size()) + 1, 0);
+template<typename T>
+std::vector<T>
+divide(std::vector<T> p, std::vector<T> q) {
+    std::vector<T> terms(std::max(p.size(), q.size()) + 1, 0);
     while ((p.size() == q.size() && p.back() == q.back()) ||
            (p.size() > q.size() || p.back() > q.back())) {
-        std::vector<int32_t> term(p.size() - q.size() + 1, 0);
+        std::vector<T> term(p.size() - q.size() + 1, 0);
         term.at(term.size() - 1) = terms.at(term.size() - 1) = p.back() / q.back();
-        p = subtract(p, (p.size() == q.size() ? multiply : multiply_foil)(q, term));
+        p = subtract(p, (p.size() == q.size() ? multiply(q, term) : multiply_foil(q, term)));
         if (p.empty()) {
             break;
         }
@@ -193,16 +199,14 @@ divide(std::vector<int32_t> p, std::vector<int32_t> q) {
  * @param N The order of the cyclotomic polynomial.
  * @return The cyclotomic polynomial as a vector.
  */
-std::vector<int32_t>
-cyclotomic_polynomial(uint32_t N) {
-    static std::unordered_map<uint32_t, std::vector<int32_t>> cache;
-    if (N == 1) {
-        return std::vector<int32_t>({1, -1});
-    }
+template<typename T>
+vector<T>
+getCyclotomicPolynomialRaw(T N) {
+    static std::unordered_map<T, std::vector<T>> cache;
     if (cache.count(N) > 0) {
         return cache.at(N);
     }
-    std::function<bool(int32_t)> prime = [](int32_t p) -> bool {
+    std::function<bool(T)> prime = [](T p) -> bool {
         if (p <= 1) {
             return false;
         }
@@ -212,7 +216,7 @@ cyclotomic_polynomial(uint32_t N) {
         if (p % 2 == 0) {
             return false;
         }
-        int32_t m = static_cast<int32_t>(sqrt(p)) + 1;
+        T m = static_cast<T>(sqrt(p)) + 1;
         for (int32_t i = 3; i <= m; i += 2) {
             if (p % i == 0) {
                 return false;
@@ -221,13 +225,13 @@ cyclotomic_polynomial(uint32_t N) {
         return true;
     };
 
-    std::function<bool(uint32_t, int32_t)> power_of = [](uint32_t x, int32_t p) -> bool {
+    std::function<bool(T, T)> power_of = [](T x, T p) -> bool {
         while (!(x % p) && x > 1) {
             x /= p;
         }
         return x == 1;
     };
-    std::vector<int32_t> v;
+    std::vector<T> v;
     if (prime(N)) {
         v.resize(N, 1);
     } else if ((N % 2 == 0) && ((N / 2) % 2 != 0) && prime(N / 2)) {
@@ -237,31 +241,31 @@ cyclotomic_polynomial(uint32_t N) {
             v.push_back((!(i % 2)) ? 1 : -1);
         }
     } else if (N > 1 && power_of(N, 2)) {
-        v.resize(static_cast<size_t>(N / 2) + 1);
+        v.resize(static_cast<T>(N / 2) + 1);
         v.at(0) = 1;
         v.at(v.size() - 1) = 1;
     } else if (((N % 12 == 0) && power_of(N / 12, 2)) || ((N % 18 == 0) && power_of(N / 18, 2))) {
-        v.resize(static_cast<size_t>(N / 3) + 1);
+        v.resize(static_cast<T>(N / 3) + 1);
         v.at(0) = 1;
         v.at(v.size() / 2) = -1;
         v.at(v.size() - 1) = 1;
     } else if (std::gcd(N, 9) == 9 && power_of(N, 3)) {
-        v.resize(static_cast<size_t>(N / 1.5) + 1);
+        v.resize(static_cast<T>(N / 1.5) + 1);
         v.at(0) = 1;
         v.at(v.size() / 2) = 1;
         v.at(v.size() - 1) = 1;
     } else {
-        std::vector<int32_t> q = {1};
+        std::vector<T> q = {1};
 
         // factors of N
-        for (uint32_t i = 1, n = N / 2; i <= n; ++i) {
+        for (T i = 1, n = N / 2; i <= n; ++i) {
             if (N % i == 0) {
-                std::vector<int32_t> p = cyclotomic_polynomial(i);
-                q = multiply(q, std::vector<int32_t>(p.rbegin(), p.rend()));
+                std::vector<T> p = getCyclotomicPolynomialRaw(i);
+                q = multiply(q, std::vector<T>(p.rbegin(), p.rend()));
             }
         }
 
-        std::vector<int32_t> p(static_cast<size_t>(N) + 1, 0);
+        std::vector<T> p(static_cast<T>(N) + 1, 0);
 
         p.at(0) = -1;
         p.at(p.size() - 1) = 1;
@@ -272,4 +276,35 @@ cyclotomic_polynomial(uint32_t N) {
     }
     return v;
 }
-}   // namespace modular
+
+/**
+ * @brief Returns the N-th cyclotomic polynomial modulo mod.
+ *
+ * This function computes the N-th cyclotomic polynomial modulo mod.
+ * The cyclotomic polynomial is first computed using the
+ * getCyclotomicPolynomialRaw function, and then the coefficients
+ * are added to a new Polynomial object with the specified modulus.
+ *
+ * @tparam T The type of the coefficients and modulus.
+ * @param N The index of the cyclotomic polynomial to compute.
+ * @param mod The modulus to use for the coefficients.
+ * @return The N-th cyclotomic polynomial modulo mod.
+ */
+template<typename T>
+Polynomial<T>
+Polynomial<T>::getCyclotomicPolynomial(T N, T mod) {
+    vector<T> v;
+    if (N == 1) {
+        v = std::vector<T>({1, -1});
+    } else {
+        v = getCyclotomicPolynomialRaw(N);
+    }
+    Polynomial<T> polynomial(mod);
+    unsigned int i = v.size() - 1;
+    while (i-- > 0) {
+//        Node<T> node(v.at(i), i);
+//        polynomial.addNode(node);
+        polynomial.addNode(v.at(i), i);
+    }
+    return polynomial;
+}
