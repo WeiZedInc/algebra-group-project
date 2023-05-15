@@ -39,23 +39,22 @@ eulerFunction(modNum<T> num) {
 
 template <typename T>
 T
-gcd(T a, T b) {
+customGCD(T a, T b) {
     if (b == static_cast<T>(0))
         return a;
-    return gcd(b, a % b);
+    return customGCD(b, static_cast<T>(a % b));
 }
 
 template <typename T>
-modNum<T>
-carmichaelFunction(modNum<T> num) {
-    T n = num.getValue();
+T
+carmichaelFunction(T n) {
     if (n <= 0)
         throw logic_error("Carmichael function is not defiend on non Natural values");
 
     if (n == 1)
-        return modNum<T>(static_cast<T>(1), num.getMod());
+        return static_cast<T>(1);
 
-    std::vector<modNum<T>> factors = factorize(num);
+    std::vector<modNum<T>> factors = factorize(modNum<T>(n, n + 1));
 
     std::map<modNum<T>, T> tmp;
     for (auto num : factors) {
@@ -74,10 +73,10 @@ carmichaelFunction(modNum<T> num) {
     T res = 1;
 
     for (auto i : factorsCombined) {
-        res = res * (i / gcd(res, i));
+        res = res * (i / customGCD(res, i));
     }
 
-    return modNum<T>(res, num.getMod());
+    return res;
 }
 
 #endif

@@ -124,7 +124,7 @@ template <typename T, typename floating = double>
 modNum<T> eulerFunction(modNum<T> num);   // Euler function
 
 template <typename T1>
-modNum<T1> carmichaelFunction(modNum<T1> value);   // Carmichael function
+T1 carmichaelFunction(T1 value);   // Carmichael function
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>

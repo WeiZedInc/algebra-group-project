@@ -193,6 +193,7 @@ factorizePolard(size_t &size, char *num, char *mod, char *errorStr) {
     char **resStr = nullptr;
     try {
         mpz_class numA, numMod;
+        numA.set_str(num, 10);
         numMod.set_str(mod, 10);
 
         modNum<mpz_class> a1(numA, numMod);
@@ -235,6 +236,7 @@ factorizeSimple(size_t &size, char *num, char *mod, char *errorStr) {
     char **resStr = nullptr;
     try {
         mpz_class numA, numMod;
+        numA.set_str(num, 10);
         numMod.set_str(mod, 10);
 
         modNum<mpz_class> a1(numA, numMod);
@@ -434,12 +436,13 @@ CarmichaelFunction(char *num, char *mod, char *errorStr) {
 
         numMod.set_str(mod, 10);
 
-        modNum<mpz_class> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod);
+        mpz_class res;
 
-        res = modular::carmichaelFunction(a1);
+        res = modular::carmichaelFunction(numA);
 
         resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.get_str().c_str());
 
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -480,15 +483,6 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
 }
 
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
-
-int
-main() {
-    char a[] = "3";
-    char b[] = "9";
-    char *err = new char[100];
-
-    std::cout << isGenerator(a, b, err) << std::endl;
-}
 
 /*
 
