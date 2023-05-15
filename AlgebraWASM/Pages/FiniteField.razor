@@ -9,7 +9,7 @@
 <div style="margin-left: 30%;">
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
-		<option value="2">2. Додавання, віднімання, множення чисел. Знаходження оберненого елемента.</option>
+		<option value="2">2. Додавання, віднімання, множення чисел.</option>
 		<option value="3">3. Знаходження оберненого елемента.</option>
 		<option value="4">4. Швидке піднесення у степінь</option>
 		<option value="5">5. Розклад числа на множники</option>
@@ -39,7 +39,7 @@
 			break;
 		case "3":
 			<div>
-				<p>Enter two numbers:</p>
+				<p>Enter numbers (Inversion works on first input field):</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<input type="text" @bind-value="@secondInputBox" />
 				<button @onclick="Inversion"> Inversion </button>
@@ -49,7 +49,7 @@
 			break;
 		case "4":
 			<div>
-				<p>Enter two numbers:</p>
+				<p>Enter number and pow:</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<input type="text" @bind-value="@secondInputBox" />  @*pow*@
 				<button @onclick="FastPow"> Fast Pow </button>
@@ -229,58 +229,108 @@
 		}
 	}
 
-	private void Inversion()
+	private unsafe void Inversion()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = MethodWrapper.inverse(aPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Division()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = MethodWrapper.division(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void FastPow()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void Division()
+	private unsafe void Polard()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void FastPow()
+	private unsafe void QuadSqrt()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void Polard()
+	private unsafe void DscLog()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void QuadSqrt()
+	private unsafe void Order()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void DscLog()
-	{
-		//MethodWrapper.addition();
-	}
-
-	private void Order()
-	{
-		//MethodWrapper.addition();
-	}
-
-	private void isGenerator()
+	private unsafe void isGenerator()
 	{
 		//MethodWrapper.addition();
 
 	}
 
-	private void Carmichael()
+	private unsafe void Carmichael()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void Euiler()
+	private unsafe void Euiler()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void isPrime()
+	private unsafe void isPrime()
 	{
 		//MethodWrapper.addition();
 	}
