@@ -39,6 +39,14 @@ class PolynomialField {
             throw std::invalid_argument("Mod should be prime");
     }
 
+    PolynomialField(T mod, Polynomial<T> polyMod, Polynomial<T> val) {
+        if (isPrimeSimpleFunction(mod)) {
+            this->numMod = mod;
+            this->MOD = polyMod;
+            this->value = val;
+        } else
+            throw std::invalid_argument("Mod should be prime");
+    }
     PolynomialField() = default;
 
     PolynomialField<T> operator+(const PolynomialField<T> &) const;
@@ -78,13 +86,13 @@ PolynomialField<T>::addNode(const T num, size_t deg) {
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator+(const PolynomialField<T> &other) const {
-    return (this->value + other->value) % MOD;
+    PolynomialField<T> res(numMod, MOD, (this->value + other->value) % MOD);
 }
 
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator-(const PolynomialField<T> &other) const {
-    return (this->value - other->value) % MOD;
+    PolynomialField<T> res(numMod, MOD, (this->value - other->value) % MOD);
 }
 
 template <typename T>
@@ -105,7 +113,7 @@ PolynomialField<T>::operator*(T num) const {
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator*(const PolynomialField<T> &other) const {
-    res = (this->value + other->value) % MOD;
+    PolynomialField<T> res(numMod, MOD, (this->value * other->value) % MOD);
 }
 
 template <typename T>
@@ -134,4 +142,9 @@ PolynomialField<T>::pow(T power) {
     return res;
 }
 
+int
+main() {
+    PolynomialField<int> a;
+    PolynomialField<int> b;
+}
 #endif
