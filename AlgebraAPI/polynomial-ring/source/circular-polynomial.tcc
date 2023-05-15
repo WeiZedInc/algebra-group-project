@@ -213,7 +213,7 @@ GCD(T1 a, T2 b) {
     return GCD(a, static_cast<T1>(b));
 }
 
-template <typename T1, typename T1>
+template <typename T1>
 T1
 GCD(T1 a, T1 b) {
     if (a < b)
