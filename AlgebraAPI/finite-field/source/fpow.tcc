@@ -138,11 +138,13 @@ template <typename T1>
 modNum<T1>
 classicLogPow(modNum<T1> value, T1 power) {
     modNum<T1> res = modNum<T1>(1, value.getMod());
+    T1 two = 2;
+    T1 one = 1;
     while (power) {
-        if (power % 2 == 1)
+        if (power % two == one)
             res = res * value;
         value = value * value;
-        power /= 2;
+        power /= two;
     }
     return res;
 }
@@ -151,11 +153,14 @@ template <typename T1>
 T1
 unsafeLogPow(T1 value, T1 power) {
     T1 res = 1;
+    T1 two = 2;
+    T1 one = 1;
+
     while (power) {
-        if (power % 2 == 1)
+        if (power % two == one)
             res = res * value;
         value = value * value;
-        power /= 2;
+        power /= two;
     }
     return res;
 }
