@@ -1,13 +1,14 @@
 #include <algorithm>
-#include <numeric>
 #include <cstdint>
+#include <map>
+#include <numeric>
 #include <random>
 #include <set>
-#include <map>
+
+#include "factorization.tcc"
 #include "fpow.tcc"
 #include "mod-num.tcc"
-#include "pollard-factor.tcc"
-
+namespace modular {
 #ifndef SQRT
 #define SQRT
 
@@ -19,19 +20,23 @@
  */
 
 template <typename T>
-int legendreSymbol(T a, T n)
-{
-    if (a == 1)
-    {
-        return 1;
+T
+legendreSymbol(T a, T n) {
+    T one = 1;
+    T minusOne = -1;
+
+    T two = 4;
+    T four = 8;
+
+    if (a == one) {
+        return one;
     }
-    if ((a % 2 == 0) && (a != 0))
-    {
-        return legendreSymbol(a / 2, n) * pow(-1, (n * n - 1) / 8);
+    if ((a % two == 0) && (a != 0)) {
+        return legendreSymbol(a / two, n) * (((n * n - one) / four) % two == one ? minusOne : one);
     }
-    if (a % 2 != 0)
-    {
-        return legendreSymbol(n % a, a) * pow(-1, (a - 1) * (n - 1) / 4);
+    if (a % two != 0) {
+        return legendreSymbol(n % a, a) *
+               (((a - one) * (n - one) / four) % two == one ? minusOne : one);
     }
     return 0;
 }
@@ -43,7 +48,8 @@ int legendreSymbol(T a, T n)
  */
 
 template <typename T>
-bool is_prime(T n) {
+bool
+is_prime(T n) {
     if (n <= 1) {
         return false;
     }
@@ -62,7 +68,8 @@ bool is_prime(T n) {
  */
 
 template <typename T>
-bool isProduct(T n) {
+bool
+isProduct(T n) {
     for (T i = 2; i <= n / 2; i++) {
         if (is_prime(i) && is_prime(n / i) && i * (n / i) == n) {
             return true;
@@ -78,18 +85,19 @@ bool isProduct(T n) {
  */
 
 template <typename T>
-std::vector<T> sqrtPrime(modNum<T> value) {
-    std::vector<T> result = { };
+std::vector<T>
+sqrtPrime(modNum<T> value) {
+    std::vector<T> result = {};
 
     T val = value.getValue();
     T p = value.getMod();
 
     if (p == 2) {
         if (val % 2 == 1) {
-            result = { 1 };
+            result = {1};
             return result;
-        }
-        else return result;
+        } else
+            return result;
     }
 
     if (legendreSymbol<T>(val, p) == -1) {
@@ -98,7 +106,7 @@ std::vector<T> sqrtPrime(modNum<T> value) {
 
     if (p % 4 == 3) {
         modNum<T> r = fpow<T>(value, (p + 1) / 4);
-        result = { r.getValue(), p - r.getValue() };
+        result = {r.getValue(), p - r.getValue()};
         return result;
     }
 
@@ -106,7 +114,7 @@ std::vector<T> sqrtPrime(modNum<T> value) {
         modNum<T> d = fpow<T>(value, (p - 1) / 4);
         if (d.getValue() == 1) {
             modNum<T> r = fpow<T>(value, (p + 3) / 8);
-            result = { r.getValue(), p - r.getValue() };
+            result = {r.getValue(), p - r.getValue()};
             return result;
         }
         if (d.getValue() == p - 1) {
@@ -114,14 +122,14 @@ std::vector<T> sqrtPrime(modNum<T> value) {
             modNum<T> r2 = value * modNum<T>(4);
             modNum<T> r3 = fpow<T>(r2, (p - 5) / 8);
             modNum<T> r = r1 * r3;
-            result = { r.getValue(), p - r.getValue() };
+            result = {r.getValue(), p - r.getValue()};
             return result;
         }
     }
 
     modNum<T> b(1, p);
-    for (T i = 1; i < p; i++)
-    {
+
+    for (T i = 1; i < p; i++) {
         if (legendreSymbol<T>(i, p) == -1) {
             b.setValue(i);
             break;
@@ -143,14 +151,14 @@ std::vector<T> sqrtPrime(modNum<T> value) {
     for (T i = 1; i <= s - 1; i++) {
         modNum<T> d1 = fpow<T>(r, 2);
         modNum<T> d2 = d1 * inv;
-        modNum<T> d = fpow<T>(d2, pow(2, s - i - 1));
+        modNum<T> d = fpow<T>(d2, static_cast<T>(std::pow(2, s - i - 1)));   // Achtung!
         if (p - d.getValue() == 1) {
             r = r * c;
         }
         c = fpow<T>(c, 2);
     }
 
-    result = { r.getValue(), p - r.getValue() };
+    result = {r.getValue(), p - r.getValue()};
     return result;
 }
 
@@ -161,7 +169,8 @@ std::vector<T> sqrtPrime(modNum<T> value) {
  */
 
 template <typename T>
-std::vector<T> sqrtComposite(modNum<T> value) {
+std::vector<T>
+sqrtComposite(modNum<T> value) {
     T val = value.getValue();
     T n = value.getMod();
 
@@ -170,7 +179,7 @@ std::vector<T> sqrtComposite(modNum<T> value) {
     T q = factors[1].getValue();
 
     std::vector<T> pRoots = sqrtPrime(modNum<T>(val, p));
-    std::vector<T> qRoots = { };
+    std::vector<T> qRoots = {};
 
     if (p != q) {
         qRoots = sqrtPrime(modNum<T>(val, q));
@@ -191,12 +200,12 @@ std::vector<T> sqrtComposite(modNum<T> value) {
     }
 
     if (sV == 0 && rV == 0)
-        return { };
+        return {};
 
     T c = 0;
     T d = 0;
-    gcdExtended<T>(p, q, &c, &d);
-    
+    value.gcdExtended(p, q, &c, &d);
+
     modNum<T> rdq(rV * d * q, n);
     modNum<T> scp(sV * c * p, n);
     modNum<T> x = rdq + scp;
@@ -213,8 +222,7 @@ std::vector<T> sqrtComposite(modNum<T> value) {
     if (y.getValue() < n - y.getValue()) {
         result.push_back(y.getValue());
         result.push_back(n - y.getValue());
-    }
-    else {
+    } else {
         result.push_back(n - y.getValue());
         result.push_back(y.getValue());
     }
@@ -229,12 +237,13 @@ std::vector<T> sqrtComposite(modNum<T> value) {
  */
 
 template <typename T>
-std::vector<T> sqrt(modNum<T> value) {
+std::vector<T>
+sqrt(modNum<T> value) {
     value = value + modNum<T>(0);
     T val = value.getValue();
     T p = value.getMod();
 
-    std::vector<T> result = { };
+    std::vector<T> result = {};
 
     if (val % p == 0) {
         return result;
@@ -255,3 +264,5 @@ std::vector<T> sqrt(modNum<T> value) {
 }
 
 #endif
+
+}   // namespace modular

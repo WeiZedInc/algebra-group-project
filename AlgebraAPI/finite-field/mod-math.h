@@ -15,7 +15,6 @@ class modNum {
     T add(T value1, T value2, T MOD) const;
     T subs(T value1, T value2, T MOD) const;
     T mult(T value1, T value2, T MOD) const;
-    T gcdExtended(T a, T b, T *x, T *y) const;
     T inverseValue(T value1, T mod) const;
     T div(T value1, T value2, T mod) const;
 
@@ -31,6 +30,7 @@ class modNum {
     T getValue() const;
     T getMod() const { return MOD; };
     void setMod(T MOD);
+    void setValue(T value);
 
     bool operator==(const modNum<T> &other) const {
         return value == other.value && MOD == other.MOD;
@@ -79,6 +79,8 @@ class modNum {
         levelStrat = strat;
         return levelStrat->factor(*this);
     }
+
+    T gcdExtended(T a, T b, T *x, T *y) const;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +103,7 @@ std::vector<modNum<T1>> naiveFactorize(
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename T1>
-modNum<T1> sqrt(modNum<T1> value);   // discrete square root
+std::vector<T1> sqrt(modNum<T1> value);   // discrete square root
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
@@ -138,5 +140,6 @@ bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 #include "source/log.tcc"
 #include "source/mod-num.tcc"
 #include "source/orderOfElement.tcc"
+#include "source/sqrt.tcc"
 
 #endif
