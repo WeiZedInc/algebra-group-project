@@ -95,36 +95,49 @@ fpowdiif(modNum<T1> value, T1 power) {
 
 
 template <typename T>
-T
-multMontgomery (T a, T b, T MOD) {
-    T r = 1048576; // 2^20
-    T k = (r * ((1 / r) % MOD) - 1) / MOD;
-    T x = (a * r) % MOD * (b * r) % MOD;
-    T s = (x * k) % r;
-    T u = (x + s * MOD) / r;
-    T res = u < MOD ? u : u - MOD;
-    return (res / r) % MOD;
+modNum<T>
+REDC (T num, T r, T MOD) {
+    T n = modNum(MOD, r).inv().getValue();
+    T m = ((num % r) * n) % r;
+    T res = (num - m * MOD) / r;
+    res = (res < 0) ? res + MOD : res;
+    return modNum(res, MOD);
 }
+
 template <typename T>
 T
 logPow(T base, T power, T MOD) {
     T result = 1;
     while (power > 0) {
         if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
-            result = multMontgomery(result, base, MOD);
+            result = (result * base) % MOD;
         }
         base = (base * base) % MOD;
         power = power / 2;   // Can also use power >>= 1; to make code even faster
     }
     return result;
 }
-template <typename T1>
-modNum<T1>
-modular::fpow(modNum<T1> value, T1 power) {
-    if (value == static_cast<T1>(0) && power == 0) {
+
+template <typename T>
+modNum<T>
+modular::fpow(modNum<T> value, T power) {
+    if (value == static_cast<T>(0) && power == 0) {
         throw std::invalid_argument("0 pow 0 is undefined");
     }
+    T MOD = value.getMod();
+    T r = 4096;
+    while (r <= MOD) r = 2 * r;
 
-    return modNum(logPow(value.getValue(), power, value.getMod()), value.getMod());
+    value = REDC(value.getValue() * ((r * r) % MOD), r, MOD);
+    modNum<T> result = modNum(1, MOD);
+
+    while (power > 0) {
+        if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
+            result = result * value;
+        }
+        value = value * value;
+        power = power / 2;   // Can also use power >>= 1; to make code even faster
+    }
+    return REDC(result.getValue() * r % MOD, r, MOD);
 }
 #endif
