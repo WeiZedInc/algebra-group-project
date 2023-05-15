@@ -92,20 +92,32 @@ fpowdiif(modNum<T1> value, T1 power) {
 
     return modNum<T1>((r * t) % n, value.getMod());
 }
+
+
+template <typename T>
+T
+multMontgomery (T a, T b, T MOD) {
+    T r = 1048576; // 2^20
+    T k = (r * ((1 / r) % MOD) - 1) / MOD;
+    T x = (a * r) % MOD * (b * r) % MOD;
+    T s = (x * k) % r;
+    T u = (x + s * MOD) / r;
+    T res = u < MOD ? u : u - MOD;
+    return (res / r) % MOD;
+}
 template <typename T>
 T
 logPow(T base, T power, T MOD) {
     T result = 1;
     while (power > 0) {
         if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
-            result = (result * base) % MOD;
+            result = multMontgomery(result, base, MOD);
         }
         base = (base * base) % MOD;
         power = power / 2;   // Can also use power >>= 1; to make code even faster
     }
     return result;
 }
-
 template <typename T1>
 modNum<T1>
 modular::fpow(modNum<T1> value, T1 power) {
