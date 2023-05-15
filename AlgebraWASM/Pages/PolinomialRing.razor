@@ -1,5 +1,25 @@
 ﻿@page "/polinomial-ring"
+<select @onchange="SelectedMethod">
+    <option value=11>11. Додавання, віднімання, множення двох многочленів.</option>
+    <option value=12>12. Знаходження похідної многочлена.</option>
+    <option value=13>13. Знаходження частки та остачі від ділення.</option>
+    <option value=14>14. Знаходження кругового многочлена.</option>
+    
+</select>
+
+<p>
+    Номер обраного методу:  @selected
+</p>
+
 
 @code {
-    
+    public int selected { get; set; } = -1;
+
+    private void SelectedMethod(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            selected = (int)e.Value;
+        }
+    }
 }
