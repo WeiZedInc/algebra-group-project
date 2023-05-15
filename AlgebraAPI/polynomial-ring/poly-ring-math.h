@@ -101,6 +101,7 @@ class Polynomial {
     std::vector<std::pair<T, size_t>> toPolyVector();
 
     void print() const;
+    size_t size() const { return poly.size(); };
 
     //////////////////////////////////////////////////////////////////////////////
 
