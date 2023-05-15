@@ -1,6 +1,7 @@
 ﻿@page "/finite-field"
 
 <select @onchange="SelectedMethod">
+	<option value="">--Оберіть метод--</option>
 	<option value="2">2. Додавання, віднімання, множення чисел. Знаходження оберненого елемента.</option>
 	<option value="3">3. Знаходження оберненого елемента.</option>
 	<option value="4">4. Швидке піднесення у степінь</option>
@@ -12,36 +13,73 @@
 	<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
 </select>
 
+<p>Coefficient module:</p>
+<input type = "text" @bind-value = "@coefModule" />
 
 @switch (selected)
 {
 	case "2":
+		<div>
+			<p>Enter two numbers to add:</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<input type="text" @bind-value="@secondInputBox" />
+		</div>
 		break;
 	case "3":
+		<div>
+			<p>This is the active element.</p>
+		</div>
 		break;
 	case "4":
+		<div>
+			<p>This is the active element.</p>
+		</div>
 		break;
 	case "5":
+		<div>
+			<p>This is the active element.</p>
+		</div>
 		break;
 	case "6":
+		<div>
+			<p>This is the active element.</p>
+		</div>
 		break;
 	case "7":
+		<div>
+			<p>This is the active element.</p>
+		</div>
 		break;
 	case "8":
+		<div>
+			<p>This is the active element.</p>
+		</div>
 		break;
 	case "9":
+		<div>
+			<p>This is the active element.</p>
+		</div>
 		break;
 	case "10":
+		<div>
+			<p>This is the active element.</p>
+		</div>
+		break;
+	default:
 		break;
 }
 
 
 @code {
+	public static string coefModule { get; set; } = "";
+
+	public string firstInputBox { get; set; } = "";
+	public string secondInputBox { get; set; } = "";
 	public string selected { get; set; } = "";
 
 	private void SelectedMethod(ChangeEventArgs e)
 	{
-		if (e.Value is not null)
+		if (!string.IsNullOrWhiteSpace((string)e.Value))
 		{
 			selected = (string)e.Value;
 		}

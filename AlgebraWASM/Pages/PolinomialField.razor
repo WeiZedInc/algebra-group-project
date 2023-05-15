@@ -23,17 +23,23 @@
 		break;
 	case "20":
 		break;
+		default:
+		break;
 }
 
 
 @code {
-    public string selected { get; set; } = "";
+	public string coefModule { get; set; } = "";
 
-    private void SelectedMethod(ChangeEventArgs e)
-    {
-        if (e.Value is not null)
-        {
-            selected = (string)e.Value;
-        }
-    }
+	public string firstInputBox { get; set; } = "";
+	public string secondInputBox { get; set; } = "";
+	public string selected { get; set; } = "";
+
+	private void SelectedMethod(ChangeEventArgs e)
+	{
+		if (!string.IsNullOrWhiteSpace((string)e.Value))
+		{
+			selected = (string)e.Value;
+		}
+	}
 }
