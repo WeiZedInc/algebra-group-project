@@ -1,23 +1,41 @@
 ﻿@page "/first-group"
-@using System.Runtime.InteropServices;
+@using System.Threading.Tasks
+@using System.Runtime.InteropServices
 
-<PageTitle>First Group</PageTitle>
+<h1>Blazor App with wasm module</h1>
 
-<h1>First Group</h1>
+<p>Enter two numbers to add:</p>
+<input type="text" @bind-value="@number1" />
+<input type="text" @bind-value="@number2" />
+<button @onclick="AddNumbers">Add</button>
 
-<p role="status">Result: @result</p>
-
-<button class="btn btn-primary" @onclick="DoMath">Click me</button>
+@if (!string.IsNullOrEmpty(result))
+{
+    <p>The sum is @result</p>
+}
 
 @code {
-    int result = 0;
+    private string number1;
+    private string number2;
+    private string result;
 
-    [DllImport("AlgebraAPI")]
-    static extern int SampleMethod(int i);
+    [DllImport("addition")]
+    private static extern IntPtr addition(string a, string b);
 
-    void DoMath()
+    private async Task AddNumbers()
     {
-        result = SampleMethod(10);
-    }
+        var a = Marshal.StringToHGlobalAnsi(number1);
+        var b = Marshal.StringToHGlobalAnsi(number2);
 
+        try
+        {
+            var resultPtr = addition(Marshal.PtrToStringAnsi(a), Marshal.PtrToStringAnsi(b));
+            result = Marshal.PtrToStringAnsi(resultPtr);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(a);
+            Marshal.FreeHGlobal(b);
+        }
+    }
 }
