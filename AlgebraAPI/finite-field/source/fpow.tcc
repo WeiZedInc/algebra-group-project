@@ -131,7 +131,7 @@ fpowMontogomery(modNum<T1> value, T1 power) {
         throw std::invalid_argument("0 pow 0 is undefined");
     }
 
-    return modNum(logPow(value.getValue(), power, value.getMod()), value.getMod());
+    return modNum<T1>(logPow(value.getValue(), power, value.getMod()), value.getMod());
 }
 
 template <typename T1>

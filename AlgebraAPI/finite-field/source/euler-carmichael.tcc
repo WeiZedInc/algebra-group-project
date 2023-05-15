@@ -10,7 +10,7 @@ namespace modular {
 #ifndef EULER_CARMICAEL
 #define EULER_CARMICAEL
 
-template <typename T, typename floating = double>
+template <typename T, typename floating>
 floating
 EulerFunction(T n) {
     if (n <= static_cast<T>(0))
@@ -31,7 +31,7 @@ EulerFunction(T n) {
     return res;
 }
 
-template <typename T, typename floating = double>
+template <typename T, typename floating>
 modNum<T>
 eulerFunction(modNum<T> num) {
     return modNum<T>(static_cast<T>(EulerFunction(num.getValue())), num.getMod());
