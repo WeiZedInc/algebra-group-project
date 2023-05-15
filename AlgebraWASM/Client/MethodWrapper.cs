@@ -3,25 +3,7 @@ using System.Text;
 
 namespace AlgebraWASM.Client
 {
-    public enum FinitiFieldMethods
-    {
-		addition = 1,
-        subtraction,
-        multiplication,
-        division,
-        fastPow,
-        inverse,
-        factorizePolard,
-        factorizeSimple,
-        discreteSqrt,
-        discreteLog,
-        orderOfElement,
-        isGenerator,
-        CarmichaelFunction,
-        isPrime
-    }
-
-    public static class MethodWrapper
+    public static class FiniteFieldMethods
     {
         [DllImport("finite-field-wrapper")]
         public static unsafe extern byte* addition(byte* a, byte* b, byte* mod, byte* errStr);
@@ -67,5 +49,23 @@ namespace AlgebraWASM.Client
 
 		[DllImport("finite-field-wrapper")]
 		public static unsafe extern byte* EulerFunction(byte* num, byte* mod, byte* errStr);
+	}
+
+	public static class PolyRingMethods
+	{
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte** polyAddition(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte** polySubstruction(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte** polyMultiplication(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte** polyDivision(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte** polyRest(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
 	}
 }
