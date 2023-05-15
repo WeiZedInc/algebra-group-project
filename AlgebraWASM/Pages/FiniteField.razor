@@ -1,6 +1,8 @@
 ﻿@page "/finite-field"
 @using AlgebraWASM.Client;
 @using System.ComponentModel.DataAnnotations;
+@using System.Runtime.InteropServices;
+@using System.Text;
 
 
 
@@ -32,10 +34,7 @@
 				<button @onclick="Add"> Add </button>
 				<button @onclick="Subtract"> Subtract </button>
 				<button @onclick="Multiply"> Multiply </button>
-				@if (isResultVisible)
-				{
 					<p>@result</p>
-				}
 			</div>
 			break;
 		case "3":
@@ -147,21 +146,51 @@
 	public bool isResultVisible { get; set; } = false;
 	public string selected { get; set; } = "";
 	public string result { get; set; } = "";
+	public string errStr { get; set; } = "";
 	[Required] public static string coefModule { get; set; } = "";
 	[Required] public string firstInputBox { get; set; } = "";
 	[Required] public string secondInputBox { get; set; } = "";
 
 	private void SelectedMethod(ChangeEventArgs e)
 	{
+		isResultVisible = false;
+		result = "";
+		errStr = "";
 		if (!string.IsNullOrWhiteSpace((string)e.Value))
 		{
 			selected = (string)e.Value;
 		}
 	}
 
-	private void Add()
+	private unsafe void Add()
 	{
-		//MethodWrapper.addition();
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = MethodWrapper.addition(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 
 	private void Subtract()
@@ -212,7 +241,7 @@
 	private void isGenerator()
 	{
 		//MethodWrapper.addition();
-	
+
 	}
 
 	private void Carmichael()
