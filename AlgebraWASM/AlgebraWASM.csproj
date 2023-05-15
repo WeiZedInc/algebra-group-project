@@ -20,6 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<NativeFileReference Include="wwwroot/addition.o" />
+		<NativeFileReference Include="wwwroot/finite-field-wrapper.o" />
 	</ItemGroup>
 </Project>
