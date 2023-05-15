@@ -1,31 +1,51 @@
 ﻿@page "/finite-field"
 
 <select @onchange="SelectedMethod">
-    <option value=23>2&3. Додавання, віднімання, множення чисел. Знаходження оберненого елемента.</option>
-    <option value="4">4. Швидке піднесення у степінь</option>
-    <option value="5">5. Розклад числа на множники</option>
-    <option value="6">6. Обчислення квадратного кореня</option>
-    <option value="7">7. Обчислення дискретного логарифму</option>
-    <option value="8">8. Знаходження порядку елемента групи</option>
-    <option value="9">9. Знаходження функції Ейлера від заданого числа та функції Кармайкла від заданого числа</option>
-    <option value="10">10. Ймовірнісна перевірка числа на простоту</option>
+	<option value="2">2. Додавання, віднімання, множення чисел. Знаходження оберненого елемента.</option>
+	<option value="3">3. Знаходження оберненого елемента.</option>
+	<option value="4">4. Швидке піднесення у степінь</option>
+	<option value="5">5. Розклад числа на множники</option>
+	<option value="6">6. Обчислення квадратного кореня</option>
+	<option value="7">7. Обчислення дискретного логарифму</option>
+	<option value="8">8. Знаходження порядку елемента групи</option>
+	<option value="9">9. Знаходження функції Ейлера від заданого числа та функції Кармайкла від заданого числа</option>
+	<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
 </select>
 
-<p>
-    Номер обраного методу:  @selected
-</p>
+
+@switch (selected)
+{
+	case "2":
+		break;
+	case "3":
+		break;
+	case "4":
+		break;
+	case "5":
+		break;
+	case "6":
+		break;
+	case "7":
+		break;
+	case "8":
+		break;
+	case "9":
+		break;
+	case "10":
+		break;
+}
 
 
 @code {
-    public int selected { get; set; } = -1;
+	public string selected { get; set; } = "";
 
-    private void SelectedMethod(ChangeEventArgs e)
-    {
-        if (e.Value is not null)
-        {
-            selected = (int)e.Value;
-        }
-    }
+	private void SelectedMethod(ChangeEventArgs e)
+	{
+		if (e.Value is not null)
+		{
+			selected = (string)e.Value;
+		}
+	}
 }
 
 
