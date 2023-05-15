@@ -1,7 +1,7 @@
-#include "poly-basic.tcc"
-
 #ifndef POLY_IS_IRREDUCABLE
 #define POLY_IS_IRREDUCABLE
+
+#include "../poly-ring-math.h"
 
 template <typename T>
 bool

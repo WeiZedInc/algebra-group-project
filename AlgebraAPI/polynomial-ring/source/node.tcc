@@ -1,45 +1,14 @@
+#ifndef POLY_NODE_IMPLEMENTATION
+#define POLY_NODE_IMPLEMENTATION
+
 #include <iostream>
 #include <list>
 
-#include "../../finite-field/mod-math.h"
+#include "../poly-ring-math.h"
 
 using namespace modular;
-#ifndef POLY_NODE_H
-#define POLY_NODE_H
 
 #include <stdexcept>
-
-template <typename T>
-class Node {
-   protected:
-    size_t degree;
-    modNum<T> koef;
-
-   public:
-    Node();
-    Node(modNum<T> koef, size_t degree);
-    ~Node() = default;
-
-    size_t deg() const;
-    modNum<T> k() const;
-
-    bool operator>(const Node<T> &p2) const;
-    bool operator>=(const Node<T> &p2) const;
-    bool operator<(const Node<T> &p2) const;
-    bool operator<=(const Node<T> &p2) const;
-
-    bool operator!=(const Node<T> &p2) const;
-    Node<T> operator+(const Node<T> &p2) const;
-    Node<T> operator-(const Node<T> &p2) const;
-    void operator=(const Node<T> &p2);
-    bool operator==(const Node<T> &p2) const;
-
-    modNum<T> evaluate(T) const;
-};
-#endif   // POLY_NODE_H
-
-#ifndef POLY_NODE_IMPLEMENTATION
-#define POLY_NODE_IMPLEMENTATION
 
 template <typename T>
 Node<T>::Node() : degree(0), koef(0) {}
