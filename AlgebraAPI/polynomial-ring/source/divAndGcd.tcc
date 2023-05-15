@@ -22,9 +22,11 @@ Polynomial<T>::divClassic(const Polynomial<T> &other) const {
     else if (numDeg < denomDeg)
         throw std::invalid_argument(
             "The degree of the divisor cannot exceed that of the numerator");
+
     else if (denomDeg == 0) {
         modNum<T> numb(other.poly.begin()->k().getValue(), other.getNumMod());
-        return *this / numb;
+        return this->divClassic(numb);
+
     } else {
         Polynomial<T> remainder = this->copy();
         Polynomial<T> quotient(this->getNumMod());
@@ -101,7 +103,7 @@ Polynomial<T>::gcd(const Polynomial<T> &other) const {
     Polynomial<T> g = this->copy(), h = other.copy();
 
     while (!h.poly.empty()) {
-        auto divRes = g / h;
+        auto divRes = g.divClassic(h);
         g = h;
         h = divRes.second;
     }
@@ -109,7 +111,7 @@ Polynomial<T>::gcd(const Polynomial<T> &other) const {
     if (!g.poly.empty() && g.poly.front().k() > 1) {
         modNum<T> numb(g.poly.begin()->k().getValue(), g.getNumMod());
 
-        auto res = g / numb;
+        auto res = g.divClassic(numb);
         g = res.first;
     }
 
