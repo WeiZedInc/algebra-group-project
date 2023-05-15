@@ -24,7 +24,7 @@ class modNum {
         if (_MOD <= 0) {
             throw std::invalid_argument("modulus should be positive");
         }
-        value = _value % _MOD;
+        value = (_value % _MOD + _MOD) % _MOD;
         MOD = _MOD;
     }
 
