@@ -118,7 +118,7 @@ std::vector<modNum<T2>>
 modNum<T1>::Naive<T2>::factor(modNum<T2> m) {
     modNum<T2> one(1, m.getMod());
     if (m < one)
-        throw invalid_argument(to_string(m.getValue()) + " is less than 1");
+        throw invalid_argument(" value is less than 1");
     else if (m == one)
         return vector<modNum<T2>>{};
 
