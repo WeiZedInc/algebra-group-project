@@ -43,93 +43,118 @@ polyVectorToString(vector<std::pair<mpz_class, size_t>> polyV) {
 }
 extern "C" char **
 polyAddition(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2,
-             char *numModStr) {
-    mpz_class numMod;
-    numMod.set_str(numModStr, 10);
+             char *numModStr, char *errorStr) {
+    try {
+        mpz_class numMod;
+        numMod.set_str(numModStr, 10);
 
-    Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
-    Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+        Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
 
-    Polynomial<mpz_class> polyRes = poly1 + poly2;
-    polyRes.print();
+        Polynomial<mpz_class> polyRes = poly1 + poly2;
+        polyRes.print();
 
-    retSize = polyRes.size();
+        retSize = polyRes.size();
 
-    char **resStr = polyVectorToString(polyRes.toPolyVector());
+        char **resStr = polyVectorToString(polyRes.toPolyVector());
 
-    return resStr;
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
 }
 
 extern "C" char **
 polySubstruction(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2,
-                 char **polyStr2, char *numModStr) {
-    mpz_class numMod;
-    numMod.set_str(numModStr, 10);
+                 char **polyStr2, char *numModStr, char *errorStr) {
+    try {
+        mpz_class numMod;
+        numMod.set_str(numModStr, 10);
 
-    Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
-    Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+        Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
 
-    Polynomial<mpz_class> polyRes = poly1 - poly2;
-    polyRes.print();
+        Polynomial<mpz_class> polyRes = poly1 - poly2;
+        polyRes.print();
 
-    retSize = polyRes.size();
+        retSize = polyRes.size();
 
-    char **resStr = polyVectorToString(polyRes.toPolyVector());
+        char **resStr = polyVectorToString(polyRes.toPolyVector());
 
-    return resStr;
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
 }
 
 extern "C" char **
 polyMultiplication(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2,
-                   char **polyStr2, char *numModStr) {
-    mpz_class numMod;
-    numMod.set_str(numModStr, 10);
+                   char **polyStr2, char *numModStr, char *errorStr) {
+    try {
+        mpz_class numMod;
+        numMod.set_str(numModStr, 10);
 
-    Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
-    Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+        Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
 
-    Polynomial<mpz_class> polyRes = poly1 * poly2;
-    polyRes.print();
+        Polynomial<mpz_class> polyRes = poly1 * poly2;
+        polyRes.print();
 
-    retSize = polyRes.size();
+        retSize = polyRes.size();
 
-    char **resStr = polyVectorToString(polyRes.toPolyVector());
+        char **resStr = polyVectorToString(polyRes.toPolyVector());
 
-    return resStr;
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
 }
 extern "C" char **
 polyDivision(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2,
-             char *numModStr) {
-    mpz_class numMod;
-    numMod.set_str(numModStr, 10);
+             char *numModStr, char *errorStr) {
+    try {
+        mpz_class numMod;
+        numMod.set_str(numModStr, 10);
 
-    Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
-    Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+        Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
 
-    Polynomial<mpz_class> polyRes = poly1 / poly2;
-    polyRes.print();
+        Polynomial<mpz_class> polyRes = poly1 / poly2;
+        polyRes.print();
 
-    retSize = polyRes.size();
+        retSize = polyRes.size();
 
-    char **resStr = polyVectorToString(polyRes.toPolyVector());
+        char **resStr = polyVectorToString(polyRes.toPolyVector());
 
-    return resStr;
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
 }
 extern "C" char **
 polyRest(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2,
-         char *numModStr) {
-    mpz_class numMod;
-    numMod.set_str(numModStr, 10);
+         char *numModStr, char *errorStr) {
+    try {
+        mpz_class numMod;
+        numMod.set_str(numModStr, 10);
 
-    Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
-    Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+        Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
 
-    Polynomial<mpz_class> polyRes = poly1 % poly2;
-    polyRes.print();
+        Polynomial<mpz_class> polyRes = poly1 % poly2;
+        polyRes.print();
 
-    retSize = polyRes.size();
+        retSize = polyRes.size();
 
-    char **resStr = polyVectorToString(polyRes.toPolyVector());
+        char **resStr = polyVectorToString(polyRes.toPolyVector());
 
-    return resStr;
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
 }
