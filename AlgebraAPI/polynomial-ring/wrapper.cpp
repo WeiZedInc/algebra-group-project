@@ -158,3 +158,91 @@ polyRest(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, c
         return nullptr;
     }
 }
+
+extern "C" char **
+polyGCD(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2,
+        char *numModStr, char *errorStr) {
+    try {
+        mpz_class numMod;
+        numMod.set_str(numModStr, 10);
+
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+        Polynomial<mpz_class> poly2(stringToPolyVector(polyStr2, polySize2, numMod), numMod);
+
+        Polynomial<mpz_class> polyRes = poly1.gcd(poly2);
+
+        retSize = polyRes.size();
+
+        char **resStr = polyVectorToString(polyRes.toPolyVector());
+
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
+}
+
+extern "C" char **
+polyDerivative(size_t &retSize, size_t polySize1, char **polyStr1, char *numModStr,
+               char *errorStr) {
+    try {
+        mpz_class numMod;
+        numMod.set_str(numModStr, 10);
+
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+
+        Polynomial<mpz_class> polyRes = poly1.der();
+
+        retSize = polyRes.size();
+
+        char **resStr = polyVectorToString(polyRes.toPolyVector());
+
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
+}
+
+extern "C" char *
+polyEvaluate(size_t polySize1, char **polyStr1, char *numModStr, char *evalPointStr,
+             char *errorStr) {
+    try {
+        mpz_class numMod, evalPoint;
+
+        evalPoint.set_str(evalPointStr, 10);
+
+        numMod.set_str(numModStr, 10);
+
+        Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
+
+        mpz_class ret = poly1.evaluate(evalPoint).getValue();
+        char *retStr = new char[MESSAGE_LEN];
+        strcpy(retStr, ret.get_str().c_str());
+
+        return retStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
+}
+
+extern "C" char **
+getCyclotomic(size_t &ret_size, char *orderStr, char *numModStr, char *errorStr) {
+    try {
+        mpz_class order, numMod;
+        numMod.set_str(numModStr, .10);
+
+        order.set_str(orderStr, 10);
+
+        Polynomial<mpz_class> polyOrdered;
+        polyOrdered.fromCyclotomic(order, numMod);
+
+        char **resStr = polyVectorToString(polyOrdered.toPolyVector());
+
+        return resStr;
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+        return nullptr;
+    }
+}
