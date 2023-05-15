@@ -98,6 +98,8 @@ class Polynomial {
     };
     T getNumMod() const { return numMod; }
 
+    std::vector<std::pair<T, size_t>> toPolyVector();
+
     void print() const;
 
     //////////////////////////////////////////////////////////////////////////////
@@ -134,6 +136,7 @@ class Polynomial {
 };
 
 #include "source/circular-polynomial.tcc"
+#include "source/constructors.tcc"
 #include "source/divAndGcd.tcc"
 #include "source/isIrreducable.tcc"
 #include "source/node.tcc"

@@ -134,8 +134,8 @@ Polynomial<T>::addNode(const Node<T> node) {
 template <typename T>
 void
 Polynomial<T>::addNode(const T num, size_t deg) {
-    if (num % numMod) {
-        Node<T> a(modNum(num % numMod, numMod), deg);
+    if (static_cast<T>(num % numMod) > 0) {
+        Node<T> a(modNum<T>(num % numMod, numMod), deg);
         this->addNode(a);
     }
 }
@@ -367,4 +367,16 @@ Polynomial<T>::shiftRight(int positions) const {
     return tmp;
 }
 
+template <typename T>
+std::vector<std::pair<T, size_t>>
+Polynomial<T>::toPolyVector() {
+    std::vector<std::pair<T, size_t>> resV;
+    resV.reserve(poly.size());
+
+    for (Node<T> nd : poly) {
+        resV.push_back(make_pair(nd.k().getValue(), nd.deg()));
+    }
+
+    return resV;
+}
 #endif
