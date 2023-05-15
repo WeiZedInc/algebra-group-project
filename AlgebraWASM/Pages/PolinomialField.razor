@@ -1,40 +1,113 @@
 ﻿@page "/polinomial-field"
-<select @onchange="SelectedMethod">
-	<option value="">--Оберіть метод--</option>
-    <option value="15">15. Розклад кругового многочлена на незвідні.</option>
-    <option value="16">16. Знаходження К незвібних многочленів.</option>
-    <option value="17">17. Перевірка чи є многочлен незвідним.</option>
-    <option value="18">18. Додавання, віднімання, множення двох многочленів. Нормування. Швидке піднесення у степінь.</option>
-    <option value="19">19. Знаходження оберненого многочлена (алгоритм Евкліда).</option>
-    <option value="20">20. Знаходження порядку незвідного многочлена.</option>
-    
-</select>
+@using System.ComponentModel.DataAnnotations;
 
-@switch (selected)
-{
-	case "15":
-		break;
-	case "16":
-		break;
-	case "17":
-		break;
-	case "18":
-		break;
-	case "19":
-		break;
-	case "20":
-		break;
-	default:
-		break;
-}
-
+<div style="margin-left: 30%;">
+	<select @onchange="SelectedMethod">
+		<option value="">--Оберіть метод--</option>
+		<option value="15">15. Розклад кругового многочлена на незвідні.</option>
+		<option value="16">16. Знаходження К незвібних многочленів.</option>
+		<option value="17">17. Перевірка чи є многочлен незвідним.</option>
+		<option value="18">18. Додавання, віднімання, множення двох многочленів. Нормування. Швидке піднесення у степінь.</option>
+		<option value="19">19. Знаходження оберненого многочлена (алгоритм Евкліда).</option>
+		<option value="20">20. Знаходження порядку незвідного многочлена.</option>
+	</select>
+	<div style="display: flex; margin-left: 20px; gap: 10px; margin-top: 15px">
+		<label for="@coefModule">Coefficient module: </label>
+		<input name="coef-module" type="input" @bind-value="@coefModule" />
+	</div>
+	<div style="display: flex; margin-left: 20px; gap: 10px; margin-top: 15px">
+		<label for="@coefModule">Pow module: </label>
+		<input name="coef-module" type="input" @bind-value="@powModule" />
+	</div>
+	@switch (selected)
+	{
+		case "15":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="Add"> Add </button>
+				<button @onclick="Subtract"> Subtract </button>
+				<button @onclick="Multiply"> Multiply </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
+			</div>
+			break;
+		case "16":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="Calculate"> Calculate </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
+			</div>
+			break;
+		case "17":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Calculate"> Calculate </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
+			</div>
+			break;
+		case "18": @*todo*@
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="Add"> Add </button>
+				<button @onclick="Subtract"> Subtract </button>
+				<button @onclick="Multiply"> Multiply </button>
+				<button @onclick="Norm"> Norm </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
+			</div>
+			break;
+		case "19":@*todo*@
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Inverse"> Inverse </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
+			</div>
+			break;
+		case "20":@*todo*@
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Order"> Order </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
+			</div>
+			break;
+		default:
+			break;
+	}
+</div>
 
 @code {
-	public string coefModule { get; set; } = "";
-
-	public string firstInputBox { get; set; } = "";
-	public string secondInputBox { get; set; } = "";
+	public bool isResultVisible { get; set; } = false;
 	public string selected { get; set; } = "";
+	public string result { get; set; } = "";
+	[Required] public static string coefModule { get; set; } = "";
+	[Required] public static string powModule { get; set; } = "";
+	[Required] public string firstInputBox { get; set; } = "";
+	[Required] public string secondInputBox { get; set; } = "";
 
 	private void SelectedMethod(ChangeEventArgs e)
 	{
@@ -42,5 +115,45 @@
 		{
 			selected = (string)e.Value;
 		}
+	}
+
+	private void Add()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Subtract()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Multiply()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Inverse()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Order()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Divide()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Norm()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Calculate()
+	{
+		//MethodWrapper.addition();
 	}
 }
