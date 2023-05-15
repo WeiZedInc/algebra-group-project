@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace AlgebraWASM.Client
 {
@@ -40,16 +41,16 @@ namespace AlgebraWASM.Client
         [DllImport("finite-field-wrapper")]
         public static unsafe extern byte* inverse(byte* num, byte* mod, byte* errStr);
 
-        [DllImport("finite-field-wrapper")]
-        public static unsafe extern byte factorizePolard(ref UInt64 size, byte* num, byte* mod, byte* errStr);
+		[DllImport("finite-field-wrapper")]
+		public static extern unsafe byte** factorizePolard(ref int size, byte* num, byte* mod, byte* errorStr);
 
-        [DllImport("finite-field-wrapper")]
-        public static unsafe extern byte factorizeSimple(ref UInt64 size, byte* num, byte* mode, byte* errStr);
+		[DllImport("finite-field-wrapper")]
+		public static extern unsafe byte** factorizeSimple(ref int size, byte* num, byte* mod, byte* errorStr);
 
-        [DllImport("finite-field-wrapper")]
-        public static unsafe extern byte** discreteSqrt(byte* num, byte* mode, byte* errStr);
+		[DllImport("finite-field-wrapper")]
+		public static extern unsafe byte** discreteSqrt(byte* num, byte* mod, byte* errorStr);
 
-        [DllImport("finite-field-wrapper")]
+		[DllImport("finite-field-wrapper")]
         public static unsafe extern byte* discreteLog(byte* num, byte* basa, byte* mod, byte* errStr);
 
         [DllImport("finite-field-wrapper")]
@@ -63,5 +64,8 @@ namespace AlgebraWASM.Client
 
         [DllImport("finite-field-wrapper")]
         public static unsafe extern bool isPrime(byte* num, byte* mod, byte* iterations, byte* errStr);
-    }
+
+		[DllImport("finite-field-wrapper")]
+		public static unsafe extern byte* EulerFunction(byte* num, byte* mod, byte* errStr);
+	}
 }
