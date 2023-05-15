@@ -1,22 +1,31 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
+#include "../circular-polynomial.hpp"
+
 #include <iostream>
 #include <vector>
-#include "../circular-polynomial.hpp"
-#include "../../poly-ring-math.h"
-#include "../../../doctest.h"
 
-//int main() {
-//    auto v = Polynomial<long long int>::getCyclotomicPolynomial(12, 5);
-//    v.print();
-//    return 0;
-//}
+#include "../../../doctest.h"
+#include "../../poly-ring-math.h"
+
+// int main() {
+//     auto v = Polynomial<long long int>::getCyclotomicPolynomial(12, 5);
+//     v.print();
+//     return 0;
+// }
 
 DOCTEST_TEST_CASE("Cyclotomic Polynomial Test") {
     DOCTEST_SUBCASE("Prime N") {
         std::vector<int32_t> result = getCyclotomicPolynomialRaw(17);
         std::vector<int32_t> expected = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         DOCTEST_CHECK(result == expected);
+    }
+
+    DOCTEST_SUBCASE("Cyclotomic Polynomial test, Polynomial class") {
+        Polynomial<int32_t> p;
+        p.fromCyclotomic(4, 4);
+
+        p.print();
     }
 
     DOCTEST_SUBCASE("Small values") {

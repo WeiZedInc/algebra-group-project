@@ -10,6 +10,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <vector>
+
 #include "../poly-ring-math.h"
 
 /**
@@ -20,7 +21,7 @@
  * @param v The vector to be printed.
  * @return Reference to the output stream.
  */
-template<typename T>
+template <typename T>
 std::ostream &
 operator<<(std::ostream &os, const std::vector<int32_t> &v) {
     std::stringstream ss;
@@ -61,7 +62,7 @@ operator<<(std::ostream &os, const std::vector<int32_t> &v) {
  * @param q The second polynomial vector.
  * @return The result of subtracting p from q.
  */
-template<typename T>
+template <typename T>
 std::vector<T>
 subtract(const std::vector<T> &p, const std::vector<T> &q) {
     std::vector<T> v(p);
@@ -84,7 +85,7 @@ subtract(const std::vector<T> &p, const std::vector<T> &q) {
  * @param k The recursion parameter (default = 1).
  * @return The transformed vector.
  */
-template<typename T>
+template <typename T>
 std::vector<std::complex<T>>
 fft(const std::vector<std::complex<T>> &v, int n, int k = 1) {
     if (abs(n) == abs(k)) {
@@ -96,14 +97,12 @@ fft(const std::vector<std::complex<T>> &v, int n, int k = 1) {
     for (T i = 0; i < v.size(); ++i) {
         u.at(i % 2).push_back(v.at(i));
     }
-    std::array<std::vector<std::complex<T>>, 2> w{fft(u.at(0), n, k << 1),
-                                                            fft(u.at(1), n, k << 1)};
+    std::array<std::vector<std::complex<T>>, 2> w{fft(u.at(0), n, k << 1), fft(u.at(1), n, k << 1)};
     std::vector<std::complex<T>> a;
     a.resize(abs(n / k));
     std::complex<T> m;
     for (T i = 0, j = a.size() >> 1; i < j; ++i) {
-        m = std::exp(std::complex<T>(2 * M_PI * k * i / n) *
-                     std::complex<T>(0, 1));
+        m = std::exp(std::complex<T>(2 * M_PI * k * i / n) * std::complex<T>(0, 1));
 
         a.at(i) = a.at(i + j) = m * w.at(1).at(i);
         a.at(i) = w.at(0).at(i) + a.at(i);
@@ -119,15 +118,13 @@ fft(const std::vector<std::complex<T>> &v, int n, int k = 1) {
  * @param q The second polynomial vector.
  * @return The result of multiplying p by q.
  */
-template<typename T>
+template <typename T>
 std::vector<T>
 multiply(const std::vector<T> &p, const std::vector<T> &q) {
     int32_t n = 1 << static_cast<T>(log2(p.size() + q.size() - 2) + 1);
 
-    std::vector<std::complex<T>> a =
-        fft(std::vector<std::complex<T>>(p.begin(), p.end()), n);
-    std::vector<std::complex<T>> b =
-        fft(std::vector<std::complex<T>>(q.begin(), q.end()), n);
+    std::vector<std::complex<T>> a = fft(std::vector<std::complex<T>>(p.begin(), p.end()), n);
+    std::vector<std::complex<T>> b = fft(std::vector<std::complex<T>>(q.begin(), q.end()), n);
     std::vector<std::complex<T>> c;
     std::vector<T> d;
     c.reserve(n);
@@ -151,7 +148,7 @@ multiply(const std::vector<T> &p, const std::vector<T> &q) {
  * @param q The second polynomial vector.
  * @return The result of multiplying p by q.
  */
-template<typename T>
+template <typename T>
 std::vector<T>
 multiply_foil(const std::vector<T> &p, const std::vector<T> &q) {
     /* this version of multiply uses the foil method */
@@ -174,14 +171,16 @@ multiply_foil(const std::vector<T> &p, const std::vector<T> &q) {
  * @param q The divisor polynomial vector.
  * @return The result of dividing p by q.
  */
-template<typename T>
+template <typename T>
 std::vector<T>
 divide(std::vector<T> p, std::vector<T> q) {
     std::vector<T> terms(std::max(p.size(), q.size()) + 1, 0);
     while ((p.size() == q.size() && p.back() == q.back()) ||
            (p.size() > q.size() || p.back() > q.back())) {
         std::vector<T> term(p.size() - q.size() + 1, 0);
+
         term.at(term.size() - 1) = terms.at(term.size() - 1) = p.back() / q.back();
+
         p = subtract(p, (p.size() == q.size() ? multiply(q, term) : multiply_foil(q, term)));
         if (p.empty()) {
             break;
@@ -199,7 +198,7 @@ divide(std::vector<T> p, std::vector<T> q) {
  * @param N The order of the cyclotomic polynomial.
  * @return The cyclotomic polynomial as a vector.
  */
-template<typename T>
+template <typename T>
 vector<T>
 getCyclotomicPolynomialRaw(T N) {
     static std::unordered_map<T, std::vector<T>> cache;
@@ -290,7 +289,7 @@ getCyclotomicPolynomialRaw(T N) {
  * @param mod The modulus to use for the coefficients.
  * @return The N-th cyclotomic polynomial modulo mod.
  */
-template<typename T>
+template <typename T>
 Polynomial<T>
 Polynomial<T>::getCyclotomicPolynomial(T N, T mod) {
     vector<T> v;
@@ -302,9 +301,24 @@ Polynomial<T>::getCyclotomicPolynomial(T N, T mod) {
     Polynomial<T> polynomial(mod);
     unsigned int i = v.size() - 1;
     while (i-- > 0) {
-//        Node<T> node(v.at(i), i);
-//        polynomial.addNode(node);
-        polynomial.addNode(v.at(i), i);
+        polynomial.addNode(v[i], i);
     }
     return polynomial;
+}
+
+template <typename T>
+void
+Polynomial<T>::fromCyclotomic(T N, T mod) {
+    vector<T> v;
+    this->numMod = mod;
+    if (N == 1) {
+        v = std::vector<T>({1, -1});
+    } else {
+        v = getCyclotomicPolynomialRaw(N);
+    }
+
+    for (size_t i = 0; i < v.size(); ++i) {
+        std::cout << v[i] << ' ' << i << std::endl;
+        this->addNode(v[i], i);
+    }
 }
