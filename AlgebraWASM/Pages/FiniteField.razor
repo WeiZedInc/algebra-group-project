@@ -41,42 +41,98 @@
 			break;
 		case "3":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="Inversion"> Inversion </button>
+				<button @onclick="Division"> Division </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		case "4":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />  @*pow*@
+				<button @onclick="FastPow"> Fast Pow </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		case "5":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Polard"> Polard </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		case "6":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="QuadSqrt"> QuadSqrt </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		case "7":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="isGenerator"> isGenerator </button>
+				<button @onclick="DscLog"> Calculate </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		case "8":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Order"> Order </button>
+				<button @onclick="isGenerator"> isGenerator </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		case "9":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Euiler"> Euiler </button>
+				<button @onclick="Carmichael"> Carmichael </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		case "10":
 			<div>
-				<p>This is the active element.</p>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="isPrime"> isPrime </button>
+				@if (isResultVisible)
+				{
+					<p>@result</p>
+				}
 			</div>
 			break;
 		default:
@@ -118,6 +174,63 @@
 	{
 		//MethodWrapper.addition();
 	}
+
+	private void Inversion()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Division()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void FastPow()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Polard()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void QuadSqrt()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void DscLog()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Order()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void isGenerator()
+	{
+		//MethodWrapper.addition();
+	
+	}
+
+	private void Carmichael()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void Euiler()
+	{
+		//MethodWrapper.addition();
+	}
+
+	private void isPrime()
+	{
+		//MethodWrapper.addition();
+	}
+
 }
 
 
