@@ -4,7 +4,7 @@ namespace AlgebraWASM.Client
 {
     public enum FinitiFieldMethods
     {
-        addition=1,
+		addition = 1,
         subtraction,
         multiplication,
         division,
@@ -22,46 +22,46 @@ namespace AlgebraWASM.Client
 
     public static class MethodWrapper
     {
-        [DllImport("addition")]
-        public static extern byte addition(byte a, byte b, byte mod, byte errStr);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* addition(byte* a, byte* b, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte subtraction(byte a, byte b, byte mod, byte errStr);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* subtraction(byte* a, byte* b, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte multiplication(byte a, byte b, byte mod, byte errStr);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* multiplication(byte* a, byte* b, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte division(byte a, byte b, byte mod, byte errStr);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* division(byte* a, byte* b, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte fastPow(byte a, byte degree, byte mod, byte errStr);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* fastPow(byte* a, byte* degree, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte inverse(byte num, byte mod, byte errStr);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* inverse(byte* num, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte factorizePolard(string a, string b);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte factorizePolard(ref UInt64 size, byte* num, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte factorizeSimple(string a, string b);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte factorizeSimple(ref UInt64 size, byte* num, byte* mode, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte discreteSqrt(string a, string b);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte** discreteSqrt(byte* num, byte* mode, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte discreteLog(string a, string b);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* discreteLog(byte* num, byte* basa, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte orderOfElement(string a, string b);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* orderOfElement(byte* num, byte* mod, byte* errStr);
 
-        [DllImport("addition")]
-        public static extern byte isGenerator(string a, string b); 
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern bool isGenerator(byte* num, byte* mod, byte* errStr); 
 
-        [DllImport("addition")]
-        public static extern byte CarmichaelFunction(string a, string b); 
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern byte* CarmichaelFunction(byte* num, byte* mod, byte* errStr); 
 
-        [DllImport("addition")]
-        public static extern byte isPrime(string a, string b);
+        [DllImport("finite-field-wrapper")]
+        public static unsafe extern bool isPrime(byte* num, byte* mod, byte* iterations, byte* errStr);
     }
 }
