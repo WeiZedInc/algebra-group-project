@@ -14,11 +14,18 @@
 //     return 0;
 // }
 
-DOCTEST_TEST_CASE("Cyclotomic Polynomial Test") {
+TEST_CASE("Cyclotomic Polynomial Test") {
     DOCTEST_SUBCASE("Prime N") {
         std::vector<int32_t> result = getCyclotomicPolynomialRaw(17);
         std::vector<int32_t> expected = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        DOCTEST_CHECK(result == expected);
+        CHECK(result == expected);
+    }
+
+    DOCTEST_SUBCASE("Cyclotomic Polynomial test, Polynomial class") {
+        Polynomial<int32_t> p;
+        p.fromCyclotomic(4, 4);
+
+        p.print();
     }
 
     DOCTEST_SUBCASE("Cyclotomic Polynomial test, Polynomial class") {
