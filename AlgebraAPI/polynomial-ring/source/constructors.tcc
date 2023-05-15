@@ -23,10 +23,3 @@ Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>> nodes, T mod) {
     this->print();
 }
 #endif
-
-int
-main() {
-    std::vector<std::pair<int, size_t>> nodes = {{3, 3}, {4, 2}, {5, 1}, {6, 0}};
-
-    Polynomial<int> p(nodes, 123);
-}
