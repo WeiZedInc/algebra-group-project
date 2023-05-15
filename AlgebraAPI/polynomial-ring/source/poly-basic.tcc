@@ -48,6 +48,8 @@ class Polynomial {
 
     ~Polynomial() = default;
 
+    void fromCyclotomic(T order, T mod);
+
     Node<T> operator[](const size_t i);   // use only when really necessary
 
     bool empty();

@@ -70,11 +70,14 @@ class Polynomial {
         else
             throw std::invalid_argument("Mod should be prime");
     };
+
     Polynomial() = default;
     Polynomial(std::vector<std::pair<T, size_t>>, T);
     Polynomial(std::pair<T, size_t> *arr, size_t n, T);
 
     ~Polynomial() = default;
+
+    void fromCyclotomic(T order, T mod);
 
     Node<T> operator[](const size_t i);   // use only when really necessary
 
