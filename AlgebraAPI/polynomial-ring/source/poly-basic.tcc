@@ -140,9 +140,6 @@ Polynomial<T>::addNode(const T num, size_t deg) {
     }
 }
 
-template <typename T>
-Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial(mod) {}
-
 /**
  * @brief Adds two polynomials.
  * @param other The polynomial to add to the current polynomial.
