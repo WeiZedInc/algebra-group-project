@@ -108,7 +108,7 @@ Polynomial<T>::gcd(const Polynomial<T> &other) const {
         h = divRes.second;
     }
 
-    if (!g.poly.empty() && g.poly.front().k() > 1) {
+    if (!g.poly.empty() && g.poly.front().k().getValue() > 1) {
         modNum<T> numb(g.poly.begin()->k().getValue(), g.getNumMod());
 
         auto res = g.divClassic(numb);

@@ -17,7 +17,7 @@
 #include "../poly-ring-math.h"
 
 /**
- * Overloaded stream insertion operator for std::vector<int32_t>.
+ * Overloaded stream insertion operator for std::vector<T>.
  * Outputs the vector as a polynomial expression.
  *
  * @param os The output stream.
@@ -26,7 +26,7 @@
  */
 template <typename T>
 std::ostream &
-operator<<(std::ostream &os, const std::vector<int32_t> &v) {
+operator<<(std::ostream &os, const std::vector<T> &v) {
     std::stringstream ss;
     if (!v.empty()) {
         for (int n = v.size() - 1; n >= 0; n--) {
@@ -127,7 +127,7 @@ fft(const std::vector<std::complex<long double>> &v, int n, int k = 1) {
 template <typename T>
 std::vector<T>
 multiply(const std::vector<T> &p, const std::vector<T> &q) {
-    int32_t n = 1 << static_cast<T>(log2(p.size() + q.size() - 2) + 1);
+    T n = 1 << static_cast<T>(log2(p.size() + q.size() - 2) + 1);
 
     std::vector<std::complex<long double>> a =
         fft(std::vector<std::complex<long double>>(p.begin(), p.end()), n);
@@ -244,8 +244,8 @@ getCyclotomicPolynomialRaw(T N) {
         if (p % 2 == 0) {
             return false;
         }
-        T m = static_cast<int32_t>(sqrt(p)) + 1;
-        for (int32_t i = 3; i <= m; i += 2) {
+        T m = static_cast<T>(sqrt(p)) + 1;
+        for (T i = 3; i <= m; i += 2) {
             if (p % i == 0) {
                 return false;
             }
@@ -263,9 +263,9 @@ getCyclotomicPolynomialRaw(T N) {
     if (prime(N)) {
         v.resize(N, 1);
     } else if ((N % 2 == 0) && ((N / 2) % 2 != 0) && prime(N / 2)) {
-        int32_t n = N / 2;
+        T n = N / 2;
         v.reserve(n);
-        for (int32_t i = 0; i < n; ++i) {
+        for (T i = 0; i < n; ++i) {
             v.push_back((!(i % 2)) ? 1 : -1);
         }
     } else if (N > 1 && power_of(N, 2)) {

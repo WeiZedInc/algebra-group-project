@@ -42,13 +42,13 @@ Polynomial<T>::der() const {
     T new_pow;
 
     for (auto it = poly.begin(); it != poly.end(); ++it) {
-        new_koef = it->k() * it->deg();
+        new_koef = it->k().getVal() * it->deg();
         new_pow = it->deg() - 1;
         if (new_pow < 1) {
             new_koef = 0;
             new_pow = 0;
         }
-        current_newnode = {new_pow, new_koef};
+        current_newnode = Node<T>(new_koef, new_pow);
         returned_field.addNode(current_newnode);
     }
 

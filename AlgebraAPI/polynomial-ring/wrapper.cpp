@@ -159,6 +159,7 @@ polyRest(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, c
     }
 }
 
+/*
 extern "C" char **
 polyGCD(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2,
         char *numModStr, char *errorStr) {
@@ -246,3 +247,8 @@ getCyclotomic(size_t &ret_size, char *orderStr, char *numModStr, char *errorStr)
         return nullptr;
     }
 }
+
+*/
+
+int
+main() {}
