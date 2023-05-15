@@ -16,7 +16,7 @@ namespace modular {
 
 template <typename T1>
 bool
-modular::isPrime(modNum<T1> base, size_t k) {
+isPrime(modNum<T1> base, size_t k) {
     T1 value = base.getValue();
 
     // Edge case
