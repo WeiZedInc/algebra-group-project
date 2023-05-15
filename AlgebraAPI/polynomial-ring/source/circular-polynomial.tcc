@@ -1,3 +1,6 @@
+#ifndef CYCLATOMIC_TCC
+#define CYCLATOMIC_TCC
+
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -97,20 +100,21 @@ fft(const std::vector<std::complex<long double>> &v, int n, int k = 1) {
     for (size_t i = 0; i < v.size(); ++i) {
         u.at(i % 2).push_back(v.at(i));
     }
-    
-    std::array<std::vector<std::complex<long double>>, 2> w{fft(u.at(0), n, k << 1), fft(u.at(1), n, k << 1)};
+
+    std::array<std::vector<std::complex<long double>>, 2> w{fft(u.at(0), n, k << 1),
+                                                            fft(u.at(1), n, k << 1)};
     std::vector<std::complex<long double>> a;
     a.resize(abs(n / k));
     std::complex<long double> m;
     for (size_t i = 0, j = a.size() >> 1; i < j; ++i) {
-        m = std::exp(std::complex<long double>(2 * M_PI * k * i / n) * std::complex<long double>(0, 1));
-
+        m = std::exp(std::complex<long double>(2 * M_PI * k * i / n) *
+                     std::complex<long double>(0, 1));
 
         a.at(i) = a.at(i + j) = m * w.at(1).at(i);
         a.at(i) = w.at(0).at(i) + a.at(i);
         a.at(i + j) = w.at(0).at(i) - a.at(i + j);
     }
-return a;
+    return a;
 }
 
 /**
@@ -125,9 +129,10 @@ std::vector<T>
 multiply(const std::vector<T> &p, const std::vector<T> &q) {
     int32_t n = 1 << static_cast<T>(log2(p.size() + q.size() - 2) + 1);
 
-
-    std::vector<std::complex<long double>> a = fft(std::vector<std::complex<long double>>(p.begin(), p.end()), n);
-    std::vector<std::complex<long double>> b = fft(std::vector<std::complex<long double>>(q.begin(), q.end()), n);
+    std::vector<std::complex<long double>> a =
+        fft(std::vector<std::complex<long double>>(p.begin(), p.end()), n);
+    std::vector<std::complex<long double>> b =
+        fft(std::vector<std::complex<long double>>(q.begin(), q.end()), n);
     std::vector<std::complex<long double>> c;
     std::vector<T> d;
     c.reserve(n);
@@ -310,3 +315,5 @@ Polynomial<T>::fromCyclotomic(T N, T mod) {
         this->addNode(v[i], i);
     }
 }
+
+#endif

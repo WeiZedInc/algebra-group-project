@@ -133,10 +133,10 @@ class Polynomial {
     bool isIrreducable() const;
 };
 
+#include "source/circular-polynomial.tcc"
 #include "source/divAndGcd.tcc"
 #include "source/isIrreducable.tcc"
 #include "source/node.tcc"
 #include "source/poly-basic.tcc"
-#include "source/cyclotomicPolynomialWrapper.tcc"
 
 #endif
