@@ -1,7 +1,8 @@
 #ifndef ALGEBRA_INVERSION_AND_DIVISION
 #define ALGEBRA_INVERSION_AND_DIVISION
 #include <iostream>
-#include"../mod-math.h"
+
+#include "../mod-math.h"
 
 using namespace std;
 using namespace modular;
@@ -93,11 +94,10 @@ fpowdiif(modNum<T1> value, T1 power) {
     return modNum<T1>((r * t) % n, value.getMod());
 }
 
-
 template <typename T>
 T
-multMontgomery (T a, T b, T MOD) {
-    T r = 1048576; // 2^20
+multMontgomery(T a, T b, T MOD) {
+    T r = 1048576;   // 2^20
     T k = (r * ((1 / r) % MOD) - 1) / MOD;
     T x = (a * r) % MOD * (b * r) % MOD;
     T s = (x * k) % r;
@@ -118,6 +118,7 @@ logPow(T base, T power, T MOD) {
     }
     return result;
 }
+
 template <typename T1>
 modNum<T1>
 modular::fpow(modNum<T1> value, T1 power) {

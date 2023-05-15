@@ -395,7 +395,7 @@ isGenerator(char *num, char *mod, char *errorStr) {
  *    */
 
 char *
-eulerFunctionWrapper(char *num, char *mod, char *errorStr) {
+EulerFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
         mpz_class numA, numMod;
@@ -425,7 +425,7 @@ eulerFunctionWrapper(char *num, char *mod, char *errorStr) {
  */
 
 char *
-carmichaelFunctionWrapper(char *num, char *mod, char *errorStr) {
+CarmichaelFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
         mpz_class numA, numMod;
@@ -480,6 +480,15 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
 }
 
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
+
+int
+main() {
+    char a[] = "3";
+    char b[] = "9";
+    char *err = new char[100];
+
+    std::cout << isGenerator(a, b, err) << std::endl;
+}
 
 /*
 
