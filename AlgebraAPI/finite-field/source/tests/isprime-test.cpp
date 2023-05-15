@@ -24,10 +24,11 @@ SimpleIsPrime(T n) {
 
 TEST_CASE("Testing the Miller-Rabin method to check a number for prime ") {
     using T = long long;
+    T mod = 16323010999;
     SUBCASE("Edge case") {
-        CHECK_EQ(isPrime(modNum<T>(-1), 100), SimpleIsPrime(1));
-        CHECK_EQ(isPrime(modNum<T>(1), 100), SimpleIsPrime(1));
-        CHECK_EQ(isPrime(modNum<T>(2), 100), SimpleIsPrime(2));
+        CHECK_EQ(isPrime(modNum<T>(-1, mod), 100), SimpleIsPrime(1));
+        CHECK_EQ(isPrime(modNum<T>(1, mod), 100), SimpleIsPrime(1));
+        CHECK_EQ(isPrime(modNum<T>(2, mod), 100), SimpleIsPrime(2));
     }
 
     SUBCASE("Input from the console") {
@@ -38,8 +39,8 @@ TEST_CASE("Testing the Miller-Rabin method to check a number for prime ") {
                   << std::endl;
         int k;
         std::cin >> k;
-        CHECK_EQ(isPrime(modNum<T>(value), k), SimpleIsPrime(value));
-        if (isPrime(modNum<T>(value), k))
+        CHECK_EQ(isPrime(modNum<T>(value, mod), k), SimpleIsPrime(value));
+        if (isPrime(modNum<T>(value, mod), k))
             std::cout << "Your number is prime" << std::endl;
         else
             std::cout << "Your number is NOT prime" << std::endl;
@@ -50,7 +51,7 @@ TEST_CASE("Testing the Miller-Rabin method to check a number for prime ") {
         for (int i = 0; i < 100000; ++i) {
             int value = getRandomNumber(1, 100000);
             int k = getRandomNumber(100, 1000);
-            CHECK_EQ(isPrime(modNum<T>(value), k), SimpleIsPrime(value));
+            CHECK_EQ(isPrime(modNum<T>(value, mod), k), SimpleIsPrime(value));
         }
     }
 
@@ -68,13 +69,13 @@ TEST_CASE("Testing the Miller-Rabin method to check a number for prime ") {
             std::cout << "File isn't open" << std::endl;
         }
 
-        CHECK_EQ(isPrime(modNum<T>(value), k), SimpleIsPrime(value));
+        CHECK_EQ(isPrime(modNum<T>(value, mod), k), SimpleIsPrime(value));
 
         std::ofstream outfile(
             "C:\\Users\\User\\Desktop\\PI-23\\Sem 2\\General "
             "Algebra\\algebra-group-project-vsc\\files\\output.txt");
         if (outfile.is_open()) {
-            if (isPrime(modNum<T>(value), k))
+            if (isPrime(modNum<T>(value, mod), k))
                 outfile << "Your number is prime" << std::endl;
             else
                 outfile << "Your number is NOT prime" << std::endl;
