@@ -123,7 +123,7 @@ class Polynomial {
 
     //////////////////////////////////////////////////////////////////////////////
 
-    static Polynomial<T> getPolynomialByOrder(size_t);
+    static Polynomial<T> getCyclotomicPolynomial(T N, T mod);
 
     bool isIrreducable() const;
 };
