@@ -1,5 +1,6 @@
 ﻿@page "/polinomial-ring"
 <select @onchange="SelectedMethod">
+	<option value="">--Оберіть метод--</option>
     <option value="11">11. Додавання, віднімання, множення двох многочленів.</option>
     <option value="12">12. Знаходження похідної многочлена.</option>
     <option value="13">13. Знаходження частки та остачі від ділення.</option>
@@ -17,17 +18,23 @@
 		break;
 	case "14":
 		break;
+	default:
+		break;
 }
 
 
 @code {
-    public string selected { get; set; } = "";
+	public string coefModule { get; set; } = "";
 
-    private void SelectedMethod(ChangeEventArgs e)
-    {
-        if (e.Value is not null)
-        {
-            selected = (string)e.Value;
-        }
-    }
+	public string firstInputBox { get; set; } = "";
+	public string secondInputBox { get; set; } = "";
+	public string selected { get; set; } = "";
+
+	private void SelectedMethod(ChangeEventArgs e)
+	{
+		if (!string.IsNullOrWhiteSpace((string)e.Value))
+		{
+			selected = (string)e.Value;
+		}
+	}
 }
