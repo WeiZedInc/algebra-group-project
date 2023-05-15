@@ -18,6 +18,7 @@ using namespace modular;
 @param b Base
 @return Length of the number
 */
+
 template <typename T1>
 T1
 number_length(T1 n, T1 b) {
@@ -109,6 +110,10 @@ template <typename T>
 T
 logPow(T base, T power, T MOD) {
     T result = 1;
+
+    if (power == 0)
+        return result;
+
     while (power > 0) {
         if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
             result = multMontgomery(result, base, MOD);
@@ -121,11 +126,34 @@ logPow(T base, T power, T MOD) {
 
 template <typename T1>
 modNum<T1>
-modular::fpow(modNum<T1> value, T1 power) {
+fpowMontogomery(modNum<T1> value, T1 power) {
     if (value == static_cast<T1>(0) && power == 0) {
         throw std::invalid_argument("0 pow 0 is undefined");
     }
 
     return modNum(logPow(value.getValue(), power, value.getMod()), value.getMod());
+}
+
+template <typename T1>
+modNum<T1>
+classicLogPow(modNum<T1> value, T1 power) {
+    modNum<T1> res = modNum<T1>(1, value.getMod());
+    while (power) {
+        if (power % 2 == 1)
+            res = res * value;
+        value = value * value;
+        power /= 2;
+    }
+    return res;
+}
+
+template <typename T1>
+modNum<T1>
+modular::fpow(modNum<T1> value, T1 power) {
+    if (value == static_cast<T1>(0) && power == static_cast<T1>(0)) {
+        throw std::invalid_argument("0 pow 0 is undefined");
+    }
+
+    return classicLogPow(value, power);
 }
 #endif
