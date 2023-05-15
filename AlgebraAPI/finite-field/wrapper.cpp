@@ -8,7 +8,6 @@
 
 #include "mod-math.h"
 #include "source/custom-hash.h"
-#define EXPORT extern "C" __declspec(dllexport)
 
 using namespace modular;
 const size_t MESSAGE_LEN = 200;
@@ -22,8 +21,7 @@ const size_t MESSAGE_LEN = 200;
  *    @return A char pointer to the result of the subtraction in string form
  *    @note memory should be manualy freed by delete[]
  *    */
-
-char *
+extern "C" char *
 addition(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -52,8 +50,7 @@ addition(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of the subtraction in string form
  *    @note memory should be manualy freed by delete[]
  *    */
-
-char *
+extern "C" char *
 subtraction(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -83,8 +80,7 @@ subtraction(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of the multiplication in string form
  *    @note memory should be manualy freed by delete[]
  */
-
-char *
+extern "C" char *
 multiplication(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -115,8 +111,7 @@ multiplication(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of modular division.
  *    @note memory should be manualy freed by delete[]
  */
-
-char *
+extern "C" char *
 division(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -135,8 +130,7 @@ division(char *a, char *b, char *mod, char *errorStr) {
     }
     return resStr;
 }
-
-char *
+extern "C" char *
 fastPow(char *a, char *degree, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -155,8 +149,7 @@ fastPow(char *a, char *degree, char *mod, char *errorStr) {
 
     return resStr;
 }
-
-char *
+extern "C" char *
 inverse(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -187,8 +180,7 @@ inverse(char *num, char *mod, char *errorStr) {
  * the number of factors.
  *    @throw std::length_error if the number of prime factors is greater than 127.
  *    */
-
-char **
+extern "C" char **
 factorizePolard(size_t &size, char *num, char *mod, char *errorStr) {
     char **resStr = nullptr;
     try {
@@ -230,8 +222,7 @@ factorizePolard(size_t &size, char *num, char *mod, char *errorStr) {
  * @return A dynamically allocated 2D char array storing the factors obtained in string format.
  * @note The memory for the result array should be manually freed by the user using 'delete[]'.
  */
-
-char **
+extern "C" char **
 factorizeSimple(size_t &size, char *num, char *mod, char *errorStr) {
     char **resStr = nullptr;
     try {
@@ -298,8 +289,7 @@ discreteSqrt(char *num, char *mod, char *errorStr) {
  *    @param mod the modulus used in the computation
  *    @return a string representation of the computed logarithm
  *    */
-
-char *
+extern "C" char *
 discreteLog(char *num, char *base, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -334,8 +324,7 @@ discreteLog(char *num, char *base, char *mod, char *errorStr) {
  *  @param mod modulus
  *  @return string representation of the order of the element
  */
-
-char *
+extern "C" char *
 orderOfElement(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -365,8 +354,7 @@ orderOfElement(char *num, char *mod, char *errorStr) {
  *    @param mod the modulus
  *    @return true if num is a generator, false otherwise
  *    */
-
-bool
+extern "C" bool
 isGenerator(char *num, char *mod, char *errorStr) {
     try {
         char *resStr = nullptr;
@@ -396,7 +384,7 @@ isGenerator(char *num, char *mod, char *errorStr) {
  * modulo m.
  *    */
 
-char *
+extern "C" char *
 EulerFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -426,7 +414,7 @@ EulerFunction(char *num, char *mod, char *errorStr) {
  *
  */
 
-char *
+extern "C" char *
 CarmichaelFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -461,7 +449,7 @@ CarmichaelFunction(char *num, char *mod, char *errorStr) {
  *    @return A boolean value indicating whether the given number is prime (true) or not (false)
  *   */
 
-bool
+extern "C" bool
 isPrime(char *num, char *mod, char *iterations, char *errorStr) {
     try {
         mpz_class numA, numMod, res;

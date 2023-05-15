@@ -116,8 +116,14 @@ class Polynomial {
 
     //////////////////////////////////////////////////////////////////////////////
 
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const modNum<T> &) const;
+    std::pair<Polynomial<T>, Polynomial<T>> divClassic(const Polynomial<T> &) const;
+    std::pair<Polynomial<T>, Polynomial<T>> divClassic(const modNum<T> &) const;
+
+    Polynomial<T> operator/(const Polynomial<T> &) const;
+    Polynomial<T> operator%(const Polynomial<T> &) const;
+
+    Polynomial<T> operator%(const modNum<T> &) const;
+    Polynomial<T> operator/(const modNum<T> &) const;
 
     Polynomial<T> gcd(const Polynomial<T> &) const;
 
@@ -128,5 +134,7 @@ class Polynomial {
 
 #endif
 
+#include "source/divAndGcd.tcc"
+#include "source/isIrreducable.tcc"
 #include "source/node.tcc"
 #include "source/poly-basic.tcc"
