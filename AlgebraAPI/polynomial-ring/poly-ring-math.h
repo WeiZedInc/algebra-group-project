@@ -1,4 +1,6 @@
-#pragma once
+#ifndef POLYNOMIAL
+#define POLYNOMIAL
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -37,9 +39,6 @@ class Node {
     modNum<T> evaluate(T) const;
 };
 #endif
-
-#ifndef POLYNOMIAL
-#define POLYNOMIAL
 
 template <typename T>
 class Polynomial {
@@ -129,12 +128,15 @@ class Polynomial {
 
     //////////////////////////////////////////////////////////////////////////////
 
+    static Polynomial<T> getPolynomialByOrder(size_t);
+
     bool isIrreducable() const;
 };
-
-#endif
 
 #include "source/divAndGcd.tcc"
 #include "source/isIrreducable.tcc"
 #include "source/node.tcc"
 #include "source/poly-basic.tcc"
+#include "source/cyclotomicPolynomialWrapper.tcc"
+
+#endif

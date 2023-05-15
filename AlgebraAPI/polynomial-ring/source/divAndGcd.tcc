@@ -1,7 +1,7 @@
-#include "poly-basic.tcc"
-
 #ifndef POLY_DIV_AND_GCD
 #define POLY_DIV_AND_GCD
+
+#include "../poly-ring-math.h"
 
 /**
  * @brief Polynomial long division
