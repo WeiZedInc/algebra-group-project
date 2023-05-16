@@ -3,6 +3,7 @@
 @using System.Text;
 @using AlgebraWASM.Client;
 @using System.Runtime.InteropServices;
+@using System.Text.RegularExpressions;
 <style>
 	html {
 		font-size: 125%;
@@ -199,6 +200,14 @@
 		{
 			selected = (string)e.Value;
 		}
+	}
+
+	void NormalizeInputString()
+	{
+		coefModule = Regex.Replace(coefModule, "[^0-9]", "");
+		powModule = Regex.Replace(powModule, "[^0-9]", "");
+		firstInputBox = Regex.Replace(firstInputBox, "[^0-9xy+\\-*/^]", "");
+		secondInputBox = Regex.Replace(secondInputBox, "[^0-9xy+\\-*/^]", "");
 	}
 
 	private unsafe void Add()

@@ -3,6 +3,7 @@
 @using System.ComponentModel.DataAnnotations;
 @using System.Runtime.InteropServices;
 @using System.Text;
+@using System.Text.RegularExpressions;
 <style>
 	html {
 		font-size: 125%;
@@ -256,10 +257,20 @@
 		}
 	}
 
+	void NormalizeInputString()
+	{
+		coefModule = Regex.Replace(coefModule, "[^0-9]", "");
+		firstInputBox = Regex.Replace(firstInputBox, "[^0-9]", "");
+		secondInputBox = Regex.Replace(secondInputBox, "[^0-9]", "");
+	}
+
 	private unsafe void Add()
 	{
 		try
 		{
+			NormalizeInputString();
+
+
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -291,6 +302,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -322,6 +334,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -353,6 +366,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
 			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
@@ -382,6 +396,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -413,6 +428,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -444,6 +460,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
 			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
@@ -498,6 +515,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
 			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
@@ -575,6 +593,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -606,6 +625,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
 			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
@@ -635,6 +655,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
 			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
@@ -656,6 +677,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -687,6 +709,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
 			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
@@ -716,6 +739,7 @@
 	{
 		try
 		{
+			NormalizeInputString();
 			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] bBytes = Encoding.ASCII.GetBytes(firstInputBox);
 			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
