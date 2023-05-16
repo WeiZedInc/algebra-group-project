@@ -1,14 +1,16 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
+#include <gmpxx.h>
+
 #include <iostream>
 #include <vector>
-#include <gmpxx.h>
 
 #include "../../poly-ring-math.h"
 
-int main() {
+int
+main() {
     Polynomial<mpz_class> p1;
-    p1.fromCyclotomic(26, 1);
+    p1.fromCyclotomic(26, 73);
     p1.print();
     // auto v = getCyclotomicPolynomialRaw(12);
     // cout << v;
@@ -86,7 +88,8 @@ int main() {
 
 //         // N = 25
 //         result = getCyclotomicPolynomialRaw<int32_t>(25);
-//         CHECK_EQ(result, std::vector<int32_t>({1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}));
+//         CHECK_EQ(result, std::vector<int32_t>({1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+//         0, 0, 0, 1}));
 
 //         // N = 30
 //         result = getCyclotomicPolynomialRaw<int32_t>(30);

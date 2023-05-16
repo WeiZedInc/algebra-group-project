@@ -189,7 +189,10 @@ divide(std::vector<T> p, std::vector<T> q) {
 
         term.at(term.size() - 1) = terms.at(term.size() - 1) = p.back() / q.back();
 
-        p = subtract(p, multiply_foil(q, term)); //(p.size() == q.size() ? multiply(q, term) : multiply_foil(q, term))
+        p = subtract(
+            p,
+            multiply_foil(
+                q, term));   //(p.size() == q.size() ? multiply(q, term) : multiply_foil(q, term))
         if (p.empty()) {
             break;
         }
@@ -216,7 +219,6 @@ GCD(T1 a, T1 b) {
 
     return GCD(b, static_cast<T1>(a % b));
 }
-
 
 /**
  * Computes the cyclotomic polynomial of order N.
@@ -262,6 +264,7 @@ getCyclotomicPolynomialRaw(size_t N) {
     std::vector<T> v;
     if (prime(N)) {
         v.resize(N, 1);
+
     } else if ((N % 2 == 0) && ((N / 2) % 2 != 0) && prime(N / 2)) {
         size_t n = N / 2;
         v.reserve(n);
@@ -277,7 +280,7 @@ getCyclotomicPolynomialRaw(size_t N) {
         v.at(0) = 1;
         v.at(v.size() / 2) = -1;
         v.at(v.size() - 1) = 1;
-    } else if ((N %  9 == 0) && power_of(N, 3)) {
+    } else if ((N % 9 == 0) && power_of(N, 3)) {
         v.resize(static_cast<size_t>(N / 1.5) + 1);
         v.at(0) = 1;
         v.at(v.size() / 2) = 1;
@@ -330,7 +333,7 @@ Polynomial<T>::fromCyclotomic(size_t N, T mod) {
 
     for (size_t i = 0; i < v.size(); ++i) {
         std::cout << v[i] << ' ' << i << std::endl;
-        this->addNode(v[i], i);
+        this->addNode((v[i] + mod) % mod, i);
     }
 }
 
