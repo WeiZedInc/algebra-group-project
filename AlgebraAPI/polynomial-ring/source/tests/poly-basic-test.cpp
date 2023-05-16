@@ -377,3 +377,14 @@ TEST_CASE("Testing division, gcd") {
         REQUIRE(gcd == expected);
     }
 }
+
+TEST_CASE("New constructor") {
+    std::vector<std::pair<int, size_t>> p1 = {{3, 3}, {4, 2}, {5, 1}, {6, 0}};
+    std::vector<std::pair<int, size_t>> p2 = {{4, 4}};
+
+    Polynomial<int> poly1(p1, 11);
+    Polynomial<int> poly2(p2, 11);
+
+    Polynomial<int> poly3 = poly1 + poly2;
+    poly3.print();
+}
