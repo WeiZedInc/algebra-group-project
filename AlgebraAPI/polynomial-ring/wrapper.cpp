@@ -288,7 +288,7 @@ extern "C" char *
 getCyclotomic(char *orderStr, char *numModStr, char *errorStr) {
     try {
         mpz_class numMod;
-        numMod.set_str(numModStr, .10);
+        numMod.set_str(numModStr, 10);
         size_t order = atol(orderStr);
 
         Polynomial<mpz_class> polyOrdered;
