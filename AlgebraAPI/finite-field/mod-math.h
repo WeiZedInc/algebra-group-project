@@ -97,7 +97,7 @@ template <typename T1>
 modNum<T1> fpow(modNum<T1> value, T1 degree);   // fast pow
 
 template <typename T>
-modNum<T> modular::fpowMontogomery(modNum<T> value, T power);
+modNum<T> fpowMontogomery(modNum<T> value, T power);
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename T1>
