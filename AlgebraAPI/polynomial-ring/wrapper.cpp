@@ -59,12 +59,19 @@ convertPolynomial(std::string polynomial) {
     std::stringstream ss(polynomial);
     std::string term;
     while (std::getline(ss, term, '+')) {
-        int32_t pos = term.find("x");
+        int32_t posX = term.find("x");
         std::string coeff, degree;
+        int32_t posDeg = term.find("^");
 
-        if (pos != -1) {
+        if (posX != -1) {
             coeff = term.substr(0, term.find("x"));
-            degree = term.substr(term.find("^") + 1, term.size() - 1);
+            if (coeff == "")
+                coeff = "1";
+            if (posDeg != -1)
+                degree = term.substr(posDeg + 1, term.size() - 1);
+            else {
+                degree = "1";
+            }
         }
 
         else {
@@ -258,7 +265,7 @@ polyDerivative(size_t &retSize, size_t polySize1, char **polyStr1, char *numModS
         return nullptr;
     }
 }
-/*
+
 extern "C" char *
 polyEvaluate(size_t polySize1, char **polyStr1, char *numModStr, char *evalPointStr,
              char *errorStr) {
@@ -281,6 +288,7 @@ polyEvaluate(size_t polySize1, char **polyStr1, char *numModStr, char *evalPoint
         return nullptr;
     }
 }
+/*
 
 extern "C" char **
 getCyclotomic(size_t &ret_size, char *orderStr, char *numModStr, char *errorStr) {

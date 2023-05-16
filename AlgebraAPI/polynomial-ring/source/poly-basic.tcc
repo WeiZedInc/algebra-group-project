@@ -63,7 +63,8 @@ Polynomial<T>::evaluate(const T x_value) const {
 
     for (auto it = poly.begin(); it != poly.end(); ++it) {
         if (it->deg() > 0) {
-            current_num = fpow(modNum<T>(x_value, numMod), it->deg()) * it->k();
+            T nodeDegree = it->deg();
+            current_num = fpow(modNum<T>(x_value, numMod), nodeDegree) * it->k();
         } else {
             current_num = it->k();
         }
@@ -134,8 +135,8 @@ Polynomial<T>::addNode(const Node<T> node) {
 template <typename T>
 void
 Polynomial<T>::addNode(const T num, size_t deg) {
-    if (static_cast<T>(num % numMod) > 0) {
-        Node<T> a(modNum<T>(num % numMod, numMod), deg);
+    if (static_cast<T>( ((num+numMod)%numMod) > 0)) {
+        Node<T> a(modNum<T>( ((num+numMod)%numMod) , numMod), deg);
         this->addNode(a);
     }
 }
