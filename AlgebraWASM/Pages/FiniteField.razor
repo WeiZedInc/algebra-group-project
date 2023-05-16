@@ -18,7 +18,7 @@
 <link href="css/buttons.css" rel="stylesheet" />
 
 <div class="wrapper">
-	<div class="alert alert-secondary mt-4" style="width: 50%; font-size: 34px;">
+	<div class="alert alert-secondary mt-4" style="width: 35%; font-size: 34px;">
 		<strong>Скінченне поле</strong>
 	</div>
 	<select @onchange="SelectedMethod">
@@ -30,7 +30,7 @@
 		<option value="6">6. Обчислення квадратного кореня</option>
 		<option value="7">7. Обчислення дискретного логарифму</option>
 		<option value="8">8. Знаходження порядку елемента групи</option>
-		<option value="9">9. Знаходження функції Ейлера від заданого числа та функції Кармайкла від заданого числа</option>
+		<option value="9">9. Знаходження функції Ейлера та Кармайкла</option>
 		<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
 	</select>
 	@if (!string.IsNullOrWhiteSpace(selected))
@@ -57,7 +57,7 @@
 				{
 					<div class="wrapper">
 						<div class="typing-demo">
-							Result:
+							<label>Result:</label>
 						</div>
 						<div class="typing-demo">
 							@result
