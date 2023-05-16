@@ -8,13 +8,6 @@
 using namespace modular;
 
 template <typename T>
-void
-PolynomialField<T>::addNode(const T num, size_t deg) {
-    Polynomial<T>::addNode(num, deg);
-    this->value = this->value % MOD;
-}
-
-template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator+(const PolynomialField<T> &other) const {
     PolynomialField<T> res(numMod, MOD, (this->value + other.value) % MOD);
@@ -31,39 +24,39 @@ PolynomialField<T>::operator-(const PolynomialField<T> &other) const {
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator*(T num) const {
-    PolynomialField<T> res(this->numMod, this->polyMod);
     auto it = this->poly.begin();
 
     modNum<T> num1(num, this->numMod);
 
     while (it != this->poly.end()) {
-        res.addNode((num1 * it->k()).getValue(), it->deg());
+        it->k = it->k().getValue() * num1;
         it++;
     }
-    return res;
+    return *this;
 }
 
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator*(const PolynomialField<T> &other) const {
-    PolynomialField<T> res(numMod, MOD, (this->value * other->value) % MOD);
+    PolynomialField<T> res(numMod, MOD, (this->value * other.value) % MOD);
+    return res;
 }
 
 template <typename T>
 bool
 PolynomialField<T>::operator==(const PolynomialField<T> &other) const {
-    if (other.polyMod != this->polyMod) {
+    if (!(this->MOD == other.MOD)) {
         return false;
     }
-    return this->Polynomial<T>::operator==(other);
+    return this->value == other.value;
 }
 
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::pow(T power) {
-    PolynomialField<T> valcp = this->value;
+    PolynomialField<T> valcp(this->numMod, this->MOD, this->value);
 
-    PolynomialField<T> res(this->numMod, this->MOD);
+    PolynomialField<T> res(this->numMod, this->MOD, {{1, 0}});
     while (power) {
         if (power % 2 == 1)
             res = res * valcp;
@@ -71,7 +64,7 @@ PolynomialField<T>::pow(T power) {
         valcp = valcp * valcp;
         power /= 2;
     }
-
+    res.value = res.value % MOD;
     return res;
 }
 

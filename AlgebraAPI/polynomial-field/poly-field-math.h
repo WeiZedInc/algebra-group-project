@@ -49,7 +49,7 @@ class PolynomialField {
         if (isPrimeSimpleFunction(mod)) {
             this->numMod = mod;
             this->MOD = polyMod;
-            this->value = Polynomial<T>(polyV);
+            this->value = Polynomial<T>(polyV, mod);
         } else
             throw std::invalid_argument("Mod should be prime");
     }
@@ -84,6 +84,7 @@ class PolynomialField {
     void normalize();
 
     PolynomialField<T> inv();
+    PolynomialField<T> operator/(const PolynomialField<T> &) const;
 
     size_t getOrder();
 
