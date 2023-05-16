@@ -16,7 +16,7 @@ EulerFunction(T n) {
     if (n <= static_cast<T>(0))
         throw logic_error("Euler totient function is not defiend on non Natural values");
 
-    T res = n;   // suitable only when T is mpz_class
+    T res = n;
 
     for (T p = static_cast<T>(2); p * p <= n; p += static_cast<T>(1)) {
         if (n % p == static_cast<T>(0)) {
