@@ -5,7 +5,8 @@
 #include "../mod-math.h"
 
 using namespace std;
-using namespace modular;
+namespace modular {
+
 /**
 @file fpow.tcc
 @brief Implementation of Montgomery modular exponentiation algorithm
@@ -97,11 +98,11 @@ fpowdiif(modNum<T1> value, T1 power) {
 template <typename T>
 modNum<T>
 REDC(T num, T r, T MOD) {
-    T n = modNum(MOD, r).inv().getValue();
+    T n = modNum<T>(MOD, r).inv().getValue();
     T m = ((num % r) * n) % r;
     T res = (num - m * MOD) / r;
     res = (res < 0) ? res + MOD : res;
-    return modNum(res, MOD);
+    return modNum<T>(res, MOD);
 }
 
 template <typename T>
@@ -136,7 +137,7 @@ unsafeLogPow(T1 value, T1 power) {
 
 template <typename T>
 modNum<T>
-modular::fpowMontogomery(modNum<T> value, T power) {
+fpowMontogomery(modNum<T> value, T power) {
     if (value == static_cast<T>(0) && power == 0) {
         throw std::invalid_argument("0 pow 0 is undefined");
     }
@@ -159,7 +160,8 @@ modular::fpowMontogomery(modNum<T> value, T power) {
 
 template <typename T1>
 modNum<T1>
-modular::fpow(modNum<T1> value, T1 degree) {
+fpow(modNum<T1> value, T1 degree) {
     return logPow(value.getValue(), degree, value.getMod());
 }
 #endif
+}
