@@ -319,6 +319,8 @@ TEST_CASE("Testing division, gcd")
 
         Polynomial<mpz_class> test = res.first * p2 + res.second;
 
+        REQUIRE(p1 == test);
+
         // CHECK_THROWS_WITH(p2 / p1, "The degree of the divisor cannot exceed that of the numerator");
     }
 

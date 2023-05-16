@@ -27,7 +27,6 @@ Polynomial<T>::divClassic(const Polynomial<T> &other) const
 
         Polynomial<T> remainder = this->copy();
         Polynomial<T> quotient(11);
-        quotient.addNode(0, 0);
 
         return std::make_pair(quotient, remainder);
     }
