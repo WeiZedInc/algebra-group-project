@@ -4,11 +4,18 @@
 @using AlgebraWASM.Client;
 @using System.Runtime.InteropServices;
 <style>
+	html {
+		font-size: 125%;
+		line-height: 1.4;
+	}
+
 	body {
 		background: linear-gradient(to right, #4e006e, #020085);
 		color: floralwhite;
 	}
 </style>
+<link href="css/typingResult.css" rel="stylesheet" />
+
 
 <div>
 	<select @onchange="SelectedMethod">

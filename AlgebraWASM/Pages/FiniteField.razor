@@ -4,6 +4,11 @@
 @using System.Runtime.InteropServices;
 @using System.Text;
 <style>
+	html {
+		font-size: 125%;
+		line-height: 1.4;
+	}
+
 	body {
 		background: linear-gradient(to right, #4e006e, #020085);
 		color: floralwhite;
@@ -11,8 +16,7 @@
 </style>
 <link href="css/typingResult.css" rel="stylesheet" />
 
-
-<div>
+<div class="wrapper">
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="2">2. Додавання, віднімання, множення чисел.</option>
@@ -25,111 +29,111 @@
 		<option value="9">9. Знаходження функції Ейлера від заданого числа та функції Кармайкла від заданого числа</option>
 		<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
 	</select>
-	<div>
-		<label for="@coefModule">Coefficient module: </label>
-		<input name="coef-module" type="input" @bind-value="@coefModule" />
+	<div class="input">
+		<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
 	</div>
 
-	@switch (selected)
-	{
-		case "2":
-			<div>
-				<p>Enter two numbers:</p>
-				<div class="wrapper">
-					<input type="text" @bind-value="@firstInputBox" />
-					<input type="text" @bind-value="@secondInputBox" />
+@switch (selected)
+{
+	case "2":
+		<div>
+			<div class="wrapper">
+				<div class="input">
+					<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter first number">
+					<input type="text" name="input" id="input" @bind-value="@secondInputBox" placeholder="Enter second number">
 				</div>
-				<button @onclick="Add"> Add </button>
-				<button @onclick="Subtract"> Subtract </button>
-				<button @onclick="Multiply"> Multiply </button>
-				@if (!string.IsNullOrWhiteSpace(result))
-				{
-					<div class="wrapper">
-						<div class="typing-demo">
-							Result: @result
-						</div>
-					</div>
-				}
 			</div>
-			break;
-		case "3":
-			<div>
-				<p>Enter numbers (Inversion works on first input field):</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" />
-				<button @onclick="Inversion"> Inversion </button>
-				<button @onclick="Division"> Division </button>
-				<p>Result: @result</p>
-			</div>
-			break;
-		case "4":
-			<div>
-				<p>Enter number and degree:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" /> @*degree*@
-				<button @onclick="FastPow"> Fast Pow </button>
-				<p>Result: @result</p>
-			</div>
-			break;
-		case "5":
-			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Polard"> Polard </button>
-				<button @onclick="NaiveFactor"> NaiveFactor </button>
-				<p>Result: @result</p>
-			</div>
-			break;
-		case "6":
-			<div>
-				<p>Someone didn't implemented it yet on api :)'</p>
-				@*				<input type="text" @bind-value="@firstInputBox" />
-		<button @onclick="QuadSqrt"> QuadSqrt </button>
-		<p>Result: @result</p>*@
-			</div>
-			break;
-		case "7":
-			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" />
-				<button @onclick="isGenerator"> isGenerator </button>
-				<button @onclick="DscLog"> discreteLog </button>
-				<p>Result: @result</p>
-			</div>
-			break;
-		case "8":
-			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Order"> Order </button>
-				<button @onclick="isGenerator"> isGenerator </button>
-				<p>Result: @result</p>
-			</div>
-			break;
-		case "9":
-			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Euiler"> Euiler </button>
-				<button @onclick="Carmichael"> Carmichael </button>
-				<p>Result: @result</p>
-			</div>
-			break;
-		case "10":
-			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" />
-				<button @onclick="isPrime"> isPrime </button>
-				<p>Result: @result</p>
-			</div>
-			break;
-		default:
-			break;
-	}
-</div>
 
+			<button @onclick="Add"> Add </button>
+			<button @onclick="Subtract"> Subtract </button>
+			<button @onclick="Multiply"> Multiply </button>
+			@if (!string.IsNullOrWhiteSpace(result))
+			{
+				<div class="wrapper">
+					<div class="typing-demo">
+						Result: @result
+					</div>
+				</div>
+			}
+		</div>
+		break;
+	case "3":
+		<div>
+			<p>Enter numbers (Inversion works on first input field):</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<input type="text" @bind-value="@secondInputBox" />
+			<button @onclick="Inversion"> Inversion </button>
+			<button @onclick="Division"> Division </button>
+			<p>Result: @result</p>
+		</div>
+		break;
+	case "4":
+		<div>
+			<p>Enter number and degree:</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<input type="text" @bind-value="@secondInputBox" /> @*degree*@
+			<button @onclick="FastPow"> Fast Pow </button>
+			<p>Result: @result</p>
+		</div>
+		break;
+	case "5":
+		<div>
+			<p>Enter two numbers:</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<button @onclick="Polard"> Polard </button>
+			<button @onclick="NaiveFactor"> NaiveFactor </button>
+			<p>Result: @result</p>
+		</div>
+		break;
+	case "6":
+		<div>
+			<p>Someone didn't implemented it yet on api :)'</p>
+			@*				<input type="text" @bind-value="@firstInputBox" />
+	<button @onclick="QuadSqrt"> QuadSqrt </button>
+	<p>Result: @result</p>*@
+		</div>
+		break;
+	case "7":
+		<div>
+			<p>Enter two numbers:</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<input type="text" @bind-value="@secondInputBox" />
+			<button @onclick="isGenerator"> isGenerator </button>
+			<button @onclick="DscLog"> discreteLog </button>
+			<p>Result: @result</p>
+		</div>
+		break;
+	case "8":
+		<div>
+			<p>Enter two numbers:</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<button @onclick="Order"> Order </button>
+			<button @onclick="isGenerator"> isGenerator </button>
+			<p>Result: @result</p>
+		</div>
+		break;
+	case "9":
+		<div>
+			<p>Enter two numbers:</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<button @onclick="Euiler"> Euiler </button>
+			<button @onclick="Carmichael"> Carmichael </button>
+			<p>Result: @result</p>
+		</div>
+		break;
+	case "10":
+		<div>
+			<p>Enter two numbers:</p>
+			<input type="text" @bind-value="@firstInputBox" />
+			<input type="text" @bind-value="@secondInputBox" />
+			<button @onclick="isPrime"> isPrime </button>
+			<p>Result: @result</p>
+		</div>
+		break;
+	default:
+		break;
+}
+</div>
 
 
 
