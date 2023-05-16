@@ -22,6 +22,7 @@
 	<div class="alert alert-secondary mt-4" style="width: 35%; font-size: 34px;">
 		<strong>Скінченне поле</strong>
 	</div>
+	<div class="alert alert-secondary mt-4">
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="2">2. Додавання, віднімання, множення чисел.</option>
@@ -34,6 +35,8 @@
 		<option value="9">9. Знаходження функції Ейлера та Кармайкла</option>
 		<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
 	</select>
+	</div>
+
 	@if (!string.IsNullOrWhiteSpace(selected))
 	{
 		<div class="input">
