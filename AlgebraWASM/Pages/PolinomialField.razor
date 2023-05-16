@@ -3,22 +3,29 @@
 @using System.Text;
 @using AlgebraWASM.Client;
 @using System.Runtime.InteropServices;
+<style>
+	body {
+		background: linear-gradient(to right, #4e006e, #020085);
+		color: floralwhite;
+	}
+</style>
 
-<div style="margin-left: 30%;">
+
+<div>
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="15">15. Розклад кругового многочлена на незвідні.</option>
-		<option value="16">16. Знаходження К незвібних многочленів.</option>
+		<option value="16">16. Знаходження К незвідних многочленів.</option>
 		<option value="17">17. Перевірка чи є многочлен незвідним.</option>
 		<option value="18">18. Додавання, віднімання, множення двох многочленів. Нормування. Швидке піднесення у степінь.</option>
 		<option value="19">19. Знаходження оберненого многочлена (алгоритм Евкліда).</option>
 		<option value="20">20. Знаходження порядку незвідного многочлена.</option>
 	</select>
-	<div style="display: flex; margin-left: 20px; gap: 10px; margin-top: 15px">
+	<div>
 		<label for="@coefModule">Coefficient module: </label>
 		<input name="coef-module" type="input" @bind-value="@coefModule" />
 	</div>
-	<div style="display: flex; margin-left: 20px; gap: 10px; margin-top: 15px">
+	<div>
 		<label for="@coefModule">Pow module: </label>
 		<input name="coef-module" type="input" @bind-value="@powModule" />
 	</div>
@@ -106,167 +113,167 @@
 
 	private unsafe void Add()
 	{
-		try
-		{
-			int size1, size2;
-			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		//try
+		//{
+		//	int size1, size2;
+		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-			int size = 0;
+		//	int size = 0;
 
-			fixed (byte* modPtr = modBytes)
-			fixed (byte* errStrPtr = errorStrBytes)
-			{
-				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+		//	fixed (byte* modPtr = modBytes)
+		//	fixed (byte* errStrPtr = errorStrBytes)
+		//	{
+		//		byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				List<string> resultList = new List<string>();
-				int offset = 0;
-				while (true)
-				{
-					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
-					if (currentPtr == IntPtr.Zero)
-						break;
+		//		List<string> resultList = new List<string>();
+		//		int offset = 0;
+		//		while (true)
+		//		{
+		//			IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+		//			if (currentPtr == IntPtr.Zero)
+		//				break;
 
-					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
-					resultList.Add(Encoding.ASCII.GetString(currentBytes));
-					offset++;
-				}
+		//			byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+		//			resultList.Add(Encoding.ASCII.GetString(currentBytes));
+		//			offset++;
+		//		}
 
-				string[] resultArray = resultList.ToArray();
-				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+		//		string[] resultArray = resultList.ToArray();
+		//		Dictionary<string, int> resultDct = new Dictionary<string, int>();
 
-				foreach (string number in resultArray)
-				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
-					else
-						resultDct[number] = 1;
-				}
+		//		foreach (string number in resultArray)
+		//		{
+		//			if (resultDct.ContainsKey(number))
+		//				resultDct[number]++;
+		//			else
+		//				resultDct[number] = 1;
+		//		}
 
-				string res = "";
-				foreach (var kvp in resultDct)
-				{
-					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
-				}
-				result = res;
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
+		//		string res = "";
+		//		foreach (var kvp in resultDct)
+		//		{
+		//			res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+		//		}
+		//		result = res;
+		//	}
+		//}
+		//catch (Exception ex)
+		//{
+		//	Console.WriteLine(ex.Message);
+		//}
 	}
 
 	private unsafe void Subtract()
 	{
-		try
-		{
-			int size1, size2;
-			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		//try
+		//{
+		//	int size1, size2;
+		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-			int size = 0;
+		//	int size = 0;
 
-			fixed (byte* modPtr = modBytes)
-			fixed (byte* errStrPtr = errorStrBytes)
-			{
-				byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+		//	fixed (byte* modPtr = modBytes)
+		//	fixed (byte* errStrPtr = errorStrBytes)
+		//	{
+		//		byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				List<string> resultList = new List<string>();
-				int offset = 0;
-				while (true)
-				{
-					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
-					if (currentPtr == IntPtr.Zero)
-						break;
+		//		List<string> resultList = new List<string>();
+		//		int offset = 0;
+		//		while (true)
+		//		{
+		//			IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+		//			if (currentPtr == IntPtr.Zero)
+		//				break;
 
-					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
-					resultList.Add(Encoding.ASCII.GetString(currentBytes));
-					offset++;
-				}
+		//			byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+		//			resultList.Add(Encoding.ASCII.GetString(currentBytes));
+		//			offset++;
+		//		}
 
-				string[] resultArray = resultList.ToArray();
-				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+		//		string[] resultArray = resultList.ToArray();
+		//		Dictionary<string, int> resultDct = new Dictionary<string, int>();
 
-				foreach (string number in resultArray)
-				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
-					else
-						resultDct[number] = 1;
-				}
+		//		foreach (string number in resultArray)
+		//		{
+		//			if (resultDct.ContainsKey(number))
+		//				resultDct[number]++;
+		//			else
+		//				resultDct[number] = 1;
+		//		}
 
-				string res = "";
-				foreach (var kvp in resultDct)
-				{
-					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
-				}
-				result = res;
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
+		//		string res = "";
+		//		foreach (var kvp in resultDct)
+		//		{
+		//			res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+		//		}
+		//		result = res;
+		//	}
+		//}
+		//catch (Exception ex)
+		//{
+		//	Console.WriteLine(ex.Message);
+		//}
 	}
 
 	private unsafe void Multiply()
 	{
-		try
-		{
-			int size1, size2;
-			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		//try
+		//{
+		//	int size1, size2;
+		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-			int size = 0;
+		//	int size = 0;
 
-			fixed (byte* modPtr = modBytes)
-			fixed (byte* errStrPtr = errorStrBytes)
-			{
-				byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+		//	fixed (byte* modPtr = modBytes)
+		//	fixed (byte* errStrPtr = errorStrBytes)
+		//	{
+		//		byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				List<string> resultList = new List<string>();
-				int offset = 0;
-				while (true)
-				{
-					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
-					if (currentPtr == IntPtr.Zero)
-						break;
+		//		List<string> resultList = new List<string>();
+		//		int offset = 0;
+		//		while (true)
+		//		{
+		//			IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+		//			if (currentPtr == IntPtr.Zero)
+		//				break;
 
-					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
-					resultList.Add(Encoding.ASCII.GetString(currentBytes));
-					offset++;
-				}
+		//			byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+		//			resultList.Add(Encoding.ASCII.GetString(currentBytes));
+		//			offset++;
+		//		}
 
-				string[] resultArray = resultList.ToArray();
-				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+		//		string[] resultArray = resultList.ToArray();
+		//		Dictionary<string, int> resultDct = new Dictionary<string, int>();
 
-				foreach (string number in resultArray)
-				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
-					else
-						resultDct[number] = 1;
-				}
+		//		foreach (string number in resultArray)
+		//		{
+		//			if (resultDct.ContainsKey(number))
+		//				resultDct[number]++;
+		//			else
+		//				resultDct[number] = 1;
+		//		}
 
-				string res = "";
-				foreach (var kvp in resultDct)
-				{
-					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
-				}
-				result = res;
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
+		//		string res = "";
+		//		foreach (var kvp in resultDct)
+		//		{
+		//			res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+		//		}
+		//		result = res;
+		//	}
+		//}
+		//catch (Exception ex)
+		//{
+		//	Console.WriteLine(ex.Message);
+		//}
 	}
 
 	private void Calculate()
