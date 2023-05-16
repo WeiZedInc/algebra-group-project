@@ -63,7 +63,8 @@ Polynomial<T>::evaluate(const T x_value) const {
 
     for (auto it = poly.begin(); it != poly.end(); ++it) {
         if (it->deg() > 0) {
-            current_num = fpow(modNum<T>(x_value, numMod), it->deg()) * it->k();
+            T nodeDegree = it->deg();
+            current_num = fpow(modNum<T>(x_value, numMod), nodeDegree) * it->k();
         } else {
             current_num = it->k();
         }
