@@ -206,8 +206,8 @@
 	{
 		coefModule = Regex.Replace(coefModule, "[^0-9]", "");
 		powModule = Regex.Replace(powModule, "[^0-9]", "");
-		firstInputBox = Regex.Replace(firstInputBox, "[^0-9xy+\\-*/^]", "");
-		secondInputBox = Regex.Replace(secondInputBox, "[^0-9xy+\\-*/^]", "");
+		firstInputBox = Regex.Replace(firstInputBox, "[^0-9x+\\-*^]", "");
+		secondInputBox = Regex.Replace(secondInputBox, "[^0-9x+\\-*^]", "");
 	}
 
 	private unsafe void Add()
