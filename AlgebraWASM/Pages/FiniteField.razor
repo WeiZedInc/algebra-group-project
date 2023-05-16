@@ -150,7 +150,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.addition(aPtr, bPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.addition(aPtr, bPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -181,7 +181,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.subtraction(aPtr, bPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.subtraction(aPtr, bPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -212,7 +212,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.multiplication(aPtr, bPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.multiplication(aPtr, bPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -241,7 +241,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.inverse(aPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.inverse(aPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -272,7 +272,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.division(aPtr, bPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.division(aPtr, bPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -303,7 +303,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.fastPow(aPtr, bPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.fastPow(aPtr, bPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -334,7 +334,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte** resultPtr = MethodWrapper.factorizePolard(ref size, aPtr, modPtr, errStrPtr);
+				byte** resultPtr = FiniteFieldMethods.factorizePolard(ref size, aPtr, modPtr, errStrPtr);
 
 				List<string> resultList = new List<string>();
 				int offset = 0;
@@ -411,7 +411,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.discreteLog(aPtr, bPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.discreteLog(aPtr, bPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -440,7 +440,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.orderOfElement(aPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.orderOfElement(aPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -469,7 +469,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				result = MethodWrapper.isGenerator(aPtr, modPtr, errStrPtr).ToString();
+				result = FiniteFieldMethods.isGenerator(aPtr, modPtr, errStrPtr).ToString();
 			}
 		}
 		catch (Exception ex)
@@ -492,7 +492,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.CarmichaelFunction(aPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.CarmichaelFunction(aPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -521,7 +521,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				byte* resultPtr = MethodWrapper.EulerFunction(aPtr, modPtr, errStrPtr);
+				byte* resultPtr = FiniteFieldMethods.EulerFunction(aPtr, modPtr, errStrPtr);
 
 				int resultLength = 0;
 				while (resultPtr[resultLength] != 0)
@@ -552,7 +552,7 @@
 			fixed (byte* modPtr = modBytes)
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
-				result = MethodWrapper.isPrime(aPtr, modPtr, bPtr, errStrPtr).ToString();
+				result = FiniteFieldMethods.isPrime(aPtr, modPtr, bPtr, errStrPtr).ToString();
 			}
 		}
 		catch (Exception ex)

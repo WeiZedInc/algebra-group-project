@@ -56,19 +56,19 @@ class modNum {
     class Factorization {
        public:
         virtual ~Factorization() = default;
-        virtual std::vector<modNum<T1>> factor(modNum<T1> value) = 0;
+        virtual std::vector<T1> factor(T1 value) = 0;
     };
 
     template <typename T1>
     class Pollard : public Factorization<T1> {
        public:
-        std::vector<modNum<T1>> factor(modNum<T1> value) override;
+        std::vector<T1> factor(T1 value) override;
     };
 
     template <typename T1>
     class Naive : public Factorization<T1> {
        public:
-        std::vector<modNum<T1>> factor(modNum<T1> m) override;
+        std::vector<T1> factor(T1 m) override;
     };
 
    private:
@@ -77,7 +77,14 @@ class modNum {
    public:
     std::vector<modNum<T>> factorize(Factorization<T> *strat) {
         levelStrat = strat;
-        return levelStrat->factor(*this);
+        std::vector<modNum<T>> res;
+        std::vector<T> factors = levelStrat->factor(this->getValue());
+
+        T mod = this->getMod();
+        for (int i = 0; i < factors.size(); i++)
+            res.push_back(modNum<T>(factors[i], mod));
+
+        return res;
     }
 
     T gcdExtended(T a, T b, T *x, T *y) const;
