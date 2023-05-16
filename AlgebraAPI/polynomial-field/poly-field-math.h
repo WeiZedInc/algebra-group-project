@@ -49,7 +49,7 @@ class PolynomialField {
         if (isPrimeSimpleFunction(mod)) {
             this->numMod = mod;
             this->MOD = polyMod;
-            this->value = Polynomial<T>(polyV);
+            this->value = Polynomial<T>(polyV, mod);
         } else
             throw std::invalid_argument("Mod should be prime");
     }
@@ -77,6 +77,8 @@ class PolynomialField {
     void addNode(const T num, size_t deg);
     Polynomial<T> getValue() { return this->value; }
 
+    static std::vector<PolynomialField<T>> cyclotomicToMultipliers(T num, T mod);
+
     static std::vector<PolynomialField<T>> findKIrreducible(size_t k);
 
     bool isIrreducible();
@@ -84,6 +86,7 @@ class PolynomialField {
     void normalize();
 
     PolynomialField<T> inv();
+    PolynomialField<T> operator/(const PolynomialField<T> &) const;
 
     size_t getOrder();
 
@@ -93,5 +96,6 @@ class PolynomialField {
 };
 
 #include "source//poly-field-basic.tcc"
+#include "source//cyclotomicToMultipliers.tcc"
 
 #endif

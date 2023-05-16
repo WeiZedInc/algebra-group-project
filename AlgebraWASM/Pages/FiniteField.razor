@@ -3,10 +3,16 @@
 @using System.ComponentModel.DataAnnotations;
 @using System.Runtime.InteropServices;
 @using System.Text;
+<style>
+	body {
+		background: linear-gradient(to right, #4e006e, #020085);
+		color: floralwhite;
+	}
+</style>
+<link href="css/typingResult.css" rel="stylesheet" />
 
 
-
-<div style="margin-left: 30%;">
+<div>
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="2">2. Додавання, віднімання, множення чисел.</option>
@@ -19,7 +25,7 @@
 		<option value="9">9. Знаходження функції Ейлера від заданого числа та функції Кармайкла від заданого числа</option>
 		<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
 	</select>
-	<div style="display: flex; margin-left: 20px; gap: 10px; margin-top: 15px">
+	<div>
 		<label for="@coefModule">Coefficient module: </label>
 		<input name="coef-module" type="input" @bind-value="@coefModule" />
 	</div>
@@ -29,12 +35,21 @@
 		case "2":
 			<div>
 				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" />
+				<div class="wrapper">
+					<input type="text" @bind-value="@firstInputBox" />
+					<input type="text" @bind-value="@secondInputBox" />
+				</div>
 				<button @onclick="Add"> Add </button>
 				<button @onclick="Subtract"> Subtract </button>
 				<button @onclick="Multiply"> Multiply </button>
-				<p>Result: @result</p>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result: @result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		case "3":
@@ -68,9 +83,9 @@
 		case "6":
 			<div>
 				<p>Someone didn't implemented it yet on api :)'</p>
-@*				<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="QuadSqrt"> QuadSqrt </button>
-				<p>Result: @result</p>*@
+				@*				<input type="text" @bind-value="@firstInputBox" />
+		<button @onclick="QuadSqrt"> QuadSqrt </button>
+		<p>Result: @result</p>*@
 			</div>
 			break;
 		case "7":

@@ -3,8 +3,14 @@
 @using System.Text;
 @using AlgebraWASM.Client;
 @using System.Runtime.InteropServices;
+<style>
+	body {
+		background: linear-gradient(to right, #4e006e, #020085);
+		color: floralwhite;
+	}
+</style>
 
-<div style="margin-left: 30%;">
+<div>
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="11">11. Додавання, віднімання, множення двох многочленів.</option>
@@ -12,7 +18,7 @@
 		<option value="13">13. Знаходження частки та остачі від ділення.</option>
 		<option value="14">14. Знаходження кругового многочлена.</option>
 	</select>
-	<div style="display: flex; margin-left: 20px; gap: 10px; margin-top: 15px">
+	<div>
 		<label for="@coefModule">Coefficient module: </label>
 		<input name="coef-module" type="input" @bind-value="@coefModule" />
 	</div>
@@ -85,80 +91,84 @@
 
 	private unsafe void Add()
 	{
-		try
-		{
-			int size1, size2;
-			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		//try
+		//{
+		//	int size1, size2;
+		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-			int size = 0;
+		//	int size = 0;
 
-			fixed (byte* modPtr = modBytes)
-			fixed (byte* errStrPtr = errorStrBytes)
-			{
-				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+		//	fixed (byte* modPtr = modBytes)
+		//	fixed (byte* errStrPtr = errorStrBytes)
+		//	{
+		//		byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				result = PolinomialParser.ParsePolynomial(resultPtr);
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
+		//		result = PolinomialParser.ParsePolynomial(resultPtr);
+		//	}
+		//}
+		//catch (Exception ex)
+		//{
+		//	Console.WriteLine(ex.Message);
+		//}
 	}
 
 	private unsafe void Subtract()
 	{
-		try
-		{
-			int size1, size2;
-			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		//try
+		//{
+		//	int size1, size2;
+		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-			int size = 0;
+		//	int size = 0;
 
-			fixed (byte* modPtr = modBytes)
-			fixed (byte* errStrPtr = errorStrBytes)
-			{
-				byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+		//	fixed (byte* modPtr = modBytes)
+		//	fixed (byte* errStrPtr = errorStrBytes)
+		//	{
+		//		byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				result = PolinomialParser.ParsePolynomial(resultPtr);
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
+		//		result = PolinomialParser.ParsePolynomial(resultPtr);
+		//	}
+		//}
+		//catch (Exception ex)
+		//{
+		//	Console.WriteLine(ex.Message);
+		//}
 	}
 
 	private unsafe void Multiply()
 	{
-		try
-		{
-			int size1, size2;
-			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		//try
+		//{
+		//	int size1, size2;
+		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+		//	Console.WriteLine(PolinomialParser.ParsePolynomial(aBytes));
+		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+		//	Console.WriteLine(PolinomialParser.ParsePolynomial(bBytes));
+		//	Console.WriteLine();
 
-			int size = 0;
+		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-			fixed (byte* modPtr = modBytes)
-			fixed (byte* errStrPtr = errorStrBytes)
-			{
-				byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+		//	int size = 0;
 
-				result = PolinomialParser.ParsePolynomial(resultPtr);
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
+		//	fixed (byte* modPtr = modBytes)
+		//	fixed (byte* errStrPtr = errorStrBytes)
+		//	{
+		//		byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+
+		//		result = PolinomialParser.ParsePolynomial(resultPtr);
+		//	}
+		//}
+		//catch (Exception ex)
+		//{
+		//	Console.WriteLine(ex.Message);
+		//}
 	}
 
 	private void Division()
