@@ -27,10 +27,13 @@ class PolynomialField {
     Polynomial<T> value;
     Polynomial<T> MOD;
 
+    void correct();
    public:
     PolynomialField(T mod, Polynomial<T> polyMod) {
         if (isPrimeSimpleFunction(mod)) {
             this->numMod = mod;
+            Polynomial<T> tmp(mod);
+            this->value = tmp;
             this->MOD = polyMod;
         } else
             throw std::invalid_argument("Mod should be prime");
@@ -75,6 +78,7 @@ class PolynomialField {
     PolynomialField<T> pow(T k);
 
     void addNode(const T num, size_t deg);
+    void addNode(Node<T>);
     Polynomial<T> getValue() { return this->value; }
 
     static std::vector<PolynomialField<T>> cyclotomicToMultipliers(T num, T mod);
