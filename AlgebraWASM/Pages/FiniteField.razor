@@ -265,6 +265,10 @@
 		coefModule = Regex.Replace(coefModule, "[^0-9]", "");
 		firstInputBox = Regex.Replace(firstInputBox, "[^0-9]", "");
 		secondInputBox = Regex.Replace(secondInputBox, "[^0-9]", "");
+
+		if (string.IsNullOrWhiteSpace(coefModule)) coefModule = "1";
+		if (string.IsNullOrWhiteSpace(firstInputBox)) firstInputBox = "1";
+		if (string.IsNullOrWhiteSpace(secondInputBox)) secondInputBox = "1";
 	}
 
 	private unsafe void Add()

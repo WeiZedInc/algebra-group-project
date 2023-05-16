@@ -211,6 +211,12 @@
 		powModule = Regex.Replace(powModule, "[^0-9]", "");
 		firstInputBox = Regex.Replace(firstInputBox, "[^0-9x+\\-*^]", "");
 		secondInputBox = Regex.Replace(secondInputBox, "[^0-9x+\\-*^]", "");
+
+
+		if (string.IsNullOrWhiteSpace(coefModule)) coefModule = "1";
+		if (string.IsNullOrWhiteSpace(powModule)) secondInputBox = "1";
+		if (string.IsNullOrWhiteSpace(firstInputBox)) firstInputBox = "x+1";
+		if (string.IsNullOrWhiteSpace(secondInputBox)) secondInputBox = "x+2";
 	}
 
 	private unsafe void Add()
