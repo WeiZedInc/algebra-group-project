@@ -386,5 +386,7 @@ TEST_CASE("New constructor") {
     Polynomial<int> poly2(p2, 11);
 
     Polynomial<int> poly3 = poly1 + poly2;
+    Polynomial<int> poly3_test();
+
     poly3.print();
 }
