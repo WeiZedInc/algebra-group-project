@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace AlgebraWASM.Client
 {
@@ -55,6 +56,34 @@ namespace AlgebraWASM.Client
 			}
 			
 			return result;
+		}
+
+		public static unsafe string ParsePolynomial(byte** coefficients, int size)
+		{
+			StringBuilder polynomial = new StringBuilder();
+
+			for (int i = size - 1; i >= 0; i--)
+			{
+				byte coefficient = *coefficients[i];
+				if (coefficient != 0)
+				{
+					if (coefficient > 0 && i != size - 1)
+						polynomial.Append("+");
+
+					if (coefficient != 1 || i == 0)
+						polynomial.Append(coefficient);
+
+					if (i > 0)
+					{
+						polynomial.Append("x");
+
+						if (i > 1)
+							polynomial.Append("^" + i);
+					}
+				}
+			}
+
+			return polynomial.ToString();
 		}
 
 		private static int GetMaxDegree(string polynomial)

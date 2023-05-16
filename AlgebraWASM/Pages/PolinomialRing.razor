@@ -50,12 +50,12 @@
 			</div>
 			break;
 		case "14":
-			@*<div>
+			<div>
 				<p>Someone didn't implemented it yet on api :)'</p>
-				<input type="text" @bind-value="@firstInputBox" />
+				@*<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Calculate"> Calculate </button>
-					<p>@result</p>
-			</div>*@
+					<p>@result</p>*@
+			</div>
 			break;
 		default:
 			break;
@@ -100,36 +100,7 @@
 			{
 				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				List<string> resultList = new List<string>();
-				int offset = 0;
-				while (true)
-				{
-					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
-					if (currentPtr == IntPtr.Zero)
-						break;
-
-					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
-					resultList.Add(Encoding.ASCII.GetString(currentBytes));
-					offset++;
-				}
-
-				string[] resultArray = resultList.ToArray();
-				Dictionary<string, int> resultDct = new Dictionary<string, int>();
-
-				foreach (string number in resultArray)
-				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
-					else
-						resultDct[number] = 1;
-				}
-
-				string res = "";
-				foreach (var kvp in resultDct)
-				{
-					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
-				}
-				result = res;
+				result = PolinomialParser.ParsePolynomial(resultPtr, size);
 			}
 		}
 		catch (Exception ex)
@@ -155,36 +126,7 @@
 			{
 				byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				List<string> resultList = new List<string>();
-				int offset = 0;
-				while (true)
-				{
-					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
-					if (currentPtr == IntPtr.Zero)
-						break;
-
-					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
-					resultList.Add(Encoding.ASCII.GetString(currentBytes));
-					offset++;
-				}
-
-				string[] resultArray = resultList.ToArray();
-				Dictionary<string, int> resultDct = new Dictionary<string, int>();
-
-				foreach (string number in resultArray)
-				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
-					else
-						resultDct[number] = 1;
-				}
-
-				string res = "";
-				foreach (var kvp in resultDct)
-				{
-					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
-				}
-				result = res;
+				result = PolinomialParser.ParsePolynomial(resultPtr, size);
 			}
 		}
 		catch (Exception ex)
@@ -210,36 +152,7 @@
 			{
 				byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				List<string> resultList = new List<string>();
-				int offset = 0;
-				while (true)
-				{
-					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
-					if (currentPtr == IntPtr.Zero)
-						break;
-
-					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
-					resultList.Add(Encoding.ASCII.GetString(currentBytes));
-					offset++;
-				}
-
-				string[] resultArray = resultList.ToArray();
-				Dictionary<string, int> resultDct = new Dictionary<string, int>();
-
-				foreach (string number in resultArray)
-				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
-					else
-						resultDct[number] = 1;
-				}
-
-				string res = "";
-				foreach (var kvp in resultDct)
-				{
-					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
-				}
-				result = res;
+				result = PolinomialParser.ParsePolynomial(resultPtr, size);
 			}
 		}
 		catch (Exception ex)
