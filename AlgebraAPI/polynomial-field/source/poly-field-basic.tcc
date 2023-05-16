@@ -10,7 +10,7 @@ using namespace modular;
 template <typename T>
 void
 PolynomialField<T>::addNode(const T num, size_t deg) {
-    Polynomial<T>::addNode(num, deg % polyMod);
+    Polynomial<T>::addNode(num, );
 }
 
 template <typename T>
