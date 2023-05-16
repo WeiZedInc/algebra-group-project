@@ -17,8 +17,10 @@
 <link href="css/typingResult.css" rel="stylesheet" />
 <link href="css/buttons.css" rel="stylesheet" />
 
-
 <div class="wrapper">
+	<div class="alert alert-secondary mt-4" style="width: 50%; font-size: 34px;">
+		<strong>Скінченне поле</strong>
+	</div>
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="2">2. Додавання, віднімання, множення чисел.</option>
@@ -31,9 +33,12 @@
 		<option value="9">9. Знаходження функції Ейлера від заданого числа та функції Кармайкла від заданого числа</option>
 		<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
 	</select>
-	<div class="input">
-		<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
-	</div>
+	@if (!string.IsNullOrWhiteSpace(selected))
+	{
+		<div class="input">
+			<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
+		</div>
+	}
 
 	@switch (selected)
 	{

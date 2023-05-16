@@ -19,6 +19,9 @@
 
 
 <div class="wrapper">
+	<div class="alert alert-secondary mt-4" style="width: 50%; font-size: 34px;">
+		<strong>Кільце многочленів</strong>
+	</div>
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="11">11. Додавання, віднімання, множення двох многочленів.</option>
@@ -26,9 +29,14 @@
 		<option value="13">13. Знаходження частки та остачі від ділення.</option>
 		<option value="14">14. Знаходження кругового многочлена.</option>
 	</select>
-	<div class="input">
-		<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
-	</div>
+	@if (!string.IsNullOrWhiteSpace(selected))
+	{
+		<div class="input">
+			<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
+		</div>
+	}
+
+
 	@switch (selected)
 	{
 		case "11":
@@ -142,10 +150,11 @@
 
 				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
 
-				byte[] byteArray = new byte[size*2];
-				Marshal.Copy(new IntPtr(resultPtr), byteArray, 0, byteArray.Length);
+				byte[] byteArray = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, byteArray, 0, byteArray.Length);
 
 				result = Encoding.UTF8.GetString(byteArray);
+				Console.WriteLine("res " + result);
 			}
 		}
 		catch (Exception ex)

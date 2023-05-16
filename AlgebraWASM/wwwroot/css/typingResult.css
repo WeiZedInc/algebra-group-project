@@ -44,6 +44,7 @@ input {
 	/*This part is important for centering*/
 	display: grid;
 	place-items: center;
+	grid-gap: 50px;
 }
 
 .typing-demo {

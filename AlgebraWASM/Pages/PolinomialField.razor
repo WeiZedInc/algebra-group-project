@@ -19,6 +19,9 @@
 
 
 <div class="wrapper">
+	<div class="alert alert-secondary mt-4" style="width: 50%; font-size: 34px;">
+		<strong>Поле многочленів</strong>
+	</div>
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="15">15. Розклад кругового многочлена на незвідні.</option>
@@ -28,12 +31,16 @@
 		<option value="19">19. Знаходження оберненого многочлена (алгоритм Евкліда).</option>
 		<option value="20">20. Знаходження порядку незвідного многочлена.</option>
 	</select>
-	<div class="input">
-		<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
-	</div>
-	<div class="input">
-		<input type="text" name="input" id="input" @bind-value="@powModule" placeholder="Enter pow module">
-	</div>
+	@if (!string.IsNullOrWhiteSpace(selected))
+	{
+		<div class="input">
+			<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
+		</div>
+		<div class="input">
+			<input type="text" name="input" id="input" @bind-value="@powModule" placeholder="Enter pow module">
+		</div>
+	}
+	
 	@switch (selected)
 	{
 		case "15":
