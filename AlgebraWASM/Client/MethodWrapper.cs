@@ -54,19 +54,31 @@ namespace AlgebraWASM.Client
 	public static class PolyRingMethods
 	{
 		[DllImport("poly-ring-wrapper")]
-		public static unsafe extern byte** polyAddition(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+		public static unsafe extern byte* polyAddition(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
 
 		[DllImport("poly-ring-wrapper")]
-		public static unsafe extern byte** polySubstruction(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+		public static unsafe extern byte* polySubstruction(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
 
 		[DllImport("poly-ring-wrapper")]
-		public static unsafe extern byte** polyMultiplication(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+		public static unsafe extern byte* polyMultiplication(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
 
 		[DllImport("poly-ring-wrapper")]
-		public static unsafe extern byte** polyDivision(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+		public static unsafe extern byte* polyDivision(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
 
 		[DllImport("poly-ring-wrapper")]
-		public static unsafe extern byte** polyRest(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+		public static unsafe extern byte* polyRest(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte* polyDerivative(ref int returnSize, int polySize1, byte** polyStr1, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte* polyGCD(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte* polyEvaluate(ref int returnSize, int polySize1, byte** polyStr1, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte* getCyclotomic(ref int returnSize, byte* orderStr, byte* numModStr, byte* errorStr);
 
 		[DllImport("poly-ring-wrapper")]
 		public static unsafe extern byte** polyParse(ref int returnSize, byte* inputPolyString);

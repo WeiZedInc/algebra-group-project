@@ -101,6 +101,7 @@ class Polynomial {
     std::vector<std::pair<T, size_t>> toPolyVector();
 
     void print() const;
+    std::string toString() const;
     size_t size() const { return poly.size(); };
 
     //////////////////////////////////////////////////////////////////////////////
@@ -142,5 +143,5 @@ class Polynomial {
 #include "source/isIrreducable.tcc"
 #include "source/node.tcc"
 #include "source/poly-basic.tcc"
-
+#include "source/utils.tcc"
 #endif

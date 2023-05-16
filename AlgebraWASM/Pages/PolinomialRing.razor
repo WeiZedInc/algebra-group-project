@@ -19,7 +19,7 @@
 
 
 <div class="wrapper">
-	<div class="alert alert-secondary mt-4" style="width: 50%; font-size: 34px;">
+	<div class="alert alert-secondary mt-4" style="width: 35%; font-size: 34px;">
 		<strong>Кільце многочленів</strong>
 	</div>
 	<select @onchange="SelectedMethod">
@@ -65,11 +65,26 @@
 			break;
 		case "12":
 			<div>
-				<p>Someone didn't implemented it yet on api :)'</p>
-				@*<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Derivative"> Derivative </button>
-				<button @onclick="Evaluate"> Evaluate </button>
-					<p>@result</p>*@
+				<div>
+					<div class="wrapper">
+						<div class="input">
+							<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter number">
+						</div>
+					</div>
+					<button class="custom-btn btn-15" @onclick="Derivative">Derivative</button>
+					<button class="custom-btn btn-15" @onclick="Evaluate">Evaluate</button>
+					@if (!string.IsNullOrWhiteSpace(result))
+					{
+						<div class="wrapper">
+							<div class="typing-demo">
+								Result:
+							</div>
+							<div class="typing-demo">
+								@result
+							</div>
+						</div>
+					}
+				</div>
 			</div>
 			break;
 		case "13":
@@ -81,6 +96,8 @@
 					</div>
 				</div>
 				<button class="custom-btn btn-15" @onclick="Division">Division</button>
+				<button class="custom-btn btn-15" @onclick="Rest">Rest</button>
+				<button class="custom-btn btn-15" @onclick="GCD">GCD</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
@@ -96,10 +113,23 @@
 			break;
 		case "14":
 			<div>
-				<p>Someone didn't implemented it yet on api :)'</p>
-				@*<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Calculate"> Calculate </button>
-					<p>@result</p>*@
+				<div class="wrapper">
+					<div class="input">
+						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter order">
+					</div>
+				</div>
+				<button class="custom-btn btn-15" @onclick="GetCyclotomic">GetCyclotomic</button>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result:
+						</div>
+						<div class="typing-demo">
+							@result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		default:
@@ -148,13 +178,12 @@
 
 				int size = 0;
 
-				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
+				byte* resultPtr = PolyRingMethods.polyAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
 
-				byte[] byteArray = new byte[size];
-				Marshal.Copy((IntPtr)resultPtr, byteArray, 0, byteArray.Length);
 
-				result = Encoding.UTF8.GetString(byteArray);
-				Console.WriteLine("res " + result);
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
 			}
 		}
 		catch (Exception ex)
@@ -165,67 +194,266 @@
 
 	private unsafe void Subtract()
 	{
-		//try
-		//{
-		//	int size1, size2;
-		//	var aBytes = PolyRingMethods.polyParse(firstInputBox, out size1);
-		//	var bBytes = PolyRingMethods.polyParse(secondInputBox, out size2);
-		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-		//	int size = 0;
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
 
-		//	fixed (byte* modPtr = modBytes)
-		//	fixed (byte* errStrPtr = errorStrBytes)
-		//	{
-		//		byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+				int size = 0;
 
-		//		result = PolyRingMethods.polyParse(resultPtr);
-		//	}
-		//}
-		//catch (Exception ex)
-		//{
-		//	Console.WriteLine(ex.Message);
-		//}
+				byte* resultPtr = PolyRingMethods.polySubstruction(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
+
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 
 	private unsafe void Multiply()
 	{
-		//try
-		//{
-		//	int size1, size2;
-		//	var aBytes = PolyRingMethods.polyParse(firstInputBox, out size1);
-		//	Console.WriteLine(PolyRingMethods.polyParse(aBytes));
-		//	var bBytes = PolyRingMethods.polyParse(secondInputBox, out size2);
-		//	Console.WriteLine(PolyRingMethods.polyParse(bBytes));
-		//	Console.WriteLine();
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
 
-		//	int size = 0;
+				int size = 0;
 
-		//	fixed (byte* modPtr = modBytes)
-		//	fixed (byte* errStrPtr = errorStrBytes)
-		//	{
-		//		byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+				byte* resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
 
-		//		result = PolyRingMethods.polyParse(resultPtr);
-		//	}
-		//}
-		//catch (Exception ex)
-		//{
-		//	Console.WriteLine(ex.Message);
-		//}
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 
-	private void Division()
+	private unsafe void Division()
 	{
-		//PolyRingMethods.addition();
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
+
+				int size = 0;
+
+				byte* resultPtr = PolyRingMethods.polyDivision(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
+
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 
-	private void Rest()
+	private unsafe void Rest()
 	{
-		//PolyRingMethods.addition();
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
+
+				int size = 0;
+
+				byte* resultPtr = PolyRingMethods.polyRest(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
+
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void GCD()
+	{
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
+
+				int size = 0;
+
+				byte* resultPtr = PolyRingMethods.polyGCD(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
+
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Derivative()
+	{
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
+
+				int size = 0;
+
+				byte* resultPtr = PolyRingMethods.polyDerivative(ref size, size1, parsedPoly1, modPtr, errStrPtr);
+
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Evaluate()
+	{
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
+
+				int size = 0;
+
+				byte* resultPtr = PolyRingMethods.polyEvaluate(ref size, size1, parsedPoly1, modPtr, errStrPtr);
+
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void GetCyclotomic()
+	{
+		try
+		{
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			{
+				int size = 0;
+
+				byte* resultPtr = PolyRingMethods.getCyclotomic(ref size, str1Ptr, modPtr, errStrPtr);
+
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 }
