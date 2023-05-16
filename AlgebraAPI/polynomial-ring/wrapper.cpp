@@ -99,8 +99,8 @@ polyParse(size_t &polySize, char *polyString) {
 }
 
 extern "C" char *
-polyAddition(size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2, char *numModStr,
-             char *errorStr) {
+polyAddition(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2,
+             char *numModStr, char *errorStr) {
     try {
         mpz_class numMod;
         numMod.set_str(numModStr, 10);
@@ -115,6 +115,7 @@ polyAddition(size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
+        retSize = resString.size() + 1;
         return resStr;
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -139,6 +140,7 @@ polySubstruction(size_t &retSize, size_t polySize1, char **polyStr1, size_t poly
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
+        retSize = resString.size() + 1;
         return resStr;
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -163,6 +165,7 @@ polyMultiplication(size_t &retSize, size_t polySize1, char **polyStr1, size_t po
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
+        retSize = resString.size() + 1;
         return resStr;
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -186,6 +189,7 @@ polyDivision(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
+        retSize = resString.size() + 1;
         return resStr;
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -209,6 +213,7 @@ polyRest(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, c
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
+        retSize = resString.size() + 1;
         return resStr;
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -232,6 +237,7 @@ polyGCD(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, ch
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
+        retSize = resString.size() + 1;
         return resStr;
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -240,7 +246,8 @@ polyGCD(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, ch
 }
 
 extern "C" char *
-polyDerivative(size_t polySize1, char **polyStr1, char *numModStr, char *errorStr) {
+polyDerivative(size_t &retSize, size_t polySize1, char **polyStr1, char *numModStr,
+               char *errorStr) {
     try {
         mpz_class numMod;
         numMod.set_str(numModStr, 10);
@@ -250,7 +257,7 @@ polyDerivative(size_t polySize1, char **polyStr1, char *numModStr, char *errorSt
         Polynomial<mpz_class> polyRes = poly1.der();
 
         std::string resString = polyRes.toString();
-
+        retSize = resString.size() + 1;
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
@@ -262,8 +269,8 @@ polyDerivative(size_t polySize1, char **polyStr1, char *numModStr, char *errorSt
 }
 
 extern "C" char *
-polyEvaluate(size_t polySize1, char **polyStr1, char *numModStr, char *evalPointStr,
-             char *errorStr) {
+polyEvaluate(size_t &retSize, size_t polySize1, char **polyStr1, char *numModStr,
+             char *evalPointStr, char *errorStr) {
     try {
         mpz_class numMod, evalPoint;
 
@@ -285,7 +292,7 @@ polyEvaluate(size_t polySize1, char **polyStr1, char *numModStr, char *evalPoint
 }
 
 extern "C" char *
-getCyclotomic(char *orderStr, char *numModStr, char *errorStr) {
+getCyclotomic(size_t &retSize, char *orderStr, char *numModStr, char *errorStr) {
     try {
         mpz_class numMod;
         numMod.set_str(numModStr, 10);
@@ -295,7 +302,7 @@ getCyclotomic(char *orderStr, char *numModStr, char *errorStr) {
         polyOrdered.fromCyclotomic(order, numMod);
 
         std::string resString = polyOrdered.toString();
-
+        retSize = resString.size() + 1;
         char *resStr = new char[resString.size() + 1];
         strcpy(resStr, resString.c_str());
 
