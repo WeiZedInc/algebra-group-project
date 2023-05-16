@@ -45,6 +45,25 @@ class PolynomialField {
             throw std::invalid_argument("Mod should be prime");
     }
 
+    PolynomialField(T mod, Polynomial<T> polyMod, std::vector<std::pair<T, size_t>> polyV) {
+        if (isPrimeSimpleFunction(mod)) {
+            this->numMod = mod;
+            this->MOD = polyMod;
+            this->value = Polynomial<T>(polyV);
+        } else
+            throw std::invalid_argument("Mod should be prime");
+    }
+
+    PolynomialField(T mod, std::vector<std::pair<T, size_t>> modV,
+                    std::vector<std::pair<T, size_t>> polyV) {
+        if (isPrimeSimpleFunction(mod)) {
+            this->numMod = mod;
+            this->MOD = Polynomial<T>(modV, mod);
+            this->value = Polynomial<T>(polyV, mod);
+        } else
+            throw std::invalid_argument("Mod should be prime");
+    }
+
     PolynomialField() = default;
 
     PolynomialField<T> operator+(const PolynomialField<T> &) const;

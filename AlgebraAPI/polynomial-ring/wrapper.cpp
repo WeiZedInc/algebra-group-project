@@ -158,8 +158,6 @@ polyRest(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, c
         return nullptr;
     }
 }
-
-/*
 extern "C" char **
 polyGCD(size_t &retSize, size_t polySize1, char **polyStr1, size_t polySize2, char **polyStr2,
         char *numModStr, char *errorStr) {
@@ -204,7 +202,7 @@ polyDerivative(size_t &retSize, size_t polySize1, char **polyStr1, char *numModS
         return nullptr;
     }
 }
-
+/*
 extern "C" char *
 polyEvaluate(size_t polySize1, char **polyStr1, char *numModStr, char *evalPointStr,
              char *errorStr) {
