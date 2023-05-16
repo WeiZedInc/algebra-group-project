@@ -134,8 +134,8 @@ Polynomial<T>::addNode(const Node<T> node) {
 template <typename T>
 void
 Polynomial<T>::addNode(const T num, size_t deg) {
-    if (static_cast<T>(num % numMod) > 0) {
-        Node<T> a(modNum<T>(num % numMod, numMod), deg);
+    if (static_cast<T>( ((num+numMod)%numMod) > 0)) {
+        Node<T> a(modNum<T>( ((num+numMod)%numMod) , numMod), deg);
         this->addNode(a);
     }
 }
