@@ -81,8 +81,7 @@ class modNum {
         std::vector<T> factors = levelStrat->factor(this->getValue());
 
         T mod = this->getMod();
-        for (int i = 0; i < factors.size(); i++)
-            res.push_back(modNum<T>(factors[i], mod));
+        for (int i = 0; i < factors.size(); i++) res.push_back(modNum<T>(factors[i], mod));
 
         return res;
     }
@@ -97,6 +96,8 @@ modNum<T1> pow(modNum<T1> value, modNum<T1> base,
 template <typename T1>
 modNum<T1> fpow(modNum<T1> value, T1 degree);   // fast pow
 
+template <typename T>
+modNum<T> modular::fpowMontogomery(modNum<T> value, T power);
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename T1>

@@ -136,7 +136,7 @@ unsafeLogPow(T1 value, T1 power) {
 
 template <typename T>
 modNum<T>
-modular::fpow(modNum<T> value, T power) {
+modular::fpowMontogomery(modNum<T> value, T power) {
     if (value == static_cast<T>(0) && power == 0) {
         throw std::invalid_argument("0 pow 0 is undefined");
     }
@@ -155,5 +155,11 @@ modular::fpow(modNum<T> value, T power) {
         power = power / 2;   // Can also use power >>= 1; to make code even faster
     }
     return REDC(static_cast<T>(result.getValue() * r % MOD), r, MOD);
+}
+
+template <typename T1>
+modNum<T1>
+modular::fpow(modNum<T1> value, T1 degree) {
+    return logPow(value.getValue(), degree, value.getMod());
 }
 #endif
