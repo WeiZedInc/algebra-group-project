@@ -47,15 +47,6 @@ class Polynomial {
     size_t degree = 0;
     T numMod = 0;
 
-    ///////////////////////Irreducable test///////////////////////////////////////////////////////
-    bool PerronTest();
-    bool CohnTest();
-    bool RootTest();
-    bool isPrime(
-        T num);   // crutial part for some test; any ideas for better algorithm are welcomed
-    long long findPower(int i, int deg);
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
     ///////////////////////For polynomial long division//////////////////////////////////////////
     modNum<T> getCoeff(const size_t power);
     Polynomial<T> copy() const;
@@ -64,7 +55,7 @@ class Polynomial {
 
    public:
     Polynomial(T mod) {
-        if (isPrime(mod))
+        if (isPrime(modNum<T>(mod, mod+1), 1000))
             numMod = mod;
         else
             throw std::invalid_argument("Mod should be prime");
@@ -134,13 +125,11 @@ class Polynomial {
 
     static Polynomial<T> getPolynomialByOrder(size_t);
 
-    bool isIrreducable() const;
 };
 
 #include "source/circular-polynomial.tcc"
 #include "source/constructors.tcc"
 #include "source/divAndGcd.tcc"
-#include "source/isIrreducable.tcc"
 #include "source/node.tcc"
 #include "source/poly-basic.tcc"
 #include "source/utils.tcc"
