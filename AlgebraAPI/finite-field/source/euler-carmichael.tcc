@@ -2,7 +2,7 @@
 #include <map>
 #include <vector>
 
-#include "..\mod-math.h"
+#include "../mod-math.h"
 
 using namespace std;
 namespace modular {
@@ -21,7 +21,7 @@ EulerFunction(T n) {
     for (T p = static_cast<T>(2); p * p <= n; p += static_cast<T>(1)) {
         if (n % p == static_cast<T>(0)) {
             while (n % p == static_cast<T>(0)) n /= p;
-            res -=res/p;
+            res -= res / p;
         }
     }
 
@@ -39,40 +39,41 @@ eulerFunction(modNum<T> num) {
 template <typename T>
 T
 gcd(T a, T b) {
-	while(b){
-		T t = a % b;
-		a = b;
-		b = t;
-	}
-	return a;
+    while (b) {
+        T t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
 }
 
 template <typename T>
 T
-CarmichaelFunction(T n){
-
+CarmichaelFunction(T n) {
     if (n <= static_cast<T>(0))
         throw logic_error("Euler totient function is not defiend on non Natural values");
 
-	if (n == static_cast<T>(1)) return static_cast<T>(1);
-	std::vector<T> factors;
-	for(T i = static_cast<T>(2); i*i <= n; i += static_cast<T>(2)){
-		T w = static_cast<T>(0);
-		while(n % i == static_cast<T>(0)){
-			w++;
-			n /= i;
-		}
-		if (i == static_cast<T>(2) && w >= static_cast<T>(3))
-			factors.push_back((std::pow(i, w-1) * (i-1))/2);
-		else if(i >= 2 && w > 0)
-			factors.push_back(std::pow(i, w-1) * (i-1));
-		if(i == 2) i--;
-	}
-	if(n != 1) factors.push_back(n-1);
+    if (n == static_cast<T>(1))
+        return static_cast<T>(1);
+    std::vector<T> factors;
+    for (T i = static_cast<T>(2); i * i <= n; i += static_cast<T>(2)) {
+        T w = static_cast<T>(0);
+        while (n % i == static_cast<T>(0)) {
+            w++;
+            n /= i;
+        }
+        if (i == static_cast<T>(2) && w >= static_cast<T>(3))
+            factors.push_back((std::pow(i, w - 1) * (i - 1)) / 2);
+        else if (i >= 2 && w > 0)
+            factors.push_back(std::pow(i, w - 1) * (i - 1));
+        if (i == 2)
+            i--;
+    }
+    if (n != 1)
+        factors.push_back(n - 1);
 
     T res = 1;
-    for(auto i : factors)
-	    res *= i/gcd(res, i);
+    for (auto i : factors) res *= i / gcd(res, i);
     return res;
 }
 
