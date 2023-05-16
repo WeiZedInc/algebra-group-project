@@ -39,7 +39,7 @@ Polynomial<T>::der() const {
     Polynomial<T> returned_field;
     Node<T> current_newnode;
     T new_koef;
-    T new_pow;
+    size_t new_pow;
 
     for (auto it = poly.begin(); it != poly.end(); ++it) {
         new_koef = it->k().getValue() * it->deg();
@@ -48,7 +48,7 @@ Polynomial<T>::der() const {
             new_koef = 0;
             new_pow = 0;
         }
-        current_newnode = Node<T>(new_koef, new_pow);
+        current_newnode = Node<T>(modNum<T>(new_koef, this->numMod), new_pow);
         returned_field.addNode(current_newnode);
     }
 
@@ -165,12 +165,12 @@ Polynomial<T>::operator+(const Polynomial<T> &other) const {
             io++;
         } else if (it->deg() > io->deg()) {
             modNum<T> t = it->k();
-            modNum<T> temp = t + (modNum<T>(0));
+            modNum<T> temp = t;
             result.addNode(temp.getValue(), it->deg());
             it++;
         } else {
             modNum<T> t = io->k();
-            modNum<T> temp = t + (modNum<T>(0));
+            modNum<T> temp = t;
             result.addNode(temp.getValue(), io->deg());
             io++;
         }
