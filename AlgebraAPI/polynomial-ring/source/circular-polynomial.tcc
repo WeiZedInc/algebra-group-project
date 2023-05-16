@@ -17,48 +17,6 @@
 #include "../poly-ring-math.h"
 
 /**
- * Overloaded stream insertion operator for std::vector<T>.
- * Outputs the vector as a polynomial expression.
- *
- * @param os The output stream.
- * @param v The vector to be printed.
- * @return Reference to the output stream.
- */
-// template <typename T>
-// std::ostream &
-// operator<<(std::ostream &os, const std::vector<T> &v) {
-//     std::stringstream ss;
-//     if (!v.empty()) {
-//         for (int n = v.size() - 1; n >= 0; n--) {
-//             if (v.at(n) != 0) {
-//                 if (n > 1) {
-//                     if (v.at(n) == 1) {
-//                         ss << " + ";
-//                     } else {
-//                         ss << " - ";
-//                     }
-//                     ss << "x^" << n;
-//                 } else if (n == 1) {
-//                     if (v.at(n) > 0) {
-//                         ss << " + x";
-//                     } else {
-//                         ss << " - x";
-//                     }
-//                 } else {
-//                     if (v.at(n) > 0) {
-//                         ss << " + 1";
-//                     } else {
-//                         ss << " - 1";
-//                     }
-//                 }
-//             }
-//         }
-//         return os << ss.str();
-//     }
-//     return os;
-// }
-
-/**
  * Subtracts two vectors representing polynomials.
  *
  * @param p The first polynomial vector.
@@ -79,75 +37,6 @@ subtract(const std::vector<T> &p, const std::vector<T> &q) {
     }
     return v;
 }
-
-/**
- * Performs the Fast Fourier Transform (FFT) on a complex vector.
- *
- * @param v The complex vector to be transformed.
- * @param n The size of the vector.
- * @param k The recursion parameter (default = 1).
- * @return The transformed vector.
- */
-
-// std::vector<std::complex<long double>>
-// fft(const std::vector<std::complex<long double>> &v, int n, int k = 1) {
-//     if (abs(n) == abs(k)) {
-//         return {std::accumulate(v.begin(), v.end(), std::complex<long double>())};
-//     }
-//     std::array<std::vector<std::complex<long double>>, 2> u{};
-//     u.at(0).reserve(v.size() + 1);
-//     u.at(1).reserve(v.size() + 1);
-//     for (size_t i = 0; i < v.size(); ++i) {
-//         u.at(i % 2).push_back(v.at(i));
-//     }
-
-//     std::array<std::vector<std::complex<long double>>, 2> w{fft(u.at(0), n, k << 1),
-//                                                             fft(u.at(1), n, k << 1)};
-//     std::vector<std::complex<long double>> a;
-//     a.resize(abs(n / k));
-//     std::complex<long double> m;
-//     for (size_t i = 0, j = a.size() >> 1; i < j; ++i) {
-//         m = std::exp(std::complex<long double>(2 * M_PI * k * i / n) *
-//                      std::complex<long double>(0, 1));
-
-//         a.at(i) = a.at(i + j) = m * w.at(1).at(i);
-//         a.at(i) = w.at(0).at(i) + a.at(i);
-//         a.at(i + j) = w.at(0).at(i) - a.at(i + j);
-//     }
-//     return a;
-// }
-
-// /**
-//  * Multiplies two vectors representing polynomials using FFT (Fast Fourier Transform).
-//  *
-//  * @param p The first polynomial vector.
-//  * @param q The second polynomial vector.
-//  * @return The result of multiplying p by q.
-//  */
-// template <typename T>
-// std::vector<T>
-// multiply(const std::vector<T> &p, const std::vector<T> &q) {
-//     size_t n = 1 << static_cast<size_t>(log2(p.size() + q.size() - 2) + 1);
-
-//     std::vector<std::complex<long double>> a =
-//         fft(std::vector<std::complex<long double>>(p.begin(), p.end()), n);
-//     std::vector<std::complex<long double>> b =
-//         fft(std::vector<std::complex<long double>>(q.begin(), q.end()), n);
-//     std::vector<std::complex<long double>> c;
-//     std::vector<T> d;
-//     c.reserve(n);
-
-//     /* for (size_t i = 0; i < n; ++i) { c.push_back(a.at(i) * b.at(i)); } */
-//     std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(c),
-//                    std::multiplies<std::complex<long double>>());
-//     for (const std::complex<long double> &m : fft(c, n, -1)) {
-//         d.push_back(static_cast<T>(round((m / std::complex<long double>(n)).real())));
-//     }
-//     while (!d.empty() && d.back() == 0) {
-//         d.pop_back();
-//     }
-//     return d;
-// }
 
 /**
  * Multiplies two vectors representing polynomials using the FOIL method.
@@ -201,23 +90,6 @@ divide(std::vector<T> p, std::vector<T> q) {
         terms.pop_back();
     }
     return terms;
-}
-
-template <typename T1, typename T2>
-T1
-GCD(T1 a, T2 b) {
-    return GCD(a, static_cast<T1>(b));
-}
-
-template <typename T1>
-T1
-GCD(T1 a, T1 b) {
-    if (a < b)
-        return GCD(b, a);
-    if (b == static_cast<T1>(0))
-        return static_cast<T1>(a);
-
-    return GCD(b, static_cast<T1>(a % b));
 }
 
 /**
