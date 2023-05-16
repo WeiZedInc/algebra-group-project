@@ -17,13 +17,15 @@ PolynomialField<T>::addNode(const T num, size_t deg) {
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator+(const PolynomialField<T> &other) const {
-    PolynomialField<T> res(numMod, MOD, (this->value + other->value) % MOD);
+    PolynomialField<T> res(numMod, MOD, (this->value + other.value) % MOD);
+    return res;
 }
 
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator-(const PolynomialField<T> &other) const {
-    PolynomialField<T> res(numMod, MOD, (this->value - other->value) % MOD);
+    PolynomialField<T> res(numMod, MOD, (this->value - other.value) % MOD);
+    return res;
 }
 
 template <typename T>

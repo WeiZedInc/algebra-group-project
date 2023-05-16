@@ -75,6 +75,7 @@ class PolynomialField {
     PolynomialField<T> pow(T k);
 
     void addNode(const T num, size_t deg);
+    Polynomial<T> getValue() { return this->value; }
 
     static std::vector<PolynomialField<T>> findKIrreducible(size_t k);
 
@@ -87,6 +88,8 @@ class PolynomialField {
     size_t getOrder();
 
     bool isGenerator();
+
+    void print() { value.print(); }
 };
 
 #include "source//poly-field-basic.tcc"
