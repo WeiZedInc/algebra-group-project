@@ -352,12 +352,12 @@
 				string[] resultArray = resultList.ToArray();
 				Dictionary<string, int> resultDct = new Dictionary<string, int>();
 
-				foreach (string number in resultArray)
+				for (int i = 0; i < size; ++i)
 				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
+					if (resultDct.ContainsKey(resultArray[i]))
+						resultDct[resultArray[i]]++;
 					else
-						resultDct[number] = 1;
+						resultDct[resultArray[i]] = 1;
 				}
 
 				string res = "";
