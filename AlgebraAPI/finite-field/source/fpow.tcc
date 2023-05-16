@@ -118,6 +118,22 @@ logPow(T base, T power, T MOD) {
     return result;
 }
 
+template <typename T1>
+T1
+unsafeLogPow(T1 value, T1 power) {
+    T1 res = 1;
+    T1 two = 2;
+    T1 one = 1;
+
+    while (power) {
+        if (power % two == one)
+            res = res * value;
+        value = value * value;
+        power /= two;
+    }
+    return res;
+}
+
 template <typename T>
 modNum<T>
 modular::fpow(modNum<T> value, T power) {
