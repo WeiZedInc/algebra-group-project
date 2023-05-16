@@ -32,6 +32,8 @@ class PolynomialField {
     PolynomialField(T mod, Polynomial<T> polyMod) {
         if (isPrimeSimpleFunction(mod)) {
             this->numMod = mod;
+            Polynomial<T> tmp(mod);
+            this->value = tmp;
             this->MOD = polyMod;
         } else
             throw std::invalid_argument("Mod should be prime");

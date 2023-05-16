@@ -19,18 +19,16 @@ irreducibilityTest(Polynomial<T> p){
         P.addNode(tmp);
     }
 
-    return true;
+    for (T i=1; i<=static_cast<T>(TRINOMIAL_DEGREE); i++){
+        PolynomialField<T> tmp = P.pow(2);
+        P = tmp;
+    }
 
-    // for (T i=1; i<=static_cast<T>(TRINOMIAL_DEGREE); i++){
-    //     PolynomialField<T> tmp = P*P;
-    //     P = tmp;
-    // }
+    Polynomial<T> res = P.getValue();
+    Node<T> first = res[0];
 
-    // Polynomial<T> res = P.getValue();
-    // Node<T> first = res[0];
-
-    // if (res.size() == 1 && first.deg() == 1 && first.k().getValue() == 1)
-    //     return true;
-    // else
-    //     return false;
+    if (res.size() == 1 && first.deg() == 1 && first.k().getValue() == 1)
+        return true;
+    else
+        return false;
 }

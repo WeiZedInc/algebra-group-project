@@ -68,14 +68,14 @@ template <typename T>
 void 
 PolynomialField<T>::addNode(Node<T> toAdd){
     value.addNode(toAdd);
-  //  correct();
+    correct();
 }
 
-// template <typename T>
-// void
-// PolynomialField<T>::correct(){
-//     value = value%MOD;
-// }
+template <typename T>
+void
+PolynomialField<T>::correct(){
+    value = value%MOD;
+}
 
 template <typename T>
 PolynomialField<T>

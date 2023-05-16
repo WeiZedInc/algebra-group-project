@@ -14,6 +14,5 @@ TEST_CASE("IRREDUCIBILITY_TEST"){
     Node<long long> three (modNum<long long>(10,898181), 0);
 
     poly.addNode(one); poly.addNode(two); poly.addNode(three);
-    irreducibilityTest<long long>(poly);
-    CHECK_EQ(1,1);
+    CHECK_EQ(irreducibilityTest<long long>(poly), false);
 }
