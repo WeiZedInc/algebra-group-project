@@ -1,4 +1,46 @@
-﻿.wrapper {
+﻿html {
+	font-size: 125%;
+	line-height: 1.4;
+}
+
+
+h2 {
+	font-size: 2em;
+}
+
+h2, p {
+	margin: 0;
+}
+
+	p + * {
+		margin-top: 1em;
+	}
+
+	h2 + p {
+		margin-top: 1em;
+	}
+
+
+.input {
+	display: flex;
+	align-items: center;
+}
+
+
+input {
+	width: 100%;
+	font: inherit;
+	padding: 0.25em 0.5em;
+	border: 0.125em solid hsl(30, 76%, 10%);
+	outline: none;
+}
+
+
+
+
+
+
+.wrapper {
 	/*This part is important for centering*/
 	display: grid;
 	place-items: center;
