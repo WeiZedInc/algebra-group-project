@@ -9,26 +9,37 @@ using namespace modular;
 
 template <typename T>
 PolynomialField<T>
-PolynomialField<T>::operator+(const PolynomialField<T> &other) const {
+PolynomialField<T>::operator+(const PolynomialField<T> &other) const
+{
+    // Polynomial<T> p1 = this->value + other.value;
+    // p1.print();
+    // Polynomial<T> p2 = p1 % MOD;
+    // MOD.print();
+    // PolynomialField<T> res(numMod, MOD, p2);
+    // return res;
+
     PolynomialField<T> res(numMod, MOD, (this->value + other.value) % MOD);
     return res;
 }
 
 template <typename T>
 PolynomialField<T>
-PolynomialField<T>::operator-(const PolynomialField<T> &other) const {
+PolynomialField<T>::operator-(const PolynomialField<T> &other) const
+{
     PolynomialField<T> res(numMod, MOD, (this->value - other.value) % MOD);
     return res;
 }
 
 template <typename T>
 PolynomialField<T>
-PolynomialField<T>::operator*(T num) const {
+PolynomialField<T>::operator*(T num) const
+{
     auto it = this->poly.begin();
 
     modNum<T> num1(num, this->numMod);
 
-    while (it != this->poly.end()) {
+    while (it != this->poly.end())
+    {
         it->k = it->k().getValue() * num1;
         it++;
     }
@@ -37,15 +48,17 @@ PolynomialField<T>::operator*(T num) const {
 
 template <typename T>
 PolynomialField<T>
-PolynomialField<T>::operator*(const PolynomialField<T> &other) const {
+PolynomialField<T>::operator*(const PolynomialField<T> &other) const
+{
     PolynomialField<T> res(numMod, MOD, (this->value * other.value) % MOD);
     return res;
 }
 
 template <typename T>
-bool
-PolynomialField<T>::operator==(const PolynomialField<T> &other) const {
-    if (!(this->MOD == other.MOD)) {
+bool PolynomialField<T>::operator==(const PolynomialField<T> &other) const
+{
+    if (!(this->MOD == other.MOD))
+    {
         return false;
     }
     return this->value == other.value;
@@ -66,11 +79,13 @@ PolynomialField<T>::addNode(Node<T> toAdd){
 
 template <typename T>
 PolynomialField<T>
-PolynomialField<T>::pow(T power) {
+PolynomialField<T>::pow(T power)
+{
     PolynomialField<T> valcp(this->numMod, this->MOD, this->value);
 
     PolynomialField<T> res(this->numMod, this->MOD, {{1, 0}});
-    while (power) {
+    while (power)
+    {
         if (power % 2 == 1)
             res = res * valcp;
 

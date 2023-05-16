@@ -119,7 +119,7 @@
 						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter order">
 					</div>
 				</div>
-				<button class="custom-btn btn-15" @onclick="GetCyclotomic">GetCyclotomic</button>
+				<button class="custom-btn btn-15" @onclick="GetCyclotomic">Calculate</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
@@ -162,8 +162,8 @@
 	void NormalizeInputString()
 	{
 		coefModule = Regex.Replace(coefModule, "[^0-9]", "");
-		firstInputBox = Regex.Replace(firstInputBox, "[^0-9xy+\\-*/^]", "");
-		secondInputBox = Regex.Replace(secondInputBox, "[^0-9xy+\\-*/^]", "");
+		firstInputBox = Regex.Replace(firstInputBox, "[^0-9x+\\-*^]", "");
+		secondInputBox = Regex.Replace(secondInputBox, "[^0-9x+\\-*^]", "");
 	}
 
 	private unsafe void Add()
