@@ -122,28 +122,36 @@
 
 	private unsafe void Add()
 	{
-		//try
-		//{
-		//	int size1, size2;
-		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
-		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+		try
+		{
+			int size1 = 0, size2 = 0;
+			byte[] str1 = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] str2 = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
-		//	int size = 0;
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			fixed (byte* str1Ptr = str1)
+			fixed (byte* str2Ptr = str2)
+			{
+				var parsedPoly1 = PolyRingMethods.polyParse(ref size1, str1Ptr);
+				var parsedPoly2 = PolyRingMethods.polyParse(ref size2, str2Ptr);
 
-		//	fixed (byte* modPtr = modBytes)
-		//	fixed (byte* errStrPtr = errorStrBytes)
-		//	{
-		//		byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+				int size = 0;
 
-		//		result = PolinomialParser.ParsePolynomial(resultPtr);
-		//	}
-		//}
-		//catch (Exception ex)
-		//{
-		//	Console.WriteLine(ex.Message);
-		//}
+				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
+
+				byte[] byteArray = new byte[size*2];
+				Marshal.Copy(new IntPtr(resultPtr), byteArray, 0, byteArray.Length);
+
+				result = Encoding.UTF8.GetString(byteArray);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
 	}
 
 	private unsafe void Subtract()
@@ -151,8 +159,8 @@
 		//try
 		//{
 		//	int size1, size2;
-		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+		//	var aBytes = PolyRingMethods.polyParse(firstInputBox, out size1);
+		//	var bBytes = PolyRingMethods.polyParse(secondInputBox, out size2);
 		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
 		//	byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
 
@@ -163,7 +171,7 @@
 		//	{
 		//		byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-		//		result = PolinomialParser.ParsePolynomial(resultPtr);
+		//		result = PolyRingMethods.polyParse(resultPtr);
 		//	}
 		//}
 		//catch (Exception ex)
@@ -177,10 +185,10 @@
 		//try
 		//{
 		//	int size1, size2;
-		//	var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
-		//	Console.WriteLine(PolinomialParser.ParsePolynomial(aBytes));
-		//	var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
-		//	Console.WriteLine(PolinomialParser.ParsePolynomial(bBytes));
+		//	var aBytes = PolyRingMethods.polyParse(firstInputBox, out size1);
+		//	Console.WriteLine(PolyRingMethods.polyParse(aBytes));
+		//	var bBytes = PolyRingMethods.polyParse(secondInputBox, out size2);
+		//	Console.WriteLine(PolyRingMethods.polyParse(bBytes));
 		//	Console.WriteLine();
 
 		//	byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
@@ -193,7 +201,7 @@
 		//	{
 		//		byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-		//		result = PolinomialParser.ParsePolynomial(resultPtr);
+		//		result = PolyRingMethods.polyParse(resultPtr);
 		//	}
 		//}
 		//catch (Exception ex)
@@ -204,11 +212,11 @@
 
 	private void Division()
 	{
-		//MethodWrapper.addition();
+		//PolyRingMethods.addition();
 	}
 
 	private void Rest()
 	{
-		//MethodWrapper.addition();
+		//PolyRingMethods.addition();
 	}
 }

@@ -67,5 +67,8 @@ namespace AlgebraWASM.Client
 
 		[DllImport("poly-ring-wrapper")]
 		public static unsafe extern byte** polyRest(ref int returnSize, int polySize1, byte** polyStr1, int polySize2, byte** polyStr2, byte* numModStr, byte* errorStr);
+
+		[DllImport("poly-ring-wrapper")]
+		public static unsafe extern byte** polyParse(ref int returnSize, byte* inputPolyString);
 	}
 }
