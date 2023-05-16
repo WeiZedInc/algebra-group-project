@@ -1,7 +1,8 @@
 #ifndef ALGEBRA_INVERSION_AND_DIVISION
 #define ALGEBRA_INVERSION_AND_DIVISION
 #include <iostream>
-#include"../mod-math.h"
+
+#include "../mod-math.h"
 
 using namespace std;
 using namespace modular;
@@ -93,10 +94,9 @@ fpowdiif(modNum<T1> value, T1 power) {
     return modNum<T1>((r * t) % n, value.getMod());
 }
 
-
 template <typename T>
 modNum<T>
-REDC (T num, T r, T MOD) {
+REDC(T num, T r, T MOD) {
     T n = modNum(MOD, r).inv().getValue();
     T m = ((num % r) * n) % r;
     T res = (num - m * MOD) / r;
@@ -128,8 +128,8 @@ modular::fpow(modNum<T> value, T power) {
     T r = 4096;
     while (r <= MOD) r = 2 * r;
 
-    value = REDC(value.getValue() * ((r * r) % MOD), r, MOD);
-    modNum<T> result = modNum(1, MOD);
+    value = REDC(static_cast<T>(value.getValue() * ((r * r) % MOD)), r, MOD);
+    modNum<T> result = modNum<T>(1, MOD);
 
     while (power > 0) {
         if (power % 2 == 1) {   // Can also use (power & 1) to make code even faster
@@ -138,6 +138,6 @@ modular::fpow(modNum<T> value, T power) {
         value = value * value;
         power = power / 2;   // Can also use power >>= 1; to make code even faster
     }
-    return REDC(result.getValue() * r % MOD, r, MOD);
+    return REDC(static_cast<T>(result.getValue() * r % MOD), r, MOD);
 }
 #endif
