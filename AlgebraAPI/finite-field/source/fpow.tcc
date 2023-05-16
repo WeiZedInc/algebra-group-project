@@ -1,3 +1,5 @@
+namespace modular {
+
 #ifndef ALGEBRA_INVERSION_AND_DIVISION
 #define ALGEBRA_INVERSION_AND_DIVISION
 #include <iostream>
@@ -5,7 +7,6 @@
 #include "../mod-math.h"
 
 using namespace std;
-namespace modular {
 
 /**
 @file fpow.tcc
@@ -163,5 +164,6 @@ modNum<T1>
 fpow(modNum<T1> value, T1 degree) {
     return logPow(value.getValue(), degree, value.getMod());
 }
+
 #endif
 }
