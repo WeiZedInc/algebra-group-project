@@ -281,6 +281,7 @@ polyEvaluate(size_t &retSize, size_t polySize1, char **polyStr1, char *numModStr
         Polynomial<mpz_class> poly1(stringToPolyVector(polyStr1, polySize1, numMod), numMod);
 
         mpz_class ret = poly1.evaluate(evalPoint).getValue();
+        retSize = ret.get_str().size() + 1;
         char *retStr = new char[MESSAGE_LEN];
         strcpy(retStr, ret.get_str().c_str());
 
