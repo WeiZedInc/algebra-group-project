@@ -1,7 +1,6 @@
 #include <cmath>
 #include <map>
 #include <vector>
-
 #include "../mod-math.h"
 
 using namespace std;
@@ -49,6 +48,22 @@ mygcd(T a, T b) {
 
 template <typename T>
 T
+myLogPow(T value, T power) {
+    T res = 1;
+    T two = 2;
+    T one = 1;
+
+    while (power) {
+        if (power % two == one)
+            res = res * value;
+        value = value * value;
+        power /= two;
+    }
+    return res;
+}
+
+template <typename T>
+T
 CarmichaelFunction(T n) {
     if (n <= static_cast<T>(0))
         throw logic_error("Euler totient function is not defiend on non Natural values");
@@ -63,11 +78,11 @@ CarmichaelFunction(T n) {
             n /= i;
         }
         if (i == static_cast<T>(2) && w >= static_cast<T>(3)){
-            T power = fpow<T>(modNum<T>(i, i+1), w-1).getValue();
+            T power = myLogPow<T>(i, w-1);
             factors.push_back((power * (i - 1)) / 2);
         }
         else if (i >= 2 && w > 0){
-            T power = fpow<T>(modNum<T>(i, i+1), w-1).getValue();
+            T power = myLogPow<T>(i, w-1);
             factors.push_back(power * (i - 1));
         }
         if (i == 2)
@@ -79,31 +94,6 @@ CarmichaelFunction(T n) {
     T res = 1;
     for (auto i : factors) res *= i / mygcd(res, i);
     return res;
-}
-
-long long Carmichael(long long n){
-	if (n < 1) return 0;
-	if (n == 1) return 1;
-	std::vector<long long> factors;
-	for(long long i = 2; i*i <= n; i += 2){
-		long long w = 0;
-		while(n % i == 0){
-			w++;
-			n /= i;
-		}
-		if (i == 2 && w >= 3){
-            long long power = std::pow(i, w-1);
-			factors.push_back((power * (i-1))/2);
-        }
-		else if(i >= 2 && w > 0)
-			factors.push_back(std::pow(i, w-1) * (i-1));
-		if(i == 2) i--;
-	}
-	if(n != 1) factors.push_back(n-1);
-    long long res = 1;
-for(auto i : factors)
-	res *= i/mygcd<long long>(res, i);
-return res;
 }
 
 #endif
