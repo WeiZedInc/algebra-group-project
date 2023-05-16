@@ -76,7 +76,7 @@ class Polynomial {
 
     ~Polynomial() = default;
 
-    void fromCyclotomic(T order, T mod);
+    void fromCyclotomic(size_t order, T mod);
 
     Node<T> operator[](const size_t i);   // use only when really necessary
 
