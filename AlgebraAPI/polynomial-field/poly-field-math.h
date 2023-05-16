@@ -96,6 +96,7 @@ class PolynomialField {
 };
 
 #include "source//poly-field-basic.tcc"
-#include "source//cyclotomicToMultipliers.tcc"
+//#include "source//cyclotomicToMultipliers.tcc" -> lots of bugs so have to comment
+#include "source/irredicibilityTest.tcc"
 
 #endif
