@@ -77,6 +77,8 @@ class PolynomialField {
     void addNode(const T num, size_t deg);
     Polynomial<T> getValue() { return this->value; }
 
+    static std::vector<PolynomialField<T>> cyclotomicToMultipliers(T num, T mod);
+
     static std::vector<PolynomialField<T>> findKIrreducible(size_t k);
 
     bool isIrreducible();
@@ -94,5 +96,6 @@ class PolynomialField {
 };
 
 #include "source//poly-field-basic.tcc"
+#include "source//cyclotomicToMultipliers.tcc"
 
 #endif
