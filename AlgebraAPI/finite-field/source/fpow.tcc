@@ -120,22 +120,6 @@ logPow(T base, T power, T MOD) {
     return result;
 }
 
-template <typename T1>
-T1
-unsafeLogPow(T1 value, T1 power) {
-    T1 res = 1;
-    T1 two = 2;
-    T1 one = 1;
-
-    while (power) {
-        if (power % two == one)
-            res = res * value;
-        value = value * value;
-        power /= two;
-    }
-    return res;
-}
-
 template <typename T>
 modNum<T>
 fpowMontogomery(modNum<T> value, T power) {
@@ -161,9 +145,43 @@ fpowMontogomery(modNum<T> value, T power) {
 
 template <typename T1>
 modNum<T1>
-fpow(modNum<T1> value, T1 degree) {
-    return fpowMontogomery(value, degree);
+classicLogPow(modNum<T1> value, T1 power) {
+    modNum<T1> res = modNum<T1>(1, value.getMod());
+    T1 two = 2;
+    T1 one = 1;
+    while (power) {
+        if (power % two == one)
+            res = res * value;
+        value = value * value;
+        power /= two;
+    }
+    return res;
 }
 
+template <typename T1>
+T1
+unsafeLogPow(T1 value, T1 power) {
+    T1 res = 1;
+    T1 two = 2;
+    T1 one = 1;
+
+    while (power) {
+        if (power % two == one)
+            res = res * value;
+        value = value * value;
+        power /= two;
+    }
+    return res;
+}
+
+template <typename T1>
+modNum<T1>
+modular::fpow(modNum<T1> value, T1 power) {
+    if (value == static_cast<T1>(0) && power == static_cast<T1>(0)) {
+        throw std::invalid_argument("0 pow 0 is undefined");
+    }
+
+    return classicLogPow(value, power);
+}
 #endif
 }
