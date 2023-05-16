@@ -7,10 +7,13 @@
 #include "../../poly-ring-math.h"
 #include "../../../doctest.h"
 
-// int main() {
+// int
+// main() {
 //     Polynomial<mpz_class> p1;
-//     p1.fromCyclotomic(26, 1);
+//     p1.fromCyclotomic(26, 73);
 //     p1.print();
+//     // auto v = getCyclotomicPolynomialRaw(12);
+//     // cout << v;
 //     return 0;
 // }
 

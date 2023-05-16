@@ -201,7 +201,7 @@ Polynomial<T>::fromCyclotomic(size_t N, T mod) {
 
     for (size_t i = 0; i < v.size(); ++i) {
         std::cout << v[i] << ' ' << i << std::endl;
-        this->addNode(v[i], i);
+        this->addNode((v[i] + mod) % mod, i);
     }
 }
 
