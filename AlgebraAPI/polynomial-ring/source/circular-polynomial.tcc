@@ -24,39 +24,39 @@
  * @param v The vector to be printed.
  * @return Reference to the output stream.
  */
-template <typename T>
-std::ostream &
-operator<<(std::ostream &os, const std::vector<T> &v) {
-    std::stringstream ss;
-    if (!v.empty()) {
-        for (int n = v.size() - 1; n >= 0; n--) {
-            if (v.at(n) != 0) {
-                if (n > 1) {
-                    if (v.at(n) == 1) {
-                        ss << " + ";
-                    } else {
-                        ss << " - ";
-                    }
-                    ss << "x^" << n;
-                } else if (n == 1) {
-                    if (v.at(n) > 0) {
-                        ss << " + x";
-                    } else {
-                        ss << " - x";
-                    }
-                } else {
-                    if (v.at(n) > 0) {
-                        ss << " + 1";
-                    } else {
-                        ss << " - 1";
-                    }
-                }
-            }
-        }
-        return os << ss.str();
-    }
-    return os;
-}
+// template <typename T>
+// std::ostream &
+// operator<<(std::ostream &os, const std::vector<T> &v) {
+//     std::stringstream ss;
+//     if (!v.empty()) {
+//         for (int n = v.size() - 1; n >= 0; n--) {
+//             if (v.at(n) != 0) {
+//                 if (n > 1) {
+//                     if (v.at(n) == 1) {
+//                         ss << " + ";
+//                     } else {
+//                         ss << " - ";
+//                     }
+//                     ss << "x^" << n;
+//                 } else if (n == 1) {
+//                     if (v.at(n) > 0) {
+//                         ss << " + x";
+//                     } else {
+//                         ss << " - x";
+//                     }
+//                 } else {
+//                     if (v.at(n) > 0) {
+//                         ss << " + 1";
+//                     } else {
+//                         ss << " - 1";
+//                     }
+//                 }
+//             }
+//         }
+//         return os << ss.str();
+//     }
+//     return os;
+// }
 
 /**
  * Subtracts two vectors representing polynomials.
@@ -89,65 +89,65 @@ subtract(const std::vector<T> &p, const std::vector<T> &q) {
  * @return The transformed vector.
  */
 
-std::vector<std::complex<long double>>
-fft(const std::vector<std::complex<long double>> &v, int n, int k = 1) {
-    if (abs(n) == abs(k)) {
-        return {std::accumulate(v.begin(), v.end(), std::complex<long double>())};
-    }
-    std::array<std::vector<std::complex<long double>>, 2> u{};
-    u.at(0).reserve(v.size() + 1);
-    u.at(1).reserve(v.size() + 1);
-    for (size_t i = 0; i < v.size(); ++i) {
-        u.at(i % 2).push_back(v.at(i));
-    }
+// std::vector<std::complex<long double>>
+// fft(const std::vector<std::complex<long double>> &v, int n, int k = 1) {
+//     if (abs(n) == abs(k)) {
+//         return {std::accumulate(v.begin(), v.end(), std::complex<long double>())};
+//     }
+//     std::array<std::vector<std::complex<long double>>, 2> u{};
+//     u.at(0).reserve(v.size() + 1);
+//     u.at(1).reserve(v.size() + 1);
+//     for (size_t i = 0; i < v.size(); ++i) {
+//         u.at(i % 2).push_back(v.at(i));
+//     }
 
-    std::array<std::vector<std::complex<long double>>, 2> w{fft(u.at(0), n, k << 1),
-                                                            fft(u.at(1), n, k << 1)};
-    std::vector<std::complex<long double>> a;
-    a.resize(abs(n / k));
-    std::complex<long double> m;
-    for (size_t i = 0, j = a.size() >> 1; i < j; ++i) {
-        m = std::exp(std::complex<long double>(2 * M_PI * k * i / n) *
-                     std::complex<long double>(0, 1));
+//     std::array<std::vector<std::complex<long double>>, 2> w{fft(u.at(0), n, k << 1),
+//                                                             fft(u.at(1), n, k << 1)};
+//     std::vector<std::complex<long double>> a;
+//     a.resize(abs(n / k));
+//     std::complex<long double> m;
+//     for (size_t i = 0, j = a.size() >> 1; i < j; ++i) {
+//         m = std::exp(std::complex<long double>(2 * M_PI * k * i / n) *
+//                      std::complex<long double>(0, 1));
 
-        a.at(i) = a.at(i + j) = m * w.at(1).at(i);
-        a.at(i) = w.at(0).at(i) + a.at(i);
-        a.at(i + j) = w.at(0).at(i) - a.at(i + j);
-    }
-    return a;
-}
+//         a.at(i) = a.at(i + j) = m * w.at(1).at(i);
+//         a.at(i) = w.at(0).at(i) + a.at(i);
+//         a.at(i + j) = w.at(0).at(i) - a.at(i + j);
+//     }
+//     return a;
+// }
 
-/**
- * Multiplies two vectors representing polynomials using FFT (Fast Fourier Transform).
- *
- * @param p The first polynomial vector.
- * @param q The second polynomial vector.
- * @return The result of multiplying p by q.
- */
-template <typename T>
-std::vector<T>
-multiply(const std::vector<T> &p, const std::vector<T> &q) {
-    T n = 1 << static_cast<T>(log2(p.size() + q.size() - 2) + 1);
+// /**
+//  * Multiplies two vectors representing polynomials using FFT (Fast Fourier Transform).
+//  *
+//  * @param p The first polynomial vector.
+//  * @param q The second polynomial vector.
+//  * @return The result of multiplying p by q.
+//  */
+// template <typename T>
+// std::vector<T>
+// multiply(const std::vector<T> &p, const std::vector<T> &q) {
+//     size_t n = 1 << static_cast<size_t>(log2(p.size() + q.size() - 2) + 1);
 
-    std::vector<std::complex<long double>> a =
-        fft(std::vector<std::complex<long double>>(p.begin(), p.end()), n);
-    std::vector<std::complex<long double>> b =
-        fft(std::vector<std::complex<long double>>(q.begin(), q.end()), n);
-    std::vector<std::complex<long double>> c;
-    std::vector<T> d;
-    c.reserve(n);
+//     std::vector<std::complex<long double>> a =
+//         fft(std::vector<std::complex<long double>>(p.begin(), p.end()), n);
+//     std::vector<std::complex<long double>> b =
+//         fft(std::vector<std::complex<long double>>(q.begin(), q.end()), n);
+//     std::vector<std::complex<long double>> c;
+//     std::vector<T> d;
+//     c.reserve(n);
 
-    /* for (size_t i = 0; i < n; ++i) { c.push_back(a.at(i) * b.at(i)); } */
-    std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(c),
-                   std::multiplies<std::complex<long double>>());
-    for (const std::complex<long double> &m : fft(c, n, -1)) {
-        d.push_back(static_cast<T>(round((m / std::complex<long double>(n)).real())));
-    }
-    while (!d.empty() && d.back() == 0) {
-        d.pop_back();
-    }
-    return d;
-}
+//     /* for (size_t i = 0; i < n; ++i) { c.push_back(a.at(i) * b.at(i)); } */
+//     std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(c),
+//                    std::multiplies<std::complex<long double>>());
+//     for (const std::complex<long double> &m : fft(c, n, -1)) {
+//         d.push_back(static_cast<T>(round((m / std::complex<long double>(n)).real())));
+//     }
+//     while (!d.empty() && d.back() == 0) {
+//         d.pop_back();
+//     }
+//     return d;
+// }
 
 /**
  * Multiplies two vectors representing polynomials using the FOIL method.
@@ -161,8 +161,8 @@ std::vector<T>
 multiply_foil(const std::vector<T> &p, const std::vector<T> &q) {
     /* this version of multiply uses the foil method */
     std::vector<T> v(p.size() + q.size(), 0);
-    for (T n = 0; n < p.size(); ++n) {
-        for (T m = 0; m < q.size(); ++m) {
+    for (size_t n = 0; n < p.size(); ++n) {
+        for (size_t m = 0; m < q.size(); ++m) {
             v.at(n + m) += p.at(n) * q.at(m);
         }
     }
@@ -189,7 +189,7 @@ divide(std::vector<T> p, std::vector<T> q) {
 
         term.at(term.size() - 1) = terms.at(term.size() - 1) = p.back() / q.back();
 
-        p = subtract(p, (p.size() == q.size() ? multiply(q, term) : multiply_foil(q, term)));
+        p = subtract(p, multiply_foil(q, term)); //(p.size() == q.size() ? multiply(q, term) : multiply_foil(q, term))
         if (p.empty()) {
             break;
         }
@@ -199,13 +199,6 @@ divide(std::vector<T> p, std::vector<T> q) {
     }
     return terms;
 }
-
-/**
- * Computes the cyclotomic polynomial of order N.
- *
- * @param N The order of the cyclotomic polynomial.
- * @return The cyclotomic polynomial as a vector.
- */
 
 template <typename T1, typename T2>
 T1
@@ -224,17 +217,24 @@ GCD(T1 a, T1 b) {
     return GCD(b, static_cast<T1>(a % b));
 }
 
+
+/**
+ * Computes the cyclotomic polynomial of order N.
+ *
+ * @param N The order of the cyclotomic polynomial.
+ * @return The cyclotomic polynomial as a vector.
+ */
 template <typename T>
 vector<T>
-getCyclotomicPolynomialRaw(T N) {
-    static std::unordered_map<T, std::vector<T>> cache;
+getCyclotomicPolynomialRaw(size_t N) {
+    static std::unordered_map<size_t, std::vector<T>> cache;
     if (N == 1) {
         return std::vector<T>({1, -1});
     }
     if (cache.count(N) > 0) {
         return cache.at(N);
     }
-    std::function<bool(T)> prime = [](T p) -> bool {
+    std::function<bool(size_t)> prime = [](size_t p) -> bool {
         if (p <= 1) {
             return false;
         }
@@ -244,8 +244,8 @@ getCyclotomicPolynomialRaw(T N) {
         if (p % 2 == 0) {
             return false;
         }
-        T m = static_cast<T>(sqrt(p)) + 1;
-        for (T i = 3; i <= m; i += 2) {
+        size_t m = static_cast<size_t>(sqrt(p)) + 1;
+        for (size_t i = 3; i <= m; i += 2) {
             if (p % i == 0) {
                 return false;
             }
@@ -253,7 +253,7 @@ getCyclotomicPolynomialRaw(T N) {
         return true;
     };
 
-    std::function<bool(T, T)> power_of = [](T x, T p) -> bool {
+    std::function<bool(size_t, size_t)> power_of = [](size_t x, size_t p) -> bool {
         while (!(x % p) && x > 1) {
             x /= p;
         }
@@ -263,9 +263,9 @@ getCyclotomicPolynomialRaw(T N) {
     if (prime(N)) {
         v.resize(N, 1);
     } else if ((N % 2 == 0) && ((N / 2) % 2 != 0) && prime(N / 2)) {
-        T n = N / 2;
+        size_t n = N / 2;
         v.reserve(n);
-        for (T i = 0; i < n; ++i) {
+        for (size_t i = 0; i < n; ++i) {
             v.push_back((!(i % 2)) ? 1 : -1);
         }
     } else if (N > 1 && power_of(N, 2)) {
@@ -277,7 +277,7 @@ getCyclotomicPolynomialRaw(T N) {
         v.at(0) = 1;
         v.at(v.size() / 2) = -1;
         v.at(v.size() - 1) = 1;
-    } else if (GCD(N, 9) == static_cast<T>(1) && power_of(N, 3)) {
+    } else if ((N %  9 == 0) && power_of(N, 3)) {
         v.resize(static_cast<size_t>(N / 1.5) + 1);
         v.at(0) = 1;
         v.at(v.size() / 2) = 1;
@@ -286,10 +286,10 @@ getCyclotomicPolynomialRaw(T N) {
         std::vector<T> q = {1};
 
         // factors of N
-        for (T i = 1, n = N / 2; i <= n; ++i) {
+        for (size_t i = 1, n = N / 2; i <= n; ++i) {
             if (N % i == 0) {
-                std::vector<T> p = getCyclotomicPolynomialRaw(i);
-                q = multiply(q, std::vector<T>(p.rbegin(), p.rend()));
+                std::vector<T> p = getCyclotomicPolynomialRaw<T>(i);
+                q = multiply_foil(q, std::vector<T>(p.rbegin(), p.rend()));
             }
         }
 
@@ -319,13 +319,13 @@ getCyclotomicPolynomialRaw(T N) {
  */
 template <typename T>
 void
-Polynomial<T>::fromCyclotomic(T N, T mod) {
+Polynomial<T>::fromCyclotomic(size_t N, T mod) {
     vector<T> v;
     this->numMod = mod;
     if (N == 1) {
         v = std::vector<T>({1, -1});
     } else {
-        v = getCyclotomicPolynomialRaw(N);
+        v = getCyclotomicPolynomialRaw<T>(N);
     }
 
     for (size_t i = 0; i < v.size(); ++i) {
