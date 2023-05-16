@@ -19,7 +19,5 @@ Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>> nodes, T mod) {
         poly.insert(poly.end(),
                     Node<T>(modNum<T>(valDegreePair.first, numMod), valDegreePair.second));
     }
-
-    this->print();
 }
 #endif

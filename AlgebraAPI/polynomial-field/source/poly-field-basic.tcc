@@ -10,19 +10,22 @@ using namespace modular;
 template <typename T>
 void
 PolynomialField<T>::addNode(const T num, size_t deg) {
-    Polynomial<T>::addNode(num, deg % polyMod);
+    Polynomial<T>::addNode(num, deg);
+    this->value = this->value % MOD;
 }
 
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator+(const PolynomialField<T> &other) const {
-    PolynomialField<T> res(numMod, MOD, (this->value + other->value) % MOD);
+    PolynomialField<T> res(numMod, MOD, (this->value + other.value) % MOD);
+    return res;
 }
 
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator-(const PolynomialField<T> &other) const {
-    PolynomialField<T> res(numMod, MOD, (this->value - other->value) % MOD);
+    PolynomialField<T> res(numMod, MOD, (this->value - other.value) % MOD);
+    return res;
 }
 
 template <typename T>
@@ -72,9 +75,4 @@ PolynomialField<T>::pow(T power) {
     return res;
 }
 
-int
-main() {
-    PolynomialField<int> a;
-    PolynomialField<int> b;
-}
 #endif

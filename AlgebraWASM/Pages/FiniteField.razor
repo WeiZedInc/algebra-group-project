@@ -61,6 +61,7 @@
 				<p>Enter two numbers:</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Polard"> Polard </button>
+				<button @onclick="NaiveFactor"> NaiveFactor </button>
 				<p>Result: @result</p>
 			</div>
 			break;
@@ -352,12 +353,66 @@
 				string[] resultArray = resultList.ToArray();
 				Dictionary<string, int> resultDct = new Dictionary<string, int>();
 
-				foreach (string number in resultArray)
+				for (int i = 0; i < size; ++i)
 				{
-					if (resultDct.ContainsKey(number))
-						resultDct[number]++;
+					if (resultDct.ContainsKey(resultArray[i]))
+						resultDct[resultArray[i]]++;
 					else
-						resultDct[number] = 1;
+						resultDct[resultArray[i]] = 1;
+				}
+
+				string res = "";
+				foreach (var kvp in resultDct)
+				{
+					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+				}
+				result = res;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void NaiveFactor()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			int size = 0;
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte** resultPtr = FiniteFieldMethods.factorizeSimple(ref size, aPtr, modPtr, errStrPtr);
+
+				List<string> resultList = new List<string>();
+				int offset = 0;
+				while (true)
+				{
+					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+					if (currentPtr == IntPtr.Zero)
+						break;
+
+					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+					resultList.Add(Encoding.ASCII.GetString(currentBytes));
+					offset++;
+				}
+
+				string[] resultArray = resultList.ToArray();
+				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+
+				for (int i = 0; i < size; ++i)
+				{
+					if (resultDct.ContainsKey(resultArray[i]))
+						resultDct[resultArray[i]]++;
+					else
+						resultDct[resultArray[i]] = 1;
 				}
 
 				string res = "";

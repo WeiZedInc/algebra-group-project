@@ -36,6 +36,34 @@ class PolynomialField {
             throw std::invalid_argument("Mod should be prime");
     }
 
+    PolynomialField(T mod, Polynomial<T> polyMod, Polynomial<T> polyValue) {
+        if (isPrimeSimpleFunction(mod)) {
+            this->numMod = mod;
+            this->MOD = polyMod;
+            this->value = polyValue;
+        } else
+            throw std::invalid_argument("Mod should be prime");
+    }
+
+    PolynomialField(T mod, Polynomial<T> polyMod, std::vector<std::pair<T, size_t>> polyV) {
+        if (isPrimeSimpleFunction(mod)) {
+            this->numMod = mod;
+            this->MOD = polyMod;
+            this->value = Polynomial<T>(polyV);
+        } else
+            throw std::invalid_argument("Mod should be prime");
+    }
+
+    PolynomialField(T mod, std::vector<std::pair<T, size_t>> modV,
+                    std::vector<std::pair<T, size_t>> polyV) {
+        if (isPrimeSimpleFunction(mod)) {
+            this->numMod = mod;
+            this->MOD = Polynomial<T>(modV, mod);
+            this->value = Polynomial<T>(polyV, mod);
+        } else
+            throw std::invalid_argument("Mod should be prime");
+    }
+
     PolynomialField() = default;
 
     PolynomialField<T> operator+(const PolynomialField<T> &) const;
@@ -47,6 +75,7 @@ class PolynomialField {
     PolynomialField<T> pow(T k);
 
     void addNode(const T num, size_t deg);
+    Polynomial<T> getValue() { return this->value; }
 
     static std::vector<PolynomialField<T>> cyclotomicToMultipliers(T num, T mod);
 
@@ -61,6 +90,8 @@ class PolynomialField {
     size_t getOrder();
 
     bool isGenerator();
+
+    void print() { value.print(); }
 };
 
 #include "source//poly-field-basic.tcc"

@@ -1,5 +1,8 @@
 ﻿@page "/polinomial-field"
 @using System.ComponentModel.DataAnnotations;
+@using System.Text;
+@using AlgebraWASM.Client;
+@using System.Runtime.InteropServices;
 
 <div style="margin-left: 30%;">
 	<select @onchange="SelectedMethod">
@@ -29,10 +32,7 @@
 				<button @onclick="Add"> Add </button>
 				<button @onclick="Subtract"> Subtract </button>
 				<button @onclick="Multiply"> Multiply </button>
-				@if (isResultVisible)
-				{
 					<p>@result</p>
-				}
 			</div>
 			break;
 		case "16":
@@ -41,10 +41,7 @@
 				<input type="text" @bind-value="@firstInputBox" />
 				<input type="text" @bind-value="@secondInputBox" />
 				<button @onclick="Calculate"> Calculate </button>
-				@if (isResultVisible)
-				{
 					<p>@result</p>
-				}
 			</div>
 			break;
 		case "17":
@@ -52,10 +49,7 @@
 				<p>Enter two numbers:</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Calculate"> Calculate </button>
-				@if (isResultVisible)
-				{
 					<p>@result</p>
-				}
 			</div>
 			break;
 		case "18": @*todo*@
@@ -67,10 +61,7 @@
 				<button @onclick="Subtract"> Subtract </button>
 				<button @onclick="Multiply"> Multiply </button>
 				<button @onclick="Norm"> Norm </button>
-				@if (isResultVisible)
-				{
 					<p>@result</p>
-				}
 			</div>
 			break;
 		case "19":@*todo*@
@@ -78,10 +69,7 @@
 				<p>Enter two numbers:</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Inverse"> Inverse </button>
-				@if (isResultVisible)
-				{
 					<p>@result</p>
-				}
 			</div>
 			break;
 		case "20":@*todo*@
@@ -89,10 +77,7 @@
 				<p>Enter two numbers:</p>
 				<input type="text" @bind-value="@firstInputBox" />
 				<button @onclick="Order"> Order </button>
-				@if (isResultVisible)
-				{
 					<p>@result</p>
-				}
 			</div>
 			break;
 		default:
@@ -101,9 +86,9 @@
 </div>
 
 @code {
-	public bool isResultVisible { get; set; } = false;
 	public string selected { get; set; } = "";
 	public string result { get; set; } = "";
+	public string errStr { get; set; } = "";
 	[Required] public static string coefModule { get; set; } = "";
 	[Required] public static string powModule { get; set; } = "";
 	[Required] public string firstInputBox { get; set; } = "";
@@ -111,23 +96,185 @@
 
 	private void SelectedMethod(ChangeEventArgs e)
 	{
+		result = "";
+		errStr = "";
 		if (!string.IsNullOrWhiteSpace((string)e.Value))
 		{
 			selected = (string)e.Value;
 		}
 	}
 
-	private void Add()
+	private unsafe void Add()
+	{
+		try
+		{
+			int size1, size2;
+			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			int size = 0;
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+
+				List<string> resultList = new List<string>();
+				int offset = 0;
+				while (true)
+				{
+					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+					if (currentPtr == IntPtr.Zero)
+						break;
+
+					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+					resultList.Add(Encoding.ASCII.GetString(currentBytes));
+					offset++;
+				}
+
+				string[] resultArray = resultList.ToArray();
+				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+
+				foreach (string number in resultArray)
+				{
+					if (resultDct.ContainsKey(number))
+						resultDct[number]++;
+					else
+						resultDct[number] = 1;
+				}
+
+				string res = "";
+				foreach (var kvp in resultDct)
+				{
+					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+				}
+				result = res;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Subtract()
+	{
+		try
+		{
+			int size1, size2;
+			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			int size = 0;
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+
+				List<string> resultList = new List<string>();
+				int offset = 0;
+				while (true)
+				{
+					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+					if (currentPtr == IntPtr.Zero)
+						break;
+
+					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+					resultList.Add(Encoding.ASCII.GetString(currentBytes));
+					offset++;
+				}
+
+				string[] resultArray = resultList.ToArray();
+				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+
+				foreach (string number in resultArray)
+				{
+					if (resultDct.ContainsKey(number))
+						resultDct[number]++;
+					else
+						resultDct[number] = 1;
+				}
+
+				string res = "";
+				foreach (var kvp in resultDct)
+				{
+					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+				}
+				result = res;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Multiply()
+	{
+		try
+		{
+			int size1, size2;
+			var aBytes = PolinomialParser.ParsePolynomial(firstInputBox, out size1);
+			var bBytes = PolinomialParser.ParsePolynomial(secondInputBox, out size2);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			int size = 0;
+
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
+
+				List<string> resultList = new List<string>();
+				int offset = 0;
+				while (true)
+				{
+					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+					if (currentPtr == IntPtr.Zero)
+						break;
+
+					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+					resultList.Add(Encoding.ASCII.GetString(currentBytes));
+					offset++;
+				}
+
+				string[] resultArray = resultList.ToArray();
+				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+
+				foreach (string number in resultArray)
+				{
+					if (resultDct.ContainsKey(number))
+						resultDct[number]++;
+					else
+						resultDct[number] = 1;
+				}
+
+				string res = "";
+				foreach (var kvp in resultDct)
+				{
+					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+				}
+				result = res;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private void Calculate()
 	{
 		//MethodWrapper.addition();
 	}
 
-	private void Subtract()
-	{
-		//MethodWrapper.addition();
-	}
-
-	private void Multiply()
+	private void Norm()
 	{
 		//MethodWrapper.addition();
 	}
@@ -138,21 +285,6 @@
 	}
 
 	private void Order()
-	{
-		//MethodWrapper.addition();
-	}
-
-	private void Divide()
-	{
-		//MethodWrapper.addition();
-	}
-
-	private void Norm()
-	{
-		//MethodWrapper.addition();
-	}
-
-	private void Calculate()
 	{
 		//MethodWrapper.addition();
 	}
