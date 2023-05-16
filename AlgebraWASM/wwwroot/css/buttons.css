@@ -1,6 +1,6 @@
 ﻿.custom-btn {
-    width: 130px;
-    height: 40px;
+    width: 150px;
+    height: 50px;
     color: #fff;
     border-radius: 5px;
     padding: 10px 25px;
@@ -16,6 +16,7 @@
 .btn-15 {
     background: #4e006e;
     border: none;
+    text-align: center;
     z-index: 1;
 }
 
