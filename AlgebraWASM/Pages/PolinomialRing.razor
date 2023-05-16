@@ -100,7 +100,7 @@
 			{
 				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				result = PolinomialParser.ParsePolynomial(resultPtr, size);
+				result = PolinomialParser.ParsePolynomial(resultPtr);
 			}
 		}
 		catch (Exception ex)
@@ -126,7 +126,7 @@
 			{
 				byte** resultPtr = PolyRingMethods.polySubstruction(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				result = PolinomialParser.ParsePolynomial(resultPtr, size);
+				result = PolinomialParser.ParsePolynomial(resultPtr);
 			}
 		}
 		catch (Exception ex)
@@ -152,7 +152,7 @@
 			{
 				byte** resultPtr = PolyRingMethods.polyMultiplication(ref size, size1, aBytes, size2, bBytes, modPtr, errStrPtr);
 
-				result = PolinomialParser.ParsePolynomial(resultPtr, size);
+				result = PolinomialParser.ParsePolynomial(resultPtr);
 			}
 		}
 		catch (Exception ex)

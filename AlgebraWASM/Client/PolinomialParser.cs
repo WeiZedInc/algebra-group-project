@@ -58,9 +58,13 @@ namespace AlgebraWASM.Client
 			return result;
 		}
 
-		public static unsafe string ParsePolynomial(byte** coefficients, int size)
+		public static unsafe string ParsePolynomial(byte** coefficients)
 		{
 			StringBuilder polynomial = new StringBuilder();
+
+			int size = 0;
+			while (coefficients[size] != null)
+				size++;
 
 			for (int i = size - 1; i >= 0; i--)
 			{
