@@ -26,7 +26,7 @@ Polynomial<T>::divClassic(const Polynomial<T> &other) const
         //     "The degree of the divisor cannot exceed that of the numerator");
 
         Polynomial<T> remainder = this->copy();
-        Polynomial<T> quotient(0);
+        Polynomial<T> quotient(11);
         quotient.addNode(0, 0);
 
         return std::make_pair(quotient, remainder);
