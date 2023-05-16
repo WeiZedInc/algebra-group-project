@@ -19,7 +19,7 @@
 
 
 <div class="wrapper">
-	<div class="alert alert-secondary mt-4" style="width: 50%; font-size: 34px;">
+	<div class="alert alert-secondary mt-4" style="width: 35%; font-size: 34px;">
 		<strong>Кільце многочленів</strong>
 	</div>
 	<select @onchange="SelectedMethod">
@@ -81,6 +81,7 @@
 					</div>
 				</div>
 				<button class="custom-btn btn-15" @onclick="Division">Division</button>
+				<button class="custom-btn btn-15" @onclick="GCD">GCD</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
@@ -148,13 +149,12 @@
 
 				int size = 0;
 
-				byte** resultPtr = PolyRingMethods.polyAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
+				byte* resultPtr = PolyRingMethods.polyAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, modPtr, errStrPtr);
 
-				byte[] byteArray = new byte[size];
-				Marshal.Copy((IntPtr)resultPtr, byteArray, 0, byteArray.Length);
 
-				result = Encoding.UTF8.GetString(byteArray);
-				Console.WriteLine("res " + result);
+				byte[] resultBytes = new byte[size];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
+				result = Encoding.ASCII.GetString(resultBytes);
 			}
 		}
 		catch (Exception ex)
@@ -225,6 +225,11 @@
 	}
 
 	private void Rest()
+	{
+		//PolyRingMethods.addition();
+	}
+
+	private void GCD()
 	{
 		//PolyRingMethods.addition();
 	}
