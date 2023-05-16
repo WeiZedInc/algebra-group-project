@@ -388,9 +388,12 @@ TEST_CASE("Testing division, gcd") {
         p2.addNode(1, 1);
         p2.addNode(2, 0);
 
-        Polynomial<mpz_class> expected = p1 % p2;
+        Polynomial<mpz_class> res = p1 % p2;
 
-        REQUIRE(1 == 1);
+        Polynomial<mpz_class> expected(3);
+        expected.addNode(0,0);
+
+        REQUIRE(res == expected);
     }
 
 }
