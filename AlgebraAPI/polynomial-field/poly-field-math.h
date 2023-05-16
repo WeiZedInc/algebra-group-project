@@ -36,6 +36,15 @@ class PolynomialField {
             throw std::invalid_argument("Mod should be prime");
     }
 
+    PolynomialField(T mod, Polynomial<T> polyMod, Polynomial<T> polyValue) {
+        if (isPrimeSimpleFunction(mod)) {
+            this->numMod = mod;
+            this->MOD = polyMod;
+            this->value = polyValue;
+        } else
+            throw std::invalid_argument("Mod should be prime");
+    }
+
     PolynomialField() = default;
 
     PolynomialField<T> operator+(const PolynomialField<T> &) const;
