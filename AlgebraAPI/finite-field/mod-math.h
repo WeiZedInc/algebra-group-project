@@ -15,7 +15,6 @@ class modNum {
     T add(T value1, T value2, T MOD) const;
     T subs(T value1, T value2, T MOD) const;
     T mult(T value1, T value2, T MOD) const;
-    T gcdExtended(T a, T b, T *x, T *y) const;
     T inverseValue(T value1, T mod) const;
     T div(T value1, T value2, T mod) const;
 
@@ -31,6 +30,7 @@ class modNum {
     T getValue() const;
     T getMod() const { return MOD; };
     void setMod(T MOD);
+    void setValue(T value);
 
     bool operator==(const modNum<T> &other) const {
         return value == other.value && MOD == other.MOD;
@@ -56,19 +56,19 @@ class modNum {
     class Factorization {
        public:
         virtual ~Factorization() = default;
-        virtual std::vector<modNum<T1>> factor(modNum<T1> value) = 0;
+        virtual std::vector<T1> factor(T1 value) = 0;
     };
 
     template <typename T1>
     class Pollard : public Factorization<T1> {
        public:
-        std::vector<modNum<T1>> factor(modNum<T1> value) override;
+        std::vector<T1> factor(T1 value) override;
     };
 
     template <typename T1>
     class Naive : public Factorization<T1> {
        public:
-        std::vector<modNum<T1>> factor(modNum<T1> m) override;
+        std::vector<T1> factor(T1 m) override;
     };
 
    private:
@@ -77,8 +77,17 @@ class modNum {
    public:
     std::vector<modNum<T>> factorize(Factorization<T> *strat) {
         levelStrat = strat;
-        return levelStrat->factor(*this);
+        std::vector<modNum<T>> res;
+        std::vector<T> factors = levelStrat->factor(this->getValue());
+
+        T mod = this->getMod();
+        for (int i = 0; i < factors.size(); i++)
+            res.push_back(modNum<T>(factors[i], mod));
+
+        return res;
     }
+
+    T gcdExtended(T a, T b, T *x, T *y) const;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +110,7 @@ std::vector<modNum<T1>> naiveFactorize(
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename T1>
-modNum<T1> sqrt(modNum<T1> value);   // discrete square root
+std::vector<T1> sqrt(modNum<T1> value);   // discrete square root
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
@@ -122,7 +131,7 @@ template <typename T, typename floating = double>
 modNum<T> eulerFunction(modNum<T> num);   // Euler function
 
 template <typename T1>
-modNum<T1> carmichaelFunction(modNum<T1> value);   // Carmichael function
+T1 carmichaelFunction(T1 value);   // Carmichael function
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T1>
@@ -138,5 +147,6 @@ bool isPrime(modNum<T1> value, size_t k);   // Miller–Rabin primality test
 #include "source/log.tcc"
 #include "source/mod-num.tcc"
 #include "source/orderOfElement.tcc"
+#include "source/sqrt.tcc"
 
 #endif

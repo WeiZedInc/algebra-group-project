@@ -81,28 +81,34 @@ pollardRhO(T1 n) {
  */
 template <typename T1>
 template <typename T2>
-std::vector<modNum<T2>>
-modNum<T1>::Pollard<T2>::factor(modNum<T2> value) {
-    modNum<T2> one(1, value.getMod());
-    if (value < one)
+std::vector<T2>
+modNum<T1>::Pollard<T2>::factor(T2 value) {
+    if (value < 1)
         throw invalid_argument("value is less than 1");
-    else if (value == one)
-        return vector<modNum<T2>>{};
-    else if (isPrimeSimple(value.getValue()))
-        return vector<modNum<T2>>{value};
+    else if (value == 1)
+        return vector<T2>{};
+    else if (isPrime(modNum<T2>(value, value+1), 10))
+        return vector<T2>{value};
 
-    vector<modNum<T2>> factors;
+    vector<T2> factors;
 
-    T2 divisor = pollardRhO(value.getValue());
-    if (isPrimeSimple(divisor))
-        factors.push_back(modNum<T2>(divisor, value.getMod()));
+    T2 divisor = pollardRhO(value);
+    if (isPrime(modNum<T2>(value, value+1), 10))
+        factors.push_back(divisor);
     else {
-        vector<modNum<T2>> tmp = factor(modNum<T2>(divisor, value.getMod()));
+        vector<T2> tmp = factor(divisor);
         factors.insert(factors.end(), tmp.begin(), tmp.end());
     }
 
-    vector<modNum<T2>> tmp = factor(modNum<T2>(value.getValue() / divisor, value.getMod()));
-    factors.insert(factors.end(), tmp.begin(), tmp.end());
+    value = value / divisor;
+
+    if (isPrime(modNum<T2>(value, value+1), 10))
+        factors.push_back(value);
+    else
+    {
+        vector<T2> tmp = factor(value);
+        factors.insert(factors.end(), tmp.begin(), tmp.end());
+    }
 
     return factors;
 }
@@ -114,27 +120,28 @@ modNum<T1>::Pollard<T2>::factor(modNum<T2> value) {
  */
 template <typename T1>
 template <typename T2>
-std::vector<modNum<T2>>
-modNum<T1>::Naive<T2>::factor(modNum<T2> m) {
-    modNum<T2> one(1, m.getMod());
-    if (m < one)
-        throw invalid_argument(to_string(m.getValue()) + " is less than 1");
-    else if (m == one)
-        return vector<modNum<T2>>{};
+std::vector<T2>
+modNum<T1>::Naive<T2>::factor(T2 m) {
+    if (m < 1)
+        throw invalid_argument(" value is less than 1");
+    else if (m == 1)
+        return vector<T2>{};
+    else if (isPrimeSimple(m))
+        return vector<T2>{m};
 
-    vector<modNum<T2>> factors;
+    vector<T2> factors;
 
     T2 p = 2;
-    while (p * p <= m.getValue()) {
-        if (m.getValue() % p == 0) {
-            m = modNum<T2>(m.getValue() / p, m.getMod());
-            factors.push_back(modNum<T2>(p, m.getMod()));
+    while (p * p <= m) {
+        if (m % p == 0) {
+            m = m / p;
+            factors.push_back(p);
         } else {
             p++;
         }
     }
 
-    if (m > one)
+    if (m > 1)
         factors.push_back(m);
 
     return factors;

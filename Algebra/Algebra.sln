@@ -3,12 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgebraAPI", "..\AlgebraAPI\AlgebraAPI.vcxproj", "{BE3061EB-BC96-435A-953E-64989F1F2E56}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgebraWASM", "..\AlgebraWASM\AlgebraWASM.csproj", "{71AE3A90-748C-4661-8CC0-91916218A330}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BE3061EB-BC96-435A-953E-64989F1F2E56} = {BE3061EB-BC96-435A-953E-64989F1F2E56}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,18 +15,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Debug|Any CPU.Build.0 = Debug|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Debug|x64.ActiveCfg = Debug|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Debug|x64.Build.0 = Debug|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Debug|x86.ActiveCfg = Debug|Win32
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Debug|x86.Build.0 = Debug|Win32
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Release|Any CPU.ActiveCfg = Release|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Release|Any CPU.Build.0 = Release|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Release|x64.ActiveCfg = Release|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Release|x64.Build.0 = Release|x64
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Release|x86.ActiveCfg = Release|Win32
-		{BE3061EB-BC96-435A-953E-64989F1F2E56}.Release|x86.Build.0 = Release|Win32
 		{71AE3A90-748C-4661-8CC0-91916218A330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71AE3A90-748C-4661-8CC0-91916218A330}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71AE3A90-748C-4661-8CC0-91916218A330}.Debug|x64.ActiveCfg = Debug|Any CPU

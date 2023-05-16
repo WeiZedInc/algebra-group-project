@@ -1,67 +1,11 @@
-#include <cmath>
-
-#include "../../finite-field/mod-math.h"
-#include "../../polynomial-ring/poly-ring-math.h"
-
-using namespace modular;
-
-#ifndef POLY_FIELD
-#define POLY_FIELD
-
-template <typename T>
-bool
-isPrimeSimpleFunction(T num) {
-    T check = sqrt(num);
-
-    for (int i = 2; i <= check; i++)
-        if (num % i == 0)
-            return false;
-    return true;
-}
-
-template <typename T>
-typename std::vector<T> nodes;
-
-template <typename T>
-class PolynomialField : public Polynomial<T> {
-   protected:
-    size_t polyMod;
-
-   public:
-    PolynomialField(T mod, T polymod) {
-        if (isPrimeSimpleFunction(mod))
-            this->numMod = mod;
-        else
-            throw std::invalid_argument("Mod should be prime");
-        this->polyMod = polymod;
-    }
-    PolynomialField() = default;
-
-    PolynomialField<T> operator+(const PolynomialField<T> &) const;
-    PolynomialField<T> operator-(const PolynomialField<T> &) const;
-    PolynomialField<T> operator*(const PolynomialField<T> &) const;
-    PolynomialField<T> operator*(T num) const;
-    bool operator==(const PolynomialField<T> &) const;
-    PolynomialField<T> pow(size_t k);
-    void addNode(const T num, size_t deg);
-
-    static std::vector<PolynomialField<T>> findKIrreducible(size_t k);
-
-    bool isIrreducible();
-
-    void normalize();
-
-    PolynomialField<T> inv();
-
-    size_t getOrder();
-
-    bool isGenerator();
-};
-
-#endif
-
 #ifndef POLY_FIELD_BASICS_IMPLEMENTATION
 #define POLY_FIELD_BASICS_IMPLEMENTATION
+
+#include <cmath>
+
+#include "../poly-field-math.h"
+
+using namespace modular;
 
 template <typename T>
 void
@@ -72,100 +16,13 @@ PolynomialField<T>::addNode(const T num, size_t deg) {
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator+(const PolynomialField<T> &other) const {
-    if (other.polyMod != this->polyMod) {
-        throw std::invalid_argument("Polynomial degree modulas are different");
-    }
-    PolynomialField<T> result(this->numMod, this->polyMod);
-    result.degree = std::max(this->degree, other.degree);
-
-    auto it = this->poly.begin();
-    auto io = other.poly.begin();
-
-    while (it != this->poly.end() && io != other.poly.end()) {
-        if (it->deg() == io->deg()) {
-            modNum<T> t1 = it->k();
-            modNum<T> t2 = io->k();
-            modNum<T> temp = t1 + t2;
-            if (temp.getValue() != 0)
-                result.addNode(temp.getValue(), it->deg());
-            it++;
-            io++;
-        } else if (it->deg() > io->deg()) {
-            modNum<T> t = it->k();
-            modNum<T> temp = t + (modNum<T>(0));
-            result.addNode(temp.getValue(), it->deg());
-            it++;
-        } else {
-            modNum<T> t = io->k();
-            modNum<T> temp = t + (modNum<T>(0));
-            result.addNode(temp.getValue(), io->deg());
-            io++;
-        }
-    }
-    while (it != this->poly.end()) {
-        modNum<T> t = it->k();
-        modNum<T> temp = t + (modNum<T>(0));
-        result.addNode(temp.getValue(), it->deg());
-        it++;
-    }
-    while (io != other.poly.end()) {
-        modNum<T> t = io->k();
-        modNum<T> temp = t + (modNum<T>(0));
-        result.addNode(temp.getValue(), io->deg());
-        io++;
-    }
-    return result;
+    PolynomialField<T> res(numMod, MOD, (this->value + other->value) % MOD);
 }
 
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator-(const PolynomialField<T> &other) const {
-    if (other.polyMod != this->polyMod) {
-        throw std::invalid_argument("Polynomial degree modulas are different");
-    }
-
-    PolynomialField<T> result(this->numMod, this->polyMod);
-
-    auto it = this->poly.begin();
-    auto io = other.poly.begin();
-
-    while (it != this->poly.end() && io != other.poly.end()) {
-        if (it->deg() == io->deg()) {
-            modNum<T> t1 = it->k();
-            modNum<T> t2 = io->k();
-            modNum<T> temp = t1 - (t2);
-
-            if (temp.getValue() != 0)
-                result.addNode(temp.getValue(), it->deg());
-
-            it++;
-            io++;
-        } else if (it->deg() > io->deg()) {
-            modNum<T> t = it->k();
-            modNum<T> temp = t + (modNum<T>(0));
-            result.addNode(temp.getValue(), it->deg());
-            it++;
-        } else {
-            modNum<T> t = io->k();
-            modNum<T> temp = (modNum<T>(0, this->numMod)) - t;
-            result.addNode(temp.getValue(), io->deg());
-            io++;
-        }
-    }
-    while (it != this->poly.end()) {
-        modNum<T> t = it->k();
-        modNum<T> temp = t + (modNum<T>(0));
-        result.addNode(temp.getValue(), it->deg());
-        it++;
-    }
-    while (io != other.poly.end()) {
-        modNum<T> t = io->k();
-        modNum<T> temp = (modNum<T>(0, this->numMod)) - t;
-        result.addNode(temp.getValue(), io->deg());
-        io++;
-    }
-
-    return result;
+    PolynomialField<T> res(numMod, MOD, (this->value - other->value) % MOD);
 }
 
 template <typename T>
@@ -186,36 +43,7 @@ PolynomialField<T>::operator*(T num) const {
 template <typename T>
 PolynomialField<T>
 PolynomialField<T>::operator*(const PolynomialField<T> &other) const {
-    PolynomialField<T> res(this->numMod, this->polyMod);
-    if (this->getNumMod() != other.getNumMod()) {
-        throw std::invalid_argument("Can't add Polynomials with diferent modulas");
-    }
-
-    std::size_t s = this->poly.size() + other.poly.size() - 1;
-    PolynomialField<T> result(this->numMod, this->polyMod);
-    result.degree = s - 1;
-    auto it = this->poly.begin();
-
-    while (it != this->poly.end()) {
-        auto io = other.poly.begin();
-        while (io != other.poly.end()) {
-            modNum<T> t1 = it->k();
-            modNum<T> t2 = io->k();
-            modNum<T> temp = t1 * t2;
-
-            result.addNode(temp.getValue(), (it->deg() + io->deg() % this->polyMod));
-            io++;
-        }
-        it++;
-    }
-
-    auto temp = result.poly.begin();
-    while (temp != result.poly.end()) {
-        if ((temp->k()).getValue() == 0)
-            temp = result.poly.erase(temp);
-        temp++;
-    }
-    return result;
+    PolynomialField<T> res(numMod, MOD, (this->value * other->value) % MOD);
 }
 
 template <typename T>
@@ -229,20 +57,24 @@ PolynomialField<T>::operator==(const PolynomialField<T> &other) const {
 
 template <typename T>
 PolynomialField<T>
-PolynomialField<T>::pow(size_t k) {
-    if (k == 0) {
-        PolynomialField<T> p(this->numMod, this->polyMod);
-        p.addNode(1, 0);
-        return p;
-    } else if (k % 2 == 0) {
-        PolynomialField<T> res(this->numMod, this->polyMod);
-        res = pow(k / 2);
-        return res * res;
-    } else {
-        PolynomialField<T> res(this->numMod, this->polyMod);
-        res = pow(k - 1);
-        return res * (*this);
+PolynomialField<T>::pow(T power) {
+    PolynomialField<T> valcp = this->value;
+
+    PolynomialField<T> res(this->numMod, this->MOD);
+    while (power) {
+        if (power % 2 == 1)
+            res = res * valcp;
+
+        valcp = valcp * valcp;
+        power /= 2;
     }
+
+    return res;
 }
 
+int
+main() {
+    PolynomialField<int> a;
+    PolynomialField<int> b;
+}
 #endif

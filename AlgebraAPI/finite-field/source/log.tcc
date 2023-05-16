@@ -26,9 +26,8 @@ log(modNum<numT> value, modNum<numT> base) {
     if (!isGenerator(base))
         throw std::invalid_argument("Base of a logarithm must be a group Generator");
 
-    numT m = std::sqrt(base.getMod());
-    if (m * m < base.getMod())
-        m++;
+    numT m = static_cast<numT>(std::sqrt(base.getMod().get_d()));
+    while (m * m < base.getMod()) m++;
 
     std::unordered_map<modNum<numT>, numT, customHash<numT>> table;
 

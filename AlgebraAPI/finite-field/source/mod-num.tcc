@@ -4,7 +4,8 @@
 #include <cassert>
 #include <iostream>
 #include <string>
-#include"../mod-math.h"
+
+#include "../mod-math.h"
 
 using namespace std;
 using namespace modular;
@@ -146,6 +147,12 @@ modNum<T>::setMod(T MOD) {
         throw invalid_argument("modulus should be positive");
     }
     this->MOD = MOD;
+}
+
+template <typename T>
+void
+modNum<T>::setValue(T _value) {
+    this->value = (((_value % MOD) + MOD) % MOD);
 }
 
 template <typename T>

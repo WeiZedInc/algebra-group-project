@@ -8,7 +8,6 @@
 
 #include "mod-math.h"
 #include "source/custom-hash.h"
-#define EXPORT extern "C" __declspec(dllexport)
 
 using namespace modular;
 const size_t MESSAGE_LEN = 200;
@@ -22,8 +21,7 @@ const size_t MESSAGE_LEN = 200;
  *    @return A char pointer to the result of the subtraction in string form
  *    @note memory should be manualy freed by delete[]
  *    */
-
-char *
+extern "C" char *
 addition(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -52,8 +50,7 @@ addition(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of the subtraction in string form
  *    @note memory should be manualy freed by delete[]
  *    */
-
-char *
+extern "C" char *
 subtraction(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -83,8 +80,7 @@ subtraction(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of the multiplication in string form
  *    @note memory should be manualy freed by delete[]
  */
-
-char *
+extern "C" char *
 multiplication(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -115,8 +111,7 @@ multiplication(char *a, char *b, char *mod, char *errorStr) {
  *    @return A char pointer to the result of modular division.
  *    @note memory should be manualy freed by delete[]
  */
-
-char *
+extern "C" char *
 division(char *a, char *b, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -135,8 +130,7 @@ division(char *a, char *b, char *mod, char *errorStr) {
     }
     return resStr;
 }
-
-char *
+extern "C" char *
 fastPow(char *a, char *degree, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -155,8 +149,7 @@ fastPow(char *a, char *degree, char *mod, char *errorStr) {
 
     return resStr;
 }
-
-char *
+extern "C" char *
 inverse(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -187,12 +180,13 @@ inverse(char *num, char *mod, char *errorStr) {
  * the number of factors.
  *    @throw std::length_error if the number of prime factors is greater than 127.
  *    */
-/*
-char **
-factorize(size_t &size, char *num, char *mod, char *errorStr) {
+extern "C" char **
+factorizePolard(size_t &size, char *num, char *mod, char *errorStr) {
     char **resStr = nullptr;
     try {
-        mpz_class numA(num), numMod.set_str(mod, 10);
+        mpz_class numA, numMod;
+        numA.set_str(num, 10);
+        numMod.set_str(mod, 10);
 
         modNum<mpz_class> a1(numA, numMod);
 
@@ -211,7 +205,48 @@ factorize(size_t &size, char *num, char *mod, char *errorStr) {
 
     return resStr;
 }
-*/
+
+/**
+ * @brief Factorizes a given number modulo another number using the naive factorization algorithm.
+ * This function takes two input numbers and factorizes the first number modulo the second number
+ * using the naive factorization algorithm, implemented using the modNum template class and the GMP.
+ * The factorized numbers are returned as a dynamically allocated 2D char array, where each row of
+ * the array represents a factor in string format. The total number of factors is returned in the
+ * input parameter 'size'. In case of any runtime errors, the function throws an exception, and the
+ * error message is stored in the input parameter 'errorStr'.
+ *
+ * @param size A reference to a variable to store the total number of factors obtained.
+ * @param num The number to be factorized in string format.
+ * @param mod The number to take the input number modulo with in string format.
+ * @param errorStr A char pointer to store the error message in case of exception.
+ * @return A dynamically allocated 2D char array storing the factors obtained in string format.
+ * @note The memory for the result array should be manually freed by the user using 'delete[]'.
+ */
+extern "C" char **
+factorizeSimple(size_t &size, char *num, char *mod, char *errorStr) {
+    char **resStr = nullptr;
+    try {
+        mpz_class numA, numMod;
+        numA.set_str(num, 10);
+        numMod.set_str(mod, 10);
+
+        modNum<mpz_class> a1(numA, numMod);
+
+        std::vector<modNum<mpz_class>> res = modular::naiveFactorize(a1);
+
+        resStr = new char *[res.size()];
+        size = res.size();
+
+        for (int i = 0; i < res.size(); ++i) {
+            resStr[i] = new char[MESSAGE_LEN];
+            strcpy(resStr[i], res[i].getValue().get_str().c_str());
+        }
+    } catch (const std::exception &e) {
+        strcpy(errorStr, e.what());
+    }
+
+    return resStr;
+}
 /**
  *
  *    @brief Calculate the discrete square root of a given number modulo a given modulus
@@ -222,7 +257,7 @@ factorize(size_t &size, char *num, char *mod, char *errorStr) {
  *    */
 
 /*
-char *
+char **
 discreteSqrt(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -254,8 +289,7 @@ discreteSqrt(char *num, char *mod, char *errorStr) {
  *    @param mod the modulus used in the computation
  *    @return a string representation of the computed logarithm
  *    */
-
-char *
+extern "C" char *
 discreteLog(char *num, char *base, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -290,8 +324,7 @@ discreteLog(char *num, char *base, char *mod, char *errorStr) {
  *  @param mod modulus
  *  @return string representation of the order of the element
  */
-
-char *
+extern "C" char *
 orderOfElement(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
@@ -321,8 +354,7 @@ orderOfElement(char *num, char *mod, char *errorStr) {
  *    @param mod the modulus
  *    @return true if num is a generator, false otherwise
  *    */
-
-bool
+extern "C" bool
 isGenerator(char *num, char *mod, char *errorStr) {
     try {
         char *resStr = nullptr;
@@ -352,8 +384,8 @@ isGenerator(char *num, char *mod, char *errorStr) {
  * modulo m.
  *    */
 
-char *
-eulerFunctionWrapper(char *num, char *mod, char *errorStr) {
+extern "C" char *
+EulerFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
         mpz_class numA, numMod;
@@ -382,8 +414,8 @@ eulerFunctionWrapper(char *num, char *mod, char *errorStr) {
  *
  */
 
-char *
-carmichaelFunctionWrapper(char *num, char *mod, char *errorStr) {
+extern "C" char *
+CarmichaelFunction(char *num, char *mod, char *errorStr) {
     char *resStr = nullptr;
     try {
         mpz_class numA, numMod;
@@ -392,12 +424,13 @@ carmichaelFunctionWrapper(char *num, char *mod, char *errorStr) {
 
         numMod.set_str(mod, 10);
 
-        modNum<mpz_class> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod);
+        mpz_class res;
 
-        res = modular::carmichaelFunction(a1);
+        res = modular::carmichaelFunction(numA);
 
         resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+        strcpy(resStr, res.get_str().c_str());
 
     } catch (const std::exception &e) {
         strcpy(errorStr, e.what());
@@ -416,7 +449,7 @@ carmichaelFunctionWrapper(char *num, char *mod, char *errorStr) {
  *    @return A boolean value indicating whether the given number is prime (true) or not (false)
  *   */
 
-bool
+extern "C" bool
 isPrime(char *num, char *mod, char *iterations, char *errorStr) {
     try {
         mpz_class numA, numMod, res;
@@ -438,23 +471,6 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
 }
 
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
-int
-main() {
-    char a[] = "1";
-    char b[] = "2";
-    char mod[] = "5";
-    char iter[] = "123123";
-    char err[200];
-
-    char *res2 = discreteLog(a, b, mod, err);
-    std::string s(res2);
-
-    if (res2) {
-        std::cout << s;
-        std::cout << std::endl;
-    } else
-        std::cout << err << std::endl;
-}
 
 /*
 

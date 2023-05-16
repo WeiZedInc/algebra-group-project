@@ -1,4 +1,6 @@
-#pragma once
+#ifndef POLYNOMIAL
+#define POLYNOMIAL
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -37,9 +39,6 @@ class Node {
     modNum<T> evaluate(T) const;
 };
 #endif
-
-#ifndef POLYNOMIAL
-#define POLYNOMIAL
 
 template <typename T>
 class Polynomial {
@@ -99,7 +98,10 @@ class Polynomial {
     };
     T getNumMod() const { return numMod; }
 
+    std::vector<std::pair<T, size_t>> toPolyVector();
+
     void print() const;
+    size_t size() const { return poly.size(); };
 
     //////////////////////////////////////////////////////////////////////////////
 
@@ -116,19 +118,29 @@ class Polynomial {
 
     //////////////////////////////////////////////////////////////////////////////
 
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const modNum<T> &) const;
+    std::pair<Polynomial<T>, Polynomial<T>> divClassic(const Polynomial<T> &) const;
+    std::pair<Polynomial<T>, Polynomial<T>> divClassic(const modNum<T> &) const;
+
+    Polynomial<T> operator/(const Polynomial<T> &) const;
+    Polynomial<T> operator%(const Polynomial<T> &) const;
+
+    Polynomial<T> operator%(const modNum<T> &) const;
+    Polynomial<T> operator/(const modNum<T> &) const;
 
     Polynomial<T> gcd(const Polynomial<T> &) const;
 
     //////////////////////////////////////////////////////////////////////////////
 
-    static Polynomial<T> getCyclotomicPolynomial(T N, T mod);
+    static Polynomial<T> getPolynomialByOrder(size_t);
 
     bool isIrreducable() const;
 };
 
-#endif
-
+#include "source/circular-polynomial.tcc"
+#include "source/constructors.tcc"
+#include "source/divAndGcd.tcc"
+#include "source/isIrreducable.tcc"
 #include "source/node.tcc"
 #include "source/poly-basic.tcc"
+
+#endif

@@ -1,0 +1,563 @@
+﻿@page "/finite-field"
+@using AlgebraWASM.Client;
+@using System.ComponentModel.DataAnnotations;
+@using System.Runtime.InteropServices;
+@using System.Text;
+
+
+
+<div style="margin-left: 30%;">
+	<select @onchange="SelectedMethod">
+		<option value="">--Оберіть метод--</option>
+		<option value="2">2. Додавання, віднімання, множення чисел.</option>
+		<option value="3">3. Знаходження оберненого елемента.</option>
+		<option value="4">4. Швидке піднесення у степінь</option>
+		<option value="5">5. Розклад числа на множники</option>
+		<option value="6">6. Обчислення квадратного кореня</option>
+		<option value="7">7. Обчислення дискретного логарифму</option>
+		<option value="8">8. Знаходження порядку елемента групи</option>
+		<option value="9">9. Знаходження функції Ейлера від заданого числа та функції Кармайкла від заданого числа</option>
+		<option value="10">10. Ймовірнісна перевірка числа на простоту</option>
+	</select>
+	<div style="display: flex; margin-left: 20px; gap: 10px; margin-top: 15px">
+		<label for="@coefModule">Coefficient module: </label>
+		<input name="coef-module" type="input" @bind-value="@coefModule" />
+	</div>
+
+	@switch (selected)
+	{
+		case "2":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="Add"> Add </button>
+				<button @onclick="Subtract"> Subtract </button>
+				<button @onclick="Multiply"> Multiply </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		case "3":
+			<div>
+				<p>Enter numbers (Inversion works on first input field):</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="Inversion"> Inversion </button>
+				<button @onclick="Division"> Division </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		case "4":
+			<div>
+				<p>Enter number and degree:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" /> @*degree*@
+				<button @onclick="FastPow"> Fast Pow </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		case "5":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Polard"> Polard </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		case "6":
+			<div>
+				<p>Someone didn't implemented it yet on api :)'</p>
+@*				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="QuadSqrt"> QuadSqrt </button>
+				<p>Result: @result</p>*@
+			</div>
+			break;
+		case "7":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="isGenerator"> isGenerator </button>
+				<button @onclick="DscLog"> discreteLog </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		case "8":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Order"> Order </button>
+				<button @onclick="isGenerator"> isGenerator </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		case "9":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<button @onclick="Euiler"> Euiler </button>
+				<button @onclick="Carmichael"> Carmichael </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		case "10":
+			<div>
+				<p>Enter two numbers:</p>
+				<input type="text" @bind-value="@firstInputBox" />
+				<input type="text" @bind-value="@secondInputBox" />
+				<button @onclick="isPrime"> isPrime </button>
+				<p>Result: @result</p>
+			</div>
+			break;
+		default:
+			break;
+	}
+</div>
+
+
+
+
+
+@code {
+	public string selected { get; set; } = "";
+	public string result { get; set; } = "";
+	public string errStr { get; set; } = "";
+	[Required] public static string coefModule { get; set; } = "";
+	[Required] public string firstInputBox { get; set; } = "";
+	[Required] public string secondInputBox { get; set; } = "";
+
+	private void SelectedMethod(ChangeEventArgs e)
+	{
+		result = "";
+		errStr = "";
+		if (!string.IsNullOrWhiteSpace((string)e.Value))
+		{
+			selected = (string)e.Value;
+		}
+	}
+
+	private unsafe void Add()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.addition(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Subtract()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.subtraction(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Multiply()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.multiplication(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Inversion()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.inverse(aPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Division()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.division(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void FastPow()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.fastPow(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Polard()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			int size = 0;
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte** resultPtr = FiniteFieldMethods.factorizePolard(ref size, aPtr, modPtr, errStrPtr);
+
+				List<string> resultList = new List<string>();
+				int offset = 0;
+				while (true)
+				{
+					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+					if (currentPtr == IntPtr.Zero)
+						break;
+
+					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+					resultList.Add(Encoding.ASCII.GetString(currentBytes));
+					offset++;
+				}
+
+				string[] resultArray = resultList.ToArray();
+				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+
+				foreach (string number in resultArray)
+				{
+					if (resultDct.ContainsKey(number))
+						resultDct[number]++;
+					else
+						resultDct[number] = 1;
+				}
+
+				string res = "";
+				foreach (var kvp in resultDct)
+				{
+					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+				}
+				result = res;
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	//private unsafe void QuadSqrt()
+	//{
+	//	try
+	//	{
+	//		byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+	//		byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+	//		byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+	//		int size = 0;
+
+	//		fixed (byte* aPtr = aBytes)
+	//		fixed (byte* modPtr = modBytes)
+	//		fixed (byte* errStrPtr = errorStrBytes)
+	//		{
+	//			byte** resultPtr = MethodWrapper.discreteSqrt(aPtr, modPtr, errStrPtr);
+	//		}
+	//	}
+	//	catch (Exception ex)
+	//	{
+	//		Console.WriteLine(ex.Message);
+	//	}
+	//}
+
+	private unsafe void DscLog()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.discreteLog(aPtr, bPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Order()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.orderOfElement(aPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void isGenerator()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				result = FiniteFieldMethods.isGenerator(aPtr, modPtr, errStrPtr).ToString();
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Carmichael()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(secondInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.CarmichaelFunction(aPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void Euiler()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				byte* resultPtr = FiniteFieldMethods.EulerFunction(aPtr, modPtr, errStrPtr);
+
+				int resultLength = 0;
+				while (resultPtr[resultLength] != 0)
+					resultLength++;
+
+				byte[] resultBytes = new byte[resultLength];
+				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, resultLength);
+				result = Encoding.ASCII.GetString(resultBytes);
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+
+	private unsafe void isPrime()
+	{
+		try
+		{
+			byte[] aBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] bBytes = Encoding.ASCII.GetBytes(firstInputBox);
+			byte[] modBytes = Encoding.ASCII.GetBytes(coefModule);
+			byte[] errorStrBytes = Encoding.ASCII.GetBytes(errStr);
+
+			fixed (byte* aPtr = aBytes)
+			fixed (byte* bPtr = bBytes)
+			fixed (byte* modPtr = modBytes)
+			fixed (byte* errStrPtr = errorStrBytes)
+			{
+				result = FiniteFieldMethods.isPrime(aPtr, modPtr, bPtr, errStrPtr).ToString();
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
+}

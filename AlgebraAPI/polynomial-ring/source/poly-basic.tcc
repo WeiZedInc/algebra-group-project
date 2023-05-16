@@ -1,105 +1,15 @@
+#ifndef POLY_BASICS_IMPLEMENTATION
+#define POLY_BASICS_IMPLEMENTATION
+
 #include <cmath>
 #include <iostream>
 #include <limits>
 #include <list>
 #include <vector>
 
-#include "../../finite-field/mod-math.h"
-#include "node.tcc"
+#include "../poly-ring-math.h"
 
 using namespace modular;
-
-#ifndef POLYNOMIAL
-#define POLYNOMIAL
-
-template <typename T>
-class Polynomial {
-   private:
-    std::list<Node<T>> poly;
-    size_t degree = 0;
-    T numMod = 0;
-
-    ///////////////////////Irreducable test///////////////////////////////////////////////////////
-    bool PerronTest();
-    bool CohnTest();
-    bool RootTest();
-    bool isPrime(
-        T num);   // crutial part for some test; any ideas for better algorithm are welcomed
-    long long findPower(int i, int deg);
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    ///////////////////////For polynomial long division//////////////////////////////////////////
-    modNum<T> getCoeff(const size_t power);
-    Polynomial<T> copy() const;
-    Polynomial<T> shiftRight(int positions) const;
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-   public:
-    Polynomial(T mod) {
-        if (isPrime(mod))
-            numMod = mod;
-        else
-            throw std::invalid_argument("Mod should be prime");
-    };
-
-    Polynomial() = default;
-    Polynomial(std::vector<std::pair<T, size_t>>, T);
-    Polynomial(std::pair<T, size_t> *arr, size_t n, T);
-
-    ~Polynomial() = default;
-
-    void fromCyclotomic(T order, T mod);
-
-    Node<T> operator[](const size_t i);   // use only when really necessary
-
-    bool empty();
-    typename std::list<Node<T>>::const_iterator begin() const { return poly.begin(); };
-    typename std::list<Node<T>>::const_iterator end() const { return poly.end(); };
-
-    void addNode(const Node<T>);
-    void addNode(const T, size_t);
-
-    void removeNode(const Node<T>);   // by value
-    void removeNode(const size_t);    // by degree
-
-    size_t getDegree() const {
-        if (poly.empty())
-            return std::numeric_limits<int>::min();
-        else
-            return degree;
-    };
-    T getNumMod() const { return numMod; }
-
-    void print() const;
-
-    //////////////////////////////////////////////////////////////////////////////
-
-    Polynomial<T> operator+(const Polynomial<T> &) const;
-    Polynomial<T> operator-(const Polynomial<T> &) const;
-    Polynomial<T> operator*(const Polynomial<T> &) const;
-    bool operator==(const Polynomial<T> &) const;
-
-    //////////////////////////////////////////////////////////////////////////////
-
-    Polynomial<T> der() const;   // deriveative
-    modNum<T> evaluate(const T) const;
-    modNum<T> evaluate(const modNum<T>) const;
-
-    //////////////////////////////////////////////////////////////////////////////
-
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const Polynomial<T> &) const;
-    std::pair<Polynomial<T>, Polynomial<T>> operator/(const modNum<T> &) const;
-
-    Polynomial<T> gcd(const Polynomial<T> &) const;
-
-    //////////////////////////////////////////////////////////////////////////////
-
-    static Polynomial<T> getPolynomialByOrder(size_t);
-
-    bool isIrreducable() const;
-};
-
-#endif
 
 template <typename T>
 Node<T>
@@ -132,13 +42,13 @@ Polynomial<T>::der() const {
     T new_pow;
 
     for (auto it = poly.begin(); it != poly.end(); ++it) {
-        new_koef = it->k() * it->deg();
+        new_koef = it->k().getVal() * it->deg();
         new_pow = it->deg() - 1;
         if (new_pow < 1) {
             new_koef = 0;
             new_pow = 0;
         }
-        current_newnode = {new_pow, new_koef};
+        current_newnode = Node<T>(new_koef, new_pow);
         returned_field.addNode(current_newnode);
     }
 
@@ -224,14 +134,11 @@ Polynomial<T>::addNode(const Node<T> node) {
 template <typename T>
 void
 Polynomial<T>::addNode(const T num, size_t deg) {
-    if (num % numMod) {
-        Node<T> a(modNum(num % numMod, numMod), deg);
+    if (static_cast<T>(num % numMod) > 0) {
+        Node<T> a(modNum<T>(num % numMod, numMod), deg);
         this->addNode(a);
     }
 }
-
-template <typename T>
-Polynomial<T>::Polynomial(std::vector<std::pair<T, size_t>>, T mod) : Polynomial(mod) {}
 
 /**
  * @brief Adds two polynomials.
@@ -404,108 +311,6 @@ Polynomial<T>::empty() {
         return true;
 }
 
-template <typename T>
-bool
-Polynomial<T>::isIrreducable() const {
-    auto k = poly.end();
-    k--;
-    Node<T> first = *poly.begin();
-    Node<T> last = *k;
-    if (first.deg() == 1)
-        return true;
-    if (last.deg() != 0)
-        return false;
-    if (first.k() == 1 && PerronTest())
-        return true;
-    if (CohnTest())
-        return true;
-    if (RootTest())
-        return false;
-    return true;
-}
-
-template <typename T>
-bool
-Polynomial<T>::RootTest() {
-    for (int i = 1; i < numMod; i++) {
-        T sum = 0;
-        for (auto j = poly.begin(); j != poly.end(); j++) {
-            Node<T> temp = *j;
-            long long power = findPower(i, temp.deg());
-            sum = (sum + temp.k() * power) % numMod;
-        }
-
-        if (sum == 0)
-            return true;
-    }
-    return false;
-}
-
-template <typename T>
-long long
-Polynomial<T>::findPower(int i, int deg) {
-    long long power = 1;
-    for (int j = 1; j <= deg; j++) {
-        power = (power * i) % numMod;
-    }
-
-    return power;
-}
-
-template <typename T>
-bool
-Polynomial<T>::PerronTest() {
-    auto i = poly.begin();
-    i++;
-    Node<T> second = *(i);
-
-    T sum = 0;
-    i++;
-    for (auto j = i; j != poly.end(); j++) {
-        Node<T> temp = (*j);
-        sum = sum + temp.k();
-    }
-
-    if (second.k() > sum)
-        return true;
-    else
-        return false;
-}
-
-template <typename T>
-bool
-Polynomial<T>::CohnTest() {
-    T sum = 0;
-
-    auto k = poly.begin();
-    Node<T> temp = *(k);
-    for (int i = temp.deg(); i > -1; i--) {
-        temp = *k;
-        if (i == temp.deg()) {
-            sum = sum + temp.k();
-            k++;
-        }
-        sum = sum * 10;
-    }
-    sum = sum / 10;
-
-    if (isPrime(sum))
-        return true;
-    else
-        return false;
-}
-
-template <typename T>
-bool
-Polynomial<T>::isPrime(T num) {
-    auto check = sqrt(num);
-
-    for (int i = 2; i <= check; i++)
-        if (num % i == 0)
-            return false;
-    return true;
-}
-
 /**
  * @brief Copies polynomшial
  * @param
@@ -562,89 +367,16 @@ Polynomial<T>::shiftRight(int positions) const {
     return tmp;
 }
 
-/**
- * @brief Polynomial division by number
- * @param other divisor(modNum)
- * @return std::pair of quotient and remainder
- */
 template <typename T>
-std::pair<Polynomial<T>, Polynomial<T>>
-Polynomial<T>::operator/(const modNum<T> &other) const {
-    Polynomial<T> remainder(this->getNumMod());
-    Polynomial<T> quotient(this->getNumMod());
+std::vector<std::pair<T, size_t>>
+Polynomial<T>::toPolyVector() {
+    std::vector<std::pair<T, size_t>> resV;
+    resV.reserve(poly.size());
 
-    for (auto it = poly.begin(); it != poly.end(); ++it) {
-        auto val3 = it->k() / other;
-        quotient.addNode(val3.getValue(), it->deg());
+    for (Node<T> nd : poly) {
+        resV.push_back(make_pair(nd.k().getValue(), nd.deg()));
     }
 
-    return std::make_pair(quotient, remainder);
+    return resV;
 }
-
-/**
- * @brief Polynomial long division
- * @param other Divisor(polynomial)
- * @return std::pair of quotient and remainder
- */
-template <typename T>
-std::pair<Polynomial<T>, Polynomial<T>>
-Polynomial<T>::operator/(const Polynomial<T> &other) const {
-    int numDeg = this->getDegree();
-    int denomDeg = other.getDegree();
-
-    if (other.poly.empty())
-        throw std::invalid_argument("Divisor must have at least one non-zero coefficient");
-    else if (this->getNumMod() != other.getNumMod())
-        throw std::invalid_argument("Can't add Polynomials with diferent modulas");
-    else if (numDeg < denomDeg)
-        throw std::invalid_argument(
-            "The degree of the divisor cannot exceed that of the numerator");
-    else if (denomDeg == 0) {
-        modNum<T> numb(other.poly.begin()->k().getValue(), other.getNumMod());
-        return *this / numb;
-    } else {
-        Polynomial<T> remainder = this->copy();
-        Polynomial<T> quotient(this->getNumMod());
-
-        while (numDeg >= denomDeg) {
-            Polynomial<T> denomTmp = other.shiftRight(numDeg - denomDeg);
-            auto val = remainder.getCoeff(numDeg) / denomTmp.getCoeff(numDeg);
-            quotient.addNode(val.getValue(), numDeg - denomDeg);
-
-            Polynomial<T> num(quotient.getNumMod());
-            num.addNode(quotient.getCoeff(numDeg - denomDeg).getValue(), 0);
-
-            denomTmp = denomTmp * num;
-            remainder = remainder - denomTmp;
-            numDeg = remainder.getDegree();
-        }
-
-        return std::make_pair(quotient, remainder);
-    }
-}
-
-/**
- * @brief Polynomials Greatest Common Divisor
- * @param other Other polynomial
- * @return GCD polynomial
- */
-template <typename T>
-Polynomial<T>
-Polynomial<T>::gcd(const Polynomial<T> &other) const {
-    Polynomial<T> g = this->copy(), h = other.copy();
-
-    while (!h.poly.empty()) {
-        auto divRes = g / h;
-        g = h;
-        h = divRes.second;
-    }
-
-    if (!g.poly.empty() && g.poly.front().k() > 1) {
-        modNum<T> numb(g.poly.begin()->k().getValue(), g.getNumMod());
-
-        auto res = g / numb;
-        g = res.first;
-    }
-
-    return g;
-}
+#endif
