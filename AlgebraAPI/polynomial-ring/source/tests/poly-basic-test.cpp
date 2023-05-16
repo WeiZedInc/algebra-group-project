@@ -196,6 +196,29 @@ TEST_CASE("Testing") {
     }
 }
 TEST_CASE("Testing division, gcd") {
+    SUBCASE("Test 0 - remainder") {
+        Polynomial<mpz_class> p1(7);
+        p1.addNode(1, 2);
+        p1.addNode(1, 1);
+        p1.addNode(1, 0);
+
+        Polynomial<mpz_class> p2(7);
+        p2.addNode(2, 1);
+        p2.addNode(2, 0);
+
+        // p1.print();
+        // p2.print();
+
+        Polynomial<mpz_class> res = p1 % p2;
+
+        //res.print();
+
+        Polynomial<mpz_class> expected(2);
+        expected.addNode(1, 0);
+
+        REQUIRE(res == expected);
+    }
+    
     SUBCASE("Test 1") {
         Polynomial<mpz_class> p1(37);
         p1.addNode(2, 4);
