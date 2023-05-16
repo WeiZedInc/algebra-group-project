@@ -52,6 +52,19 @@ PolynomialField<T>::operator==(const PolynomialField<T> &other) const {
 }
 
 template <typename T>
+void 
+PolynomialField<T>::addNode(Node<T> toAdd){
+    value.addNode(toAdd);
+  //  correct();
+}
+
+// template <typename T>
+// void
+// PolynomialField<T>::correct(){
+//     value = value%MOD;
+// }
+
+template <typename T>
 PolynomialField<T>
 PolynomialField<T>::pow(T power) {
     PolynomialField<T> valcp(this->numMod, this->MOD, this->value);

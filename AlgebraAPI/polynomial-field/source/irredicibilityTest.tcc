@@ -16,8 +16,7 @@ irreducibilityTest(Polynomial<T> p){
     PolynomialField<T> P(p.getNumMod(), t);
     for (auto i = p.begin(); i!=p.end(); i++){
         Node<T> tmp = *i;
-        auto a = tmp.k().getValue();
-        P.addNode(a, tmp.deg());
+        P.addNode(tmp);
     }
 
     return true;
