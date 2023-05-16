@@ -145,7 +145,7 @@ Polynomial<T>::addNode(const T num, size_t deg) {
  * @param other The polynomial to add to the current polynomial.
  * @return Polynomial<T> The result of adding two polynomials.
  */
-template <typename T>
+template <typename T>   // mpz_class libGMP
 Polynomial<T>
 Polynomial<T>::operator+(const Polynomial<T> &other) const {
     Polynomial<T> result(this->numMod);
