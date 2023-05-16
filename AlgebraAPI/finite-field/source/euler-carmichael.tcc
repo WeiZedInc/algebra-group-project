@@ -2,7 +2,7 @@
 #include <map>
 #include <vector>
 
-#include "mod-num.tcc"
+#include "..\mod-math.h"
 
 using namespace std;
 namespace modular {
@@ -10,72 +10,69 @@ namespace modular {
 #ifndef EULER_CARMICAEL
 #define EULER_CARMICAEL
 
-template <typename T, typename floating>
-floating
+template <typename T>
+T
 EulerFunction(T n) {
     if (n <= static_cast<T>(0))
         throw logic_error("Euler totient function is not defiend on non Natural values");
 
-    floating res = n.get_d();   // suitable only when T is mpz_class
-    floating one(1.0);
+    T res = n;
 
     for (T p = static_cast<T>(2); p * p <= n; p += static_cast<T>(1)) {
         if (n % p == static_cast<T>(0)) {
             while (n % p == static_cast<T>(0)) n /= p;
-            res *= (one - (one / p.get_d()));
+            res -=res/p;
         }
     }
 
     if (n > static_cast<T>(1))
-        res -= res / (n.get_d());
+        res -= res / n;
     return res;
 }
 
-template <typename T, typename floating>
+template <typename T>
 modNum<T>
 eulerFunction(modNum<T> num) {
-    return modNum<T>(static_cast<T>(EulerFunction<T, floating>(num.getValue())), num.getMod());
+    return modNum<T>(static_cast<T>(EulerFunction<T>(num.getValue())), num.getMod());
 }
 
 template <typename T>
 T
-customGCD(T a, T b) {
-    if (b == static_cast<T>(0))
-        return a;
-    return customGCD(b, static_cast<T>(a % b));
+gcd(T a, T b) {
+	while(b){
+		T t = a % b;
+		a = b;
+		b = t;
+	}
+	return a;
 }
 
 template <typename T>
 T
-carmichaelFunction(T n) {
-    if (n <= 0)
-        throw logic_error("Carmichael function is not defiend on non Natural values");
+CarmichaelFunction(T n){
 
-    if (n == 1)
-        return static_cast<T>(1);
+    if (n <= static_cast<T>(0))
+        throw logic_error("Euler totient function is not defiend on non Natural values");
 
-    std::vector<modNum<T>> factors = factorize(modNum<T>(n, n + 1));
-
-    std::map<modNum<T>, T> tmp;
-    for (auto num : factors) {
-        tmp[num]++;
-    }
-
-    std::vector<T> factorsCombined;
-
-    for (auto ths : tmp) {
-        factorsCombined.push_back(fpow(ths.first, ths.second).getValue());
-    }
-
-    if (n != 1)
-        factorsCombined.push_back(n - static_cast<T>(1));
+	if (n == static_cast<T>(1)) return static_cast<T>(1);
+	std::vector<T> factors;
+	for(T i = static_cast<T>(2); i*i <= n; i += static_cast<T>(2)){
+		T w = static_cast<T>(0);
+		while(n % i == static_cast<T>(0)){
+			w++;
+			n /= i;
+		}
+		if (i == static_cast<T>(2) && w >= static_cast<T>(3))
+			factors.push_back((std::pow(i, w-1) * (i-1))/2);
+		else if(i >= 2 && w > 0)
+			factors.push_back(std::pow(i, w-1) * (i-1));
+		if(i == 2) i--;
+	}
+	if(n != 1) factors.push_back(n-1);
 
     T res = 1;
-
-    for (auto i : factorsCombined) {
-        res = res * (i / customGCD(res, i));
-    }
-
+    for(auto i : factors)
+	    res *= i/gcd(res, i);
     return res;
 }
 

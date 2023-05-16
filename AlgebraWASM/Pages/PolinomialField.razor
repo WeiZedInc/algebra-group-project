@@ -15,9 +15,10 @@
 	}
 </style>
 <link href="css/typingResult.css" rel="stylesheet" />
+<link href="css/buttons.css" rel="stylesheet" />
 
 
-<div>
+<div class="wrapper">
 	<select @onchange="SelectedMethod">
 		<option value="">--Оберіть метод--</option>
 		<option value="15">15. Розклад кругового многочлена на незвідні.</option>
@@ -27,70 +28,146 @@
 		<option value="19">19. Знаходження оберненого многочлена (алгоритм Евкліда).</option>
 		<option value="20">20. Знаходження порядку незвідного многочлена.</option>
 	</select>
-	<div>
-		<label for="@coefModule">Coefficient module: </label>
-		<input name="coef-module" type="input" @bind-value="@coefModule" />
+	<div class="input">
+		<input type="text" name="input" id="input" @bind-value="@coefModule" placeholder="Enter coefficient module">
 	</div>
-	<div>
-		<label for="@coefModule">Pow module: </label>
-		<input name="coef-module" type="input" @bind-value="@powModule" />
+	<div class="input">
+		<input type="text" name="input" id="input" @bind-value="@powModule" placeholder="Enter pow module">
 	</div>
 	@switch (selected)
 	{
 		case "15":
 			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" />
-				<button @onclick="Add"> Add </button>
-				<button @onclick="Subtract"> Subtract </button>
-				<button @onclick="Multiply"> Multiply </button>
-					<p>@result</p>
+				<div class="wrapper">
+					<div class="input">
+						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter first number">
+						<input type="text" name="input" id="input" @bind-value="@secondInputBox" placeholder="Enter second number">
+					</div>
+				</div>
+				<button class="custom-btn btn-15" @onclick="Add">Add</button>
+				<button class="custom-btn btn-15" @onclick="Subtract">Subtract</button>
+				<button class="custom-btn btn-15" @onclick="Multiply">Multiply</button>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result:
+						</div>
+						<div class="typing-demo">
+							@result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		case "16":
 			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" />
-				<button @onclick="Calculate"> Calculate </button>
-					<p>@result</p>
+				<div class="wrapper">
+					<div class="input">
+						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter first number">
+						<input type="text" name="input" id="input" @bind-value="@secondInputBox" placeholder="Enter second number">
+					</div>
+				</div>
+				<button class="custom-btn btn-15" @onclick="Calculate">Calculate</button>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result:
+						</div>
+						<div class="typing-demo">
+							@result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		case "17":
 			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Calculate"> Calculate </button>
-					<p>@result</p>
+				<div class="wrapper">
+					<div class="input">
+						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter a number">
+					</div>
+				</div>
+				<button class="custom-btn btn-15" @onclick="Calculate">Calculate</button>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result:
+						</div>
+						<div class="typing-demo">
+							@result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		case "18": @*todo*@
 			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<input type="text" @bind-value="@secondInputBox" />
-				<button @onclick="Add"> Add </button>
-				<button @onclick="Subtract"> Subtract </button>
-				<button @onclick="Multiply"> Multiply </button>
-				<button @onclick="Norm"> Norm </button>
-					<p>@result</p>
+				<div class="wrapper">
+					<div class="input">
+						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter first number">
+						<input type="text" name="input" id="input" @bind-value="@secondInputBox" placeholder="Enter second number">
+					</div>
+				</div>
+				<button class="custom-btn btn-15" @onclick="Add">Add</button>
+				<button class="custom-btn btn-15" @onclick="Subtract">Subtract</button>
+				<button class="custom-btn btn-15" @onclick="Multiply">Multiply</button>
+				<button class="custom-btn btn-15" @onclick="Norm">Norm</button>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result:
+						</div>
+						<div class="typing-demo">
+							@result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		case "19":@*todo*@
 			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Inverse"> Inverse </button>
-					<p>@result</p>
+				<div class="wrapper">
+					<div class="input">
+						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter number">
+					</div>
+				</div>
+				<button class="custom-btn btn-15" @onclick="Inverse">Inverse</button>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result:
+						</div>
+						<div class="typing-demo">
+							@result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		case "20":@*todo*@
 			<div>
-				<p>Enter two numbers:</p>
-				<input type="text" @bind-value="@firstInputBox" />
-				<button @onclick="Order"> Order </button>
-					<p>@result</p>
+				<div class="wrapper">
+					<div class="input">
+						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter number">
+					</div>
+				</div>
+				<button class="custom-btn btn-15" @onclick="Order">Order</button>
+				@if (!string.IsNullOrWhiteSpace(result))
+				{
+					<div class="wrapper">
+						<div class="typing-demo">
+							Result:
+						</div>
+						<div class="typing-demo">
+							@result
+						</div>
+					</div>
+				}
 			</div>
 			break;
 		default:

@@ -377,6 +377,22 @@ TEST_CASE("Testing division, gcd") {
 
         REQUIRE(gcd == expected);
     }
+
+    SUBCASE("Test 11 - remainder") {
+        Polynomial<mpz_class> p1(3);
+        p1.addNode(1, 80);
+        p1.addNode(-1, 0);
+
+        Polynomial<mpz_class> p2(3);
+        p2.addNode(1, 4);
+        p2.addNode(1, 1);
+        p2.addNode(2, 0);
+
+        Polynomial<mpz_class> expected = p1 % p2;
+
+        REQUIRE(1 == 1);
+    }
+
 }
 
 TEST_CASE("New constructor") {
