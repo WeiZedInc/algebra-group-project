@@ -256,10 +256,8 @@ factorizeSimple(size_t &size, char *num, char *mod, char *errorStr) {
  * given modulus
  *    */
 
-/*
-char **
-discreteSqrt(char *num, char *mod, char *errorStr) {
-    char *resStr = nullptr;
+char *
+discreteSqrt(size_t &retSize, char *num, char *mod, char *errorStr) {
     try {
         mpz_class numA, numMod;
 
@@ -267,18 +265,28 @@ discreteSqrt(char *num, char *mod, char *errorStr) {
 
         numMod.set_str(mod, 10);
 
-        modNum<mpz_class> a1(numA, numMod), res;
+        modNum<mpz_class> a1(numA, numMod);
+        std::vector<mpz_class> res;
 
         res = modular::sqrt(a1);
-        char *resStr = new char[MESSAGE_LEN];
-        strcpy(resStr, res.getValue().get_str().c_str());
+
+        std::string strCombined;
+
+        for (mpz_class num : res) {
+            strCombined += num.get_str();
+            strCombined += " ";
+        }
+
+        char *resStr = new char[strCombined.size() + 1];
+        strcpy(resStr, strCombined.c_str());
+
+        return resStr;
+
     } catch (const std::exception &ex) {
         strcpy(errorStr, ex.what());
+        return nullptr;
     }
-
-    return resStr;
 }
-*/
 
 /**
  *
@@ -393,7 +401,7 @@ EulerFunction(char *num, char *mod, char *errorStr) {
 
         modNum<mpz_class> a1(numA, numMod), res;
 
-        res = modular::eulerFunction<mpz_class, double>(a1);
+        res = modular::eulerFunction(a1);
 
         resStr = new char[MESSAGE_LEN];
         strcpy(resStr, res.getValue().get_str().c_str());
@@ -427,7 +435,7 @@ CarmichaelFunction(char *num, char *mod, char *errorStr) {
         modNum<mpz_class> a1(numA, numMod);
         mpz_class res;
 
-        res = modular::carmichaelFunction(numA);
+        res = modular::CarmichaelFunction(numA);
 
         resStr = new char[MESSAGE_LEN];
         strcpy(resStr, res.get_str().c_str());
@@ -468,6 +476,11 @@ isPrime(char *num, char *mod, char *iterations, char *errorStr) {
     }
 
     return false;
+}
+
+int
+main() {
+    std::cout << "RES: " << modular::log(modNum<int>(57, 113), modNum<int>(3, 113)) << std::endl;
 }
 
 // Compile: g++ wrapper.cpp -lgmpxx -lgmp
