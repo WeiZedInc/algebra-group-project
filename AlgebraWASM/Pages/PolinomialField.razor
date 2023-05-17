@@ -217,7 +217,7 @@
 	void NormalizeInputString()
 	{
 		coefModule = Regex.Replace(coefModule, "[^0-9]", "");
-		powModule = Regex.Replace(firstInputBox, "[^0-9x+\\-*^]", "");
+		powModule = Regex.Replace(powModule, "[^0-9x+\\-*^]", "");
 		firstInputBox = Regex.Replace(firstInputBox, "[^0-9x+\\-*^]", "");
 		secondInputBox = Regex.Replace(secondInputBox, "[^0-9x+\\-*^]", "");
 
@@ -252,7 +252,7 @@
 
 				int size = 0;
 
-				byte* resultPtr = PolyFieldMethods.polyFieldAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModPtr, modPtr , errStrPtr);
+				byte* resultPtr = PolyFieldMethods.polyFieldAddition(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModparsed, modPtr, errStrPtr);
 
 
 				byte[] resultBytes = new byte[size];
@@ -290,7 +290,7 @@
 
 				int size = 0;
 
-				byte* resultPtr = PolyFieldMethods.polyFieldSubstruction(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModPtr, modPtr, errStrPtr);
+				byte* resultPtr = PolyFieldMethods.polyFieldSubstruction(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModparsed, modPtr, errStrPtr);
 
 
 				byte[] resultBytes = new byte[size];
@@ -328,7 +328,7 @@
 
 				int size = 0;
 
-				byte* resultPtr = PolyFieldMethods.polyFieldMultiplication(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModPtr, modPtr, errStrPtr);
+				byte* resultPtr = PolyFieldMethods.polyFieldMultiplication(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModparsed, modPtr, errStrPtr);
 
 
 				byte[] resultBytes = new byte[size];
@@ -363,7 +363,7 @@
 
 				int size = 0;
 
-				byte* resultPtr = PolyFieldMethods.polyFieldInversion(ref size, size1, parsedPoly1, polyModSize, polyModPtr, modPtr, errStrPtr);
+				byte* resultPtr = PolyFieldMethods.polyFieldInversion(ref size, size1, parsedPoly1, polyModSize, polyModparsed, modPtr, errStrPtr);
 
 
 				byte[] resultBytes = new byte[size];
@@ -401,7 +401,7 @@
 
 				int size = 0;
 
-				byte* resultPtr = PolyFieldMethods.polyFieldDivision(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModPtr, modPtr, errStrPtr);
+				byte* resultPtr = PolyFieldMethods.polyFieldDivision(ref size, size1, parsedPoly1, size2, parsedPoly2, polyModSize, polyModparsed, modPtr, errStrPtr);
 
 
 				byte[] resultBytes = new byte[size];
