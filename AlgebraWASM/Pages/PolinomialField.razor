@@ -59,7 +59,7 @@
 				<button class="custom-btn btn-15" @onclick="Add">Add</button>
 				<button class="custom-btn btn-15" @onclick="Subtract">Subtract</button>
 				<button class="custom-btn btn-15" @onclick="Multiply">Multiply</button>
-				<button class="custom-btn btn-15" @onclick="RickRoll">Norm</button>
+				<button class="custom-btn btn-15" @onclick="RickRoll" target="_blank">Norm</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
@@ -81,7 +81,7 @@
 						<input type="text" name="input" id="input" @bind-value="@secondInputBox" placeholder="Enter second number">
 					</div>
 				</div>
-				<button class="custom-btn btn-15" @onclick="RickRoll">Calculate</button>
+				<button class="custom-btn btn-15" @onclick="RickRoll" target="_blank">Calculate</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
@@ -102,7 +102,7 @@
 						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter a number">
 					</div>
 				</div>
-				<button class="custom-btn btn-15" @onclick="RickRoll">Calculate</button>
+				<button class="custom-btn btn-15" @onclick="RickRoll" target="_blank">Calculate</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
@@ -127,7 +127,7 @@
 				<button class="custom-btn btn-15" @onclick="Add">Add</button>
 				<button class="custom-btn btn-15" @onclick="Subtract">Subtract</button>
 				<button class="custom-btn btn-15" @onclick="Multiply">Multiply</button>
-				<button class="custom-btn btn-15" @onclick="RickRoll">Norm</button>
+				<button class="custom-btn btn-15" @onclick="RickRoll" target="_blank">Norm</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
@@ -170,7 +170,7 @@
 						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter number">
 					</div>
 				</div>
-				<button class="custom-btn btn-15" @onclick="RickRoll">Order</button>
+				<button class="custom-btn btn-15" @onclick="RickRoll" target="_blank">Order</button>
 				@if (!string.IsNullOrWhiteSpace(result))
 				{
 					<div class="wrapper">
