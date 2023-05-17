@@ -230,7 +230,6 @@
 				<div class="wrapper">
 					<div class="input">
 						<input type="text" name="input" id="input" @bind-value="@firstInputBox" placeholder="Enter first number">
-						<input type="text" name="input" id="input" @bind-value="@secondInputBox" placeholder="Enter second number">
 					</div>
 				</div>
 				<button class="custom-btn btn-15" @onclick="isPrime">isPrime</button>
@@ -490,11 +489,38 @@
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
 				int size = 0;
-				byte* resultPtr = FiniteFieldMethods.factorizePolard(ref size, aPtr, modPtr, errStrPtr);
+				byte** resultPtr = FiniteFieldMethods.factorizePolard(ref size, aPtr, modPtr, errStrPtr);
 
-				byte[] resultBytes = new byte[size];
-				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
-				result = Encoding.ASCII.GetString(resultBytes);
+				List<string> resultList = new List<string>();
+				int offset = 0;
+				while (true)
+				{
+					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+					if (currentPtr == IntPtr.Zero)
+						break;
+
+					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+					resultList.Add(Encoding.ASCII.GetString(currentBytes));
+					offset++;
+				}
+
+				string[] resultArray = resultList.ToArray();
+				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+
+				for (int i = 0; i < size; ++i)
+				{
+					if (resultDct.ContainsKey(resultArray[i]))
+						resultDct[resultArray[i]]++;
+					else
+						resultDct[resultArray[i]] = 1;
+				}
+
+				string res = "";
+				foreach (var kvp in resultDct)
+				{
+					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+				}
+				result = res;
 			}
 		}
 		catch (Exception ex)
@@ -517,11 +543,36 @@
 			fixed (byte* errStrPtr = errorStrBytes)
 			{
 				int size = 0;
-				byte* resultPtr = FiniteFieldMethods.factorizeSimple(ref size, aPtr, modPtr, errStrPtr);
+				byte** resultPtr = FiniteFieldMethods.factorizeSimple(ref size, aPtr, modPtr, errStrPtr);
+				List<string> resultList = new List<string>();
+				int offset = 0;
+				while (true)
+				{
+					IntPtr currentPtr = new IntPtr(resultPtr[offset]);
+					if (currentPtr == IntPtr.Zero)
+						break;
 
-				byte[] resultBytes = new byte[size];
-				Marshal.Copy((IntPtr)resultPtr, resultBytes, 0, size);
-				result = Encoding.ASCII.GetString(resultBytes);
+					byte[] currentBytes = Encoding.ASCII.GetBytes(Marshal.PtrToStringAnsi(currentPtr));
+					resultList.Add(Encoding.ASCII.GetString(currentBytes));
+					offset++;
+				}
+
+				string[] resultArray = resultList.ToArray();
+				Dictionary<string, int> resultDct = new Dictionary<string, int>();
+				for (int i = 0; i < size; ++i)
+				{
+					if (resultDct.ContainsKey(resultArray[i]))
+						resultDct[resultArray[i]]++;
+					else
+						resultDct[resultArray[i]] = 1;
+				}
+
+				string res = "";
+				foreach (var kvp in resultDct)
+				{
+					res += "Key: " + kvp.Key + " Value: " + kvp.Value + '\n';
+				}
+				result = res;
 			}
 		}
 		catch (Exception ex)
